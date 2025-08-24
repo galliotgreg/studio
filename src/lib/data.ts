@@ -1,4 +1,4 @@
-import type { Quote, Badge } from "./types";
+import type { Badge } from "./types";
 import { Star, Award, Zap, Trophy, Crown, BookMarked } from "lucide-react";
 
 export const PROMPTS: string[] = [
@@ -32,16 +32,6 @@ export const PROMPTS: string[] = [
     "What is a place you've visited that you're grateful to have seen?",
     "What is a kindness someone showed you recently?",
     "Looking back on this challenge, what are you most grateful for?",
-];
-
-export const QUOTES: Quote[] = [
-    { text: "Gratitude turns what we have into enough.", author: "Aesop" },
-    { text: "The root of joy is gratefulness.", author: "David Steindl-Rast" },
-    { text: "Gratitude is the healthiest of all human emotions. The more you express gratitude for what you have, the more likely you will have even more to express gratitude for.", author: "Zig Ziglar" },
-    { text: "He is a wise man who does not grieve for the things which he has not, but rejoices for those which he has.", author: "Epictetus" },
-    { text: "Wear gratitude like a cloak, and it will feed every corner of your life.", author: "Rumi" },
-    { text: "When we focus on our gratitude, the tide of disappointment goes out and the tide of love rushes in.", author: "Kristin Armstrong" },
-    { text: "Acknowledging the good that you already have in your life is the foundation for all abundance.", author: "Eckhart Tolle" },
 ];
 
 export const BADGES: Badge[] = [

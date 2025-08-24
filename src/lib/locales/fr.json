@@ -27,5 +27,6 @@
     "gratitudeSaved": "Gratitude enregistrée !",
     "gratitudeSavedDescription": "Votre entrée a été enregistrée avec succès.",
     "badgeUnlocked": "Badge débloqué !",
-    "badgeUnlockedDescription": "Vous avez gagné le badge \"{badgeName}\"."
+    "badgeUnlockedDescription": "Vous avez gagné le badge \"{badgeName}\".",
+    "quotesJson": "[{\"text\":\"La gratitude transforme ce que nous avons en assez.\",\"author\":\"Ésope\"},{\"text\":\"La racine de la joie est la reconnaissance.\",\"author\":\"David Steindl-Rast\"},{\"text\":\"La gratitude est la plus saine de toutes les émotions humaines. Plus vous exprimez de la gratitude pour ce que vous avez, plus vous aurez probablement de choses pour lesquelles exprimer de la gratitude.\",\"author\":\"Zig Ziglar\"},{\"text\":\"C'est un homme sage celui qui ne s'afflige pas des choses qu'il n'a pas, mais se réjouit de celles qu'il a.\",\"author\":\"Épictète\"},{\"text\":\"Portez la gratitude comme un manteau, et elle nourrira chaque recoin de votre vie.\",\"author\":\"Rumi\"},{\"text\":\"Lorsque nous nous concentrons sur notre gratitude, la marée de la déception se retire et la marée de l'amour déferle.\",\"author\":\"Kristin Armstrong\"},{\"text\":\"Reconnaître le bien que vous avez déjà dans votre vie est le fondement de toute abondance.\",\"author\":\"Eckhart Tolle\"}]"
 }

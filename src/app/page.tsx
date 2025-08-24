@@ -5,7 +5,7 @@ import { Star, BrainCircuit, Forward, Badge } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import type { GratitudeState, Quote } from "@/lib/types";
-import { PROMPTS, QUOTES, BADGES } from "@/lib/data";
+import { PROMPTS, BADGES } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { suggestGratitudePrompt } from "@/ai/flows/suggest-gratitude-prompt";
@@ -23,12 +23,20 @@ const CHALLENGE_DURATION = 30;
 
 export default function GratitudeChallengePage() {
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isLoading, setIsLoading] = React.useState(true);
   const [state, setState] = React.useState<GratitudeState | null>(null);
   const [currentPrompt, setCurrentPrompt] = React.useState<string>("");
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
   const [isSuggestingPrompt, setIsSuggestingPrompt] = React.useState(false);
+  
+  const getQuotes = React.useCallback(() => {
+    try {
+      return JSON.parse(t('quotesJson'));
+    } catch (e) {
+      return [];
+    }
+  }, [t]);
 
   React.useEffect(() => {
     try {
@@ -70,10 +78,13 @@ export default function GratitudeChallengePage() {
         entries: [], currentDay: 1, streak: 0, points: 0, unlockedBadges: [], lastEntryDate: null,
       });
     }
-
-    setCurrentQuote(QUOTES[Math.floor(Math.random() * QUOTES.length)]);
+    
+    const quotes = getQuotes();
+    if(quotes.length > 0) {
+      setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    }
     setIsLoading(false);
-  }, []);
+  }, [getQuotes]);
 
   React.useEffect(() => {
     if (state && !isLoading) {
@@ -84,6 +95,13 @@ export default function GratitudeChallengePage() {
       }
     }
   }, [state, isLoading]);
+
+  React.useEffect(() => {
+    const quotes = getQuotes();
+    if(quotes.length > 0) {
+      setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    }
+  }, [language, getQuotes]);
 
   const handleAddEntry = (text: string) => {
     if (!text.trim() || !state) return;
@@ -177,7 +195,10 @@ export default function GratitudeChallengePage() {
   };
 
   const handleNewQuote = () => {
-    setCurrentQuote(QUOTES[Math.floor(Math.random() * QUOTES.length)]);
+    const quotes = getQuotes();
+    if(quotes.length > 0) {
+      setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+    }
   };
 
   if (isLoading || !state) {
