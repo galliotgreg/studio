@@ -25,10 +25,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/components/app/LanguageProvider";
 
 const GratitudeFormSchema = z.object({
   entry: z.string().min(10, {
-    message: "Your entry must be at least 10 characters.",
+    message: "entryTooShort",
   }),
 });
 
@@ -49,6 +50,7 @@ export function GratitudeCard({
   onEntrySubmit,
   onSuggestPrompt,
 }: GratitudeCardProps) {
+  const { t } = useLanguage();
   const form = useForm<z.infer<typeof GratitudeFormSchema>>({
     resolver: zodResolver(GratitudeFormSchema),
     defaultValues: {
@@ -70,7 +72,7 @@ export function GratitudeCard({
   return (
     <Card className="h-full flex flex-col transform transition-transform duration-300 hover:scale-[1.01] hover:shadow-xl">
         <CardHeader>
-          <CardTitle className="text-primary">Day {day}: Daily Gratitude</CardTitle>
+          <CardTitle className="text-primary">{t('dailyGratitude').replace('{day}', String(day))}</CardTitle>
           <CardDescription className="text-lg font-serif italic pt-2">
             "{prompt}"
           </CardDescription>
@@ -87,9 +89,9 @@ export function GratitudeCard({
                 className="flex flex-col items-center justify-center h-full text-center bg-secondary/50 rounded-lg p-8"
               >
                 <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
-                <h3 className="text-xl font-semibold">Thank you for your entry!</h3>
+                <h3 className="text-xl font-semibold">{t('submittedTitle')}</h3>
                 <p className="text-muted-foreground mt-2">
-                  You've completed your gratitude for today. See you tomorrow!
+                  {t('submittedDescription')}
                 </p>
               </motion.div>
             ) : (
@@ -109,18 +111,20 @@ export function GratitudeCard({
                         <FormItem>
                           <FormControl>
                             <Textarea
-                              placeholder="What are you grateful for today? Write at least one thing..."
+                              placeholder={t('gratitudePlaceholder')}
                               className="min-h-[150px] text-base resize-none"
                               {...field}
                             />
                           </FormControl>
-                          <FormMessage />
+                          <FormMessage>
+                            {form.formState.errors.entry && t(form.formState.errors.entry.message || '')}
+                          </FormMessage>
                         </FormItem>
                       )}
                     />
                      <Button type="submit" className="w-full" size="lg">
                         <Sparkles className="mr-2" />
-                        Save My Gratitude
+                        {t('saveGratitude')}
                     </Button>
                   </form>
                 </Form>
@@ -137,7 +141,7 @@ export function GratitudeCard({
                 disabled={isSuggestingPrompt}
             >
                 <BrainCircuit className={cn("mr-2", isSuggestingPrompt && "animate-spin")} />
-                {isSuggestingPrompt ? "Thinking..." : "Feeling stuck? Get a new prompt"}
+                {isSuggestingPrompt ? t('suggestingPrompt') : t('suggestPrompt')}
             </Button>
             </CardFooter>
         )}

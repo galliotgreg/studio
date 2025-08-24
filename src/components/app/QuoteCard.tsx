@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useLanguage } from "./LanguageProvider";
 
 interface QuoteCardProps {
   quote: string;
@@ -18,12 +19,13 @@ interface QuoteCardProps {
 }
 
 export function QuoteCard({ quote, author, onNewQuote }: QuoteCardProps) {
+  const { t } = useLanguage();
   return (
     <Card className="h-full flex flex-col transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
             <MessageSquareQuote className="text-primary"/>
-            <span>A Moment of Insight</span>
+            <span>{t('quoteTitle')}</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="flex-grow">
@@ -34,7 +36,7 @@ export function QuoteCard({ quote, author, onNewQuote }: QuoteCardProps) {
       </CardContent>
       <CardFooter className="justify-end">
         <Button variant="outline" onClick={onNewQuote}>
-          New Quote
+          {t('newQuote')}
           <Forward className="ml-2 h-4 w-4" />
         </Button>
       </CardFooter>

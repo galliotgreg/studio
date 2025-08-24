@@ -16,6 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useLanguage } from "@/components/app/LanguageProvider";
 import { Badge as BadgeType } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -25,15 +26,16 @@ interface BadgesCardProps {
 }
 
 export function BadgesCard({ allBadges, unlockedBadgeIds }: BadgesCardProps) {
+  const { t } = useLanguage();
   return (
     <Card className="h-full transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Award className="text-primary" />
-          <span>My Badges</span>
+          <span>{t("myBadges")}</span>
         </CardTitle>
         <CardDescription>
-          Achievements you've unlocked on your gratitude journey.
+          {t("badgesDescription")}
         </CardDescription>
       </CardHeader>
       <CardContent>

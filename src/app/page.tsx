@@ -17,11 +17,13 @@ import { ProgressCard } from "@/components/app/ProgressCard";
 import { QuoteCard } from "@/components/app/QuoteCard";
 import { BadgesCard } from "@/components/app/BadgesCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useLanguage } from "@/components/app/LanguageProvider";
 
 const CHALLENGE_DURATION = 30;
 
 export default function GratitudeChallengePage() {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = React.useState(true);
   const [state, setState] = React.useState<GratitudeState | null>(null);
   const [currentPrompt, setCurrentPrompt] = React.useState<string>("");
@@ -93,8 +95,8 @@ export default function GratitudeChallengePage() {
 
     if (lastEntryDate === todayStr) {
       toast({
-        title: "Entry already submitted",
-        description: "You've already submitted your gratitude for today. Come back tomorrow!",
+        title: t('entryAlreadySubmitted'),
+        description: t('entryAlreadySubmittedDescription'),
         variant: "destructive"
       });
       return;
@@ -120,8 +122,8 @@ export default function GratitudeChallengePage() {
         if (isUnlocked && !newUnlockedBadges.includes(badge.id)) {
             newUnlockedBadges.push(badge.id);
             toast({
-                title: "Badge Unlocked!",
-                description: `You've earned the "${badge.name}" badge.`,
+                title: t('badgeUnlocked'),
+                description: t('badgeUnlockedDescription').replace('{badgeName}', badge.name),
             });
         }
     });
@@ -137,8 +139,8 @@ export default function GratitudeChallengePage() {
     });
 
     toast({
-        title: "Gratitude Saved!",
-        description: "Your entry has been successfully saved.",
+        title: t('gratitudeSaved'),
+        description: t('gratitudeSavedDescription'),
     });
 
     setCurrentPrompt(PROMPTS[newCurrentDay - 1] || PROMPTS[PROMPTS.length-1]);
@@ -147,8 +149,8 @@ export default function GratitudeChallengePage() {
   const handleSuggestPrompt = async () => {
     if (!state || state.entries.length === 0) {
         toast({
-            title: "Not enough data",
-            description: "Please write a few entries first for personalized suggestions.",
+            title: t('notEnoughData'),
+            description: t('notEnoughDataDescription'),
             variant: "destructive"
         });
         return;
@@ -165,8 +167,8 @@ export default function GratitudeChallengePage() {
     } catch (error) {
         console.error("Error suggesting prompt:", error);
         toast({
-            title: "Suggestion failed",
-            description: "Could not get an AI-powered suggestion at this time.",
+            title: t('suggestionFailed'),
+            description: t('suggestionFailedDescription'),
             variant: "destructive"
         });
     } finally {
@@ -210,10 +212,10 @@ export default function GratitudeChallengePage() {
                 />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                <StatsCard icon={Star} title="Current Streak" value={`${state.streak} Days`} />
+                <StatsCard icon={Star} title={t('currentStreak')} value={t('days').replace('{count}', String(state.streak))} />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                <StatsCard icon={Badge} title="Total Points" value={`${state.points}`} />
+                <StatsCard icon={Badge} title={t('totalPoints')} value={`${state.points}`} />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-3">
                 <ProgressCard currentDay={state.currentDay} totalDays={CHALLENGE_DURATION} />

@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { useLanguage } from "./LanguageProvider";
 
 interface ProgressCardProps {
   currentDay: number;
@@ -17,6 +18,7 @@ interface ProgressCardProps {
 }
 
 export function ProgressCard({ currentDay, totalDays }: ProgressCardProps) {
+  const { t } = useLanguage();
   const progressPercentage = (Math.min(currentDay, totalDays) / totalDays) * 100;
   
   return (
@@ -24,10 +26,10 @@ export function ProgressCard({ currentDay, totalDays }: ProgressCardProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
             <CalendarDays className="text-primary"/>
-            <span>Challenge Progress</span>
+            <span>{t('challengeProgress')}</span>
         </CardTitle>
         <CardDescription>
-          You are on day {currentDay} of your {totalDays}-day journey.
+          {t('progressDescription').replace('{currentDay}', String(currentDay)).replace('{totalDays}', String(totalDays))}
         </CardDescription>
       </CardHeader>
       <CardContent>
