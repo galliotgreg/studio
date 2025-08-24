@@ -5,7 +5,7 @@ import { Star, BrainCircuit, Forward, Badge } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import type { GratitudeState, Quote } from "@/lib/types";
-import { PROMPTS, BADGES } from "@/lib/data";
+import { BADGES } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { suggestGratitudePrompt } from "@/ai/flows/suggest-gratitude-prompt";
@@ -33,6 +33,14 @@ export default function GratitudeChallengePage() {
   const getQuotes = React.useCallback(() => {
     try {
       return JSON.parse(t('quotesJson'));
+    } catch (e) {
+      return [];
+    }
+  }, [t]);
+
+  const getPrompts = React.useCallback(() => {
+    try {
+      return JSON.parse(t('promptsJson'));
     } catch (e) {
       return [];
     }
@@ -71,7 +79,10 @@ export default function GratitudeChallengePage() {
       }
 
       setState(initialState);
-      setCurrentPrompt(PROMPTS[initialState.currentDay - 1] || PROMPTS[PROMPTS.length-1]);
+      const prompts = getPrompts();
+      if(prompts.length > 0) {
+        setCurrentPrompt(prompts[initialState.currentDay - 1] || prompts[prompts.length-1]);
+      }
     } catch (error) {
       console.error("Failed to load data from local storage", error);
       setState({
@@ -84,7 +95,7 @@ export default function GratitudeChallengePage() {
       setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
     }
     setIsLoading(false);
-  }, [getQuotes]);
+  }, [getQuotes, getPrompts]);
 
   React.useEffect(() => {
     if (state && !isLoading) {
@@ -101,7 +112,11 @@ export default function GratitudeChallengePage() {
     if(quotes.length > 0) {
       setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
     }
-  }, [language, getQuotes]);
+    const prompts = getPrompts();
+    if(prompts.length > 0 && state) {
+      setCurrentPrompt(prompts[state.currentDay - 1] || prompts[prompts.length-1]);
+    }
+  }, [language, getQuotes, getPrompts, state]);
 
   const handleAddEntry = (text: string) => {
     if (!text.trim() || !state) return;
@@ -160,8 +175,11 @@ export default function GratitudeChallengePage() {
         title: t('gratitudeSaved'),
         description: t('gratitudeSavedDescription'),
     });
-
-    setCurrentPrompt(PROMPTS[newCurrentDay - 1] || PROMPTS[PROMPTS.length-1]);
+    
+    const prompts = getPrompts();
+    if(prompts.length > 0) {
+      setCurrentPrompt(prompts[newCurrentDay - 1] || prompts[prompts.length-1]);
+    }
   };
 
   const handleSuggestPrompt = async () => {
