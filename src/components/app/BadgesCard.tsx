@@ -38,7 +38,7 @@ export function BadgesCard({ allBadges, unlockedBadgeIds }: BadgesCardProps) {
       </CardHeader>
       <CardContent>
         <TooltipProvider>
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-4">
+          <div className="flex flex-row flex-wrap gap-4">
             {allBadges.map((badge) => {
               const isUnlocked = unlockedBadgeIds.includes(badge.id);
               return (
