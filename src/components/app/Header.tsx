@@ -21,6 +21,11 @@ export function Header() {
       <p className="mt-3 text-lg text-muted-foreground">
         {t('appDescription')}
       </p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        <a href="https://www.greg-ggt.com/gratitude/" target="_blank" rel="noopener noreferrer" className="underline hover:text-primary">
+          {t('blogLinkText')}
+        </a>
+      </p>
       <div className="absolute top-0 right-0 flex items-center gap-2">
         <LanguageSwitcher />
         <ThemeToggle />
