@@ -266,7 +266,7 @@ export default function GratitudeChallengePage() {
                 <BadgesCard allBadges={BADGES} unlockedBadgeIds={state.unlockedBadges} />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
-                 <BlogCard href="#" />
+                 <BlogCard href="https://www.greg-ggt.com/gratitude/" />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lg:col-span-3">
                 {currentQuote && <QuoteCard quote={currentQuote.text} author={currentQuote.author} onNewQuote={handleNewQuote}/>}
