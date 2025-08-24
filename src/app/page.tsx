@@ -18,6 +18,7 @@ import { QuoteCard } from "@/components/app/QuoteCard";
 import { BadgesCard } from "@/components/app/BadgesCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/components/app/LanguageProvider";
+import { BlogCard } from "@/components/app/BlogCard";
 
 const CHALLENGE_DURATION = 30;
 
@@ -265,6 +266,9 @@ export default function GratitudeChallengePage() {
                 <BadgesCard allBadges={BADGES} unlockedBadgeIds={state.unlockedBadges} />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
+                 <BlogCard href="#" />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lg:col-span-3">
                 {currentQuote && <QuoteCard quote={currentQuote.text} author={currentQuote.author} onNewQuote={handleNewQuote}/>}
             </motion.div>
         </div>
