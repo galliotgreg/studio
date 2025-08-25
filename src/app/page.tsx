@@ -90,10 +90,6 @@ export default function GratitudeChallengePage() {
       }
 
       setState(initialState);
-      const prompts = getPrompts();
-      if(prompts.length > 0) {
-        setCurrentPrompt(prompts[initialState.currentDay - 1] || prompts[prompts.length-1]);
-      }
     } catch (error) {
       console.error("Failed to load data from local storage", error);
       setState({
@@ -101,12 +97,8 @@ export default function GratitudeChallengePage() {
       });
     }
     
-    const quotes = getQuotes();
-    if(quotes.length > 0) {
-      setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
-    }
     setIsLoading(false);
-  }, [getQuotes, getPrompts]);
+  }, []);
 
   React.useEffect(() => {
     if (state && !isLoading) {
@@ -233,9 +225,9 @@ export default function GratitudeChallengePage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 
                     prompt={currentPrompt}
-                    onEntrySubmit={handleAddEntry}
-                    isSubmittedToday={isTodayEntrySubmitted}
                     day={state.currentDay}
+                    isSubmittedToday={isTodayEntrySubmitted}
+                    onEntrySubmit={handleAddEntry}
                 />
             </motion.div>
             <div className="flex flex-col gap-6">
