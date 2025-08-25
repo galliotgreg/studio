@@ -9,14 +9,18 @@ import fr from '@/lib/locales/fr.json';
 // Mock Lucide icons
 vi.mock('lucide-react', async () => {
     const original = await vi.importActual('lucide-react');
-    const iconNames = ['Star', 'Award', 'Zap', 'Trophy', 'Crown', 'BookMarked'];
-    const mockIcons: Record<string, React.FC> = {};
-    iconNames.forEach(name => {
-        mockIcons[name] = () => <svg data-testid={`${name.toLowerCase()}-icon`} />;
-    });
+    const icons: Record<string, React.FC> = {
+        Star: () => <svg data-testid="star-icon" />,
+        Award: () => <svg data-testid="award-icon" />,
+        Zap: () => <svg data-testid="zap-icon" />,
+        Trophy: () => <svg data-testid="trophy-icon" />,
+        Crown: () => <svg data-testid="crown-icon" />,
+        BookMarked: () => <svg data-testid="bookmarked-icon" />,
+    };
+
     return {
         ...original,
-        ...mockIcons,
+        ...icons
     };
 });
 
@@ -40,8 +44,8 @@ describe('BadgesCard', () => {
 
         // Verify that all badge icons are rendered within the list
         if (badgeListContainer) {
-            BADGES.forEach(badge => {
-                const iconTestId = `${badge.icon.name.toLowerCase()}-icon`;
+            const iconTestIds = ['star-icon', 'award-icon', 'trophy-icon', 'bookmarked-icon', 'zap-icon', 'crown-icon'];
+            iconTestIds.forEach(iconTestId => {
                 expect(within(badgeListContainer).getByTestId(iconTestId)).toBeInTheDocument();
             });
 
