@@ -136,7 +136,7 @@ export function GratitudeCard({
             <CardFooter>
             <Button
                 variant="link"
-                className="text-muted-foreground mx-auto"
+                className="text-muted-foreground mx-auto h-auto whitespace-normal text-center"
                 onClick={onSuggestPrompt}
                 disabled={isSuggestingPrompt}
             >
