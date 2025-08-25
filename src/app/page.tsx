@@ -31,7 +31,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 const CHALLENGE_DURATION = 30;
 
@@ -246,7 +246,10 @@ export default function GratitudeChallengePage() {
         <Header onReset={() => setIsResetDialogOpen(true)} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <Skeleton className="h-96 lg:col-span-2 md:row-span-2" />
-            <Skeleton className="h-48" />
+            <div className="flex flex-col gap-6">
+                <Skeleton className="h-24" />
+                <Skeleton className="h-24" />
+            </div>
             <Skeleton className="h-48" />
             <Skeleton className="h-64 lg:col-span-3" />
             <Skeleton className="h-64 lg:col-span-3" />
@@ -279,7 +282,7 @@ export default function GratitudeChallengePage() {
                     <StatsCard icon={Badge} title={t('totalPoints')} value={`${state.points}`} />
                 </motion.div>
             </div>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-3">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-1">
                 <ProgressCard currentDay={state.currentDay} totalDays={CHALLENGE_DURATION} />
             </motion.div>
              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="lg:col-span-3">
