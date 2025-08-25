@@ -2,16 +2,13 @@
 "use client";
 
 import * as React from "react";
-import { Star, BrainCircuit, Forward, Badge, Settings, Trash2 } from "lucide-react";
+import { Star, Badge, Settings, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from 'next/link';
 
 import type { GratitudeState, Quote } from "@/lib/types";
 import { BADGES } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
-import { suggestGratitudePrompt } from "@/ai/flows/suggest-gratitude-prompt";
-
 import { Header } from "@/components/app/Header";
 import { GratitudeCard } from "@/components/app/GratitudeCard";
 import { StatsCard } from "@/components/app/StatsCard";
@@ -42,7 +39,6 @@ export default function GratitudeChallengePage() {
   const [state, setState] = React.useState<GratitudeState | null>(null);
   const [currentPrompt, setCurrentPrompt] = React.useState<string>("");
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
-  const [isSuggestingPrompt, setIsSuggestingPrompt] = React.useState(false);
   const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
   
   const getQuotes = React.useCallback(() => {
@@ -197,36 +193,6 @@ export default function GratitudeChallengePage() {
     }
   };
 
-  const handleSuggestPrompt = async () => {
-    if (!state || state.entries.length === 0) {
-        toast({
-            title: t('notEnoughData'),
-            description: t('notEnoughDataDescription'),
-            variant: "destructive"
-        });
-        return;
-    }
-
-    setIsSuggestingPrompt(true);
-    try {
-        const pastResponses = state.entries.map(e => e.text).join('\n');
-        const result = await suggestGratitudePrompt({ pastResponses });
-        if (result.suggestedPrompt) {
-            setCurrentPrompt(result.suggestedPrompt);
-            toast({ title: "New prompt suggested!", description: "Here is a personalized prompt for you."});
-        }
-    } catch (error) {
-        console.error("Error suggesting prompt:", error);
-        toast({
-            title: t('suggestionFailed'),
-            description: t('suggestionFailedDescription'),
-            variant: "destructive"
-        });
-    } finally {
-        setIsSuggestingPrompt(false);
-    }
-  };
-
   const handleNewQuote = () => {
     const quotes = getQuotes();
     if(quotes.length > 0) {
@@ -268,8 +234,6 @@ export default function GratitudeChallengePage() {
                 <GratitudeCard 
                     prompt={currentPrompt}
                     onEntrySubmit={handleAddEntry}
-                    onSuggestPrompt={handleSuggestPrompt}
-                    isSuggestingPrompt={isSuggestingPrompt}
                     isSubmittedToday={isTodayEntrySubmitted}
                     day={state.currentDay}
                 />

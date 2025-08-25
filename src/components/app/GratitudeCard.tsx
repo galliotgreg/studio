@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -11,7 +12,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -24,7 +24,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/app/LanguageProvider";
 
 const GratitudeFormSchema = z.object({
@@ -37,18 +36,14 @@ interface GratitudeCardProps {
   prompt: string;
   day: number;
   isSubmittedToday: boolean;
-  isSuggestingPrompt: boolean;
   onEntrySubmit: (text: string) => void;
-  onSuggestPrompt: () => void;
 }
 
 export function GratitudeCard({
   prompt,
   day,
   isSubmittedToday,
-  isSuggestingPrompt,
   onEntrySubmit,
-  onSuggestPrompt,
 }: GratitudeCardProps) {
   const { t } = useLanguage();
   const form = useForm<z.infer<typeof GratitudeFormSchema>>({
@@ -132,19 +127,6 @@ export function GratitudeCard({
             )}
           </AnimatePresence>
         </CardContent>
-        {!isSubmittedToday && (
-            <CardFooter>
-            <Button
-                variant="link"
-                className="text-muted-foreground mx-auto h-auto whitespace-normal text-center"
-                onClick={onSuggestPrompt}
-                disabled={isSuggestingPrompt}
-            >
-                <Sparkles className={cn("mr-2", isSuggestingPrompt && "animate-spin")} />
-                {isSuggestingPrompt ? t('suggestingPrompt') : t('suggestPrompt')}
-            </Button>
-            </CardFooter>
-        )}
     </Card>
   );
 }
