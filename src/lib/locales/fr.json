@@ -39,5 +39,12 @@
     "recentEntries": "Entrées Récentes",
     "recentEntriesDescription": "Un aperçu de vos récents moments de gratitude.",
     "noEntriesYet": "Vos entrées récentes apparaîtront ici une fois que vous les aurez écrites.",
-    "viewAll": "Voir tout"
+    "viewAll": "Voir tout",
+    "settings": "Paramètres",
+    "resetChallenge": "Réinitialiser le défi",
+    "resetWarningTitle": "Êtes-vous sûr(e) ?",
+    "resetWarningDescription": "Cela supprimera définitivement toutes vos entrées de journal, points et badges. Cette action est irréversible.",
+    "cancel": "Annuler",
+    "confirm": "Confirmer"
 }
+

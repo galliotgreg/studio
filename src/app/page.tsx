@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { Star, BrainCircuit, Forward, Badge } from "lucide-react";
+import { Star, BrainCircuit, Forward, Badge, Settings, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from 'next/link';
 
@@ -21,6 +21,17 @@ import { BadgesCard } from "@/components/app/BadgesCard";
 import { JournalCard } from "@/components/app/JournalCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/components/app/LanguageProvider";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button";
 
 const CHALLENGE_DURATION = 30;
 
@@ -32,6 +43,7 @@ export default function GratitudeChallengePage() {
   const [currentPrompt, setCurrentPrompt] = React.useState<string>("");
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
   const [isSuggestingPrompt, setIsSuggestingPrompt] = React.useState(false);
+  const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
   
   const getQuotes = React.useCallback(() => {
     try {
@@ -221,11 +233,17 @@ export default function GratitudeChallengePage() {
       setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
     }
   };
+  
+  const handleResetChallenge = () => {
+    localStorage.removeItem("gratitudeChallengeData");
+    window.location.reload();
+  };
+
 
   if (isLoading || !state) {
     return (
       <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header />
+        <Header onReset={() => setIsResetDialogOpen(true)} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <Skeleton className="h-96 lg:col-span-2 md:row-span-2" />
             <Skeleton className="h-48" />
@@ -241,7 +259,7 @@ export default function GratitudeChallengePage() {
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header />
+        <Header onReset={() => setIsResetDialogOpen(true)} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 
@@ -274,6 +292,23 @@ export default function GratitudeChallengePage() {
                 {currentQuote && <QuoteCard quote={currentQuote.text} author={currentQuote.author} onNewQuote={handleNewQuote}/>}
             </motion.div>
         </div>
+        <AlertDialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>{t('resetWarningTitle')}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        {t('resetWarningDescription')}
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleResetChallenge} className={buttonVariants({ variant: "destructive" })}>
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        {t('confirm')}
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     </main>
   );
 }

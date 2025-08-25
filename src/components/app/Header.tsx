@@ -1,12 +1,23 @@
+
 "use client";
 
-import { Star } from "lucide-react";
+import { Star, Settings } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "./LanguageProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Button } from "../ui/button";
 
+interface HeaderProps {
+    onReset: () => void;
+}
 
-export function Header() {
+export function Header({ onReset }: HeaderProps) {
   const { t } = useLanguage();
 
   return (
@@ -29,6 +40,18 @@ export function Header() {
       <div className="absolute top-0 right-0 flex items-center gap-2">
         <LanguageSwitcher />
         <ThemeToggle />
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon">
+                    <Settings className="h-[1.2rem] w-[1.2rem]" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={onReset} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                    {t('resetChallenge')}
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
