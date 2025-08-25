@@ -53,6 +53,10 @@ export function GratitudeCard({
     },
   });
 
+  React.useEffect(() => {
+    form.reset({ entry: "" });
+  }, [prompt, form]);
+
   function onSubmit(data: z.infer<typeof GratitudeFormSchema>) {
     onEntrySubmit(data.entry);
     form.reset();
