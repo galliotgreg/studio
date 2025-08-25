@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Instagram, Linkedin, Twitter } from "lucide-react";
+import { Instagram, Linkedin, Twitter, Facebook, Youtube, Github } from "lucide-react";
 import Image from "next/image";
 import { useLanguage } from "./LanguageProvider";
 
@@ -13,6 +13,9 @@ export function Footer() {
     { name: "Instagram", icon: Instagram, href: "#" },
     { name: "Bluesky", icon: () => <Image src="/icons/bluesky.svg" alt="Bluesky" width={24} height={24} />, href: "#" },
     { name: "Twitter", icon: Twitter, href: "#" },
+    { name: "Facebook", icon: Facebook, href: "#" },
+    { name: "Youtube", icon: Youtube, href: "#" },
+    { name: "Github", icon: Github, href: "#" },
   ];
 
   return (
