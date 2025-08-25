@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle, BrainCircuit, Sparkles } from "lucide-react";
+import { CheckCircle, Sparkles } from "lucide-react";
 
 import {
   Card,
@@ -140,7 +140,7 @@ export function GratitudeCard({
                 onClick={onSuggestPrompt}
                 disabled={isSuggestingPrompt}
             >
-                <BrainCircuit className={cn("mr-2", isSuggestingPrompt && "animate-spin")} />
+                <Sparkles className={cn("mr-2", isSuggestingPrompt && "animate-spin")} />
                 {isSuggestingPrompt ? t('suggestingPrompt') : t('suggestPrompt')}
             </Button>
             </CardFooter>
