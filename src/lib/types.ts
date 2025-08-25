@@ -14,8 +14,8 @@ export interface Quote {
 
 export interface Badge {
   id: string;
-  name: string;
-  description: string;
+  nameKey: string;
+  descriptionKey: string;
   icon: LucideIcon;
   milestone: number;
   type: "streak" | "entries";

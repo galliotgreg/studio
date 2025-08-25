@@ -140,7 +140,7 @@ describe('Gratitude App Logic', () => {
         for (let i = 1; i <= 7; i++) {
             const entryDate = new Date();
             entryDate.setDate(entryDate.getDate() - (7 - i));
-            state = { ...state, streak: i - 1, lastEntryDate: entryDate.toISOString() };
+            state = { ...state, lastEntryDate: entryDate.toISOString() };
             state = addGratitudeEntry(state, `Streak entry ${i} is long enough.`, `Prompt ${i}`);
         }
         

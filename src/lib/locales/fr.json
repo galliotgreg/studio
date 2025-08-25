@@ -39,5 +39,17 @@
     "resetWarningTitle": "Êtes-vous sûr(e) ?",
     "resetWarningDescription": "Cela supprimera définitivement toutes vos entrées de journal, points et badges. Cette action est irréversible.",
     "cancel": "Annuler",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "badge.entry-1.name": "Premier Pas",
+    "badge.entry-1.description": "A complété votre première entrée.",
+    "badge.streak-3.name": "Coeur Constant",
+    "badge.streak-3.description": "A maintenu une série de 3 jours.",
+    "badge.streak-7.name": "Guerrier de la Semaine",
+    "badge.streak-7.description": "A maintenu une série de 7 jours.",
+    "badge.entry-10.name": "Journaliste",
+    "badge.entry-10.description": "A complété 10 entrées.",
+    "badge.streak-21.name": "Nouvelle Habitude",
+    "badge.streak-21.description": "A maintenu une série de 21 jours.",
+    "badge.streak-30.name": "Maître de la Gratitude",
+    "badge.streak-30.description": "A maintenu une série de 30 jours."
 }

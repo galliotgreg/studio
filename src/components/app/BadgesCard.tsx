@@ -63,8 +63,8 @@ export function BadgesCard({ allBadges, unlockedBadgeIds }: BadgesCardProps) {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="font-bold">{badge.name}</p>
-                    <p>{badge.description}</p>
+                    <p className="font-bold">{t(badge.nameKey)}</p>
+                    <p>{t(badge.descriptionKey)}</p>
                   </TooltipContent>
                 </Tooltip>
               );

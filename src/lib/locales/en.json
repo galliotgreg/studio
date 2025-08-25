@@ -39,5 +39,17 @@
     "resetWarningTitle": "Are you sure?",
     "resetWarningDescription": "This will permanently delete all your journal entries, points, and badges. This action cannot be undone.",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "badge.entry-1.name": "First Step",
+    "badge.entry-1.description": "Completed your first entry.",
+    "badge.streak-3.name": "Consistent Heart",
+    "badge.streak-3.description": "Maintained a 3-day streak.",
+    "badge.streak-7.name": "Weekly Warrior",
+    "badge.streak-7.description": "Maintained a 7-day streak.",
+    "badge.entry-10.name": "Journaler",
+    "badge.entry-10.description": "Completed 10 entries.",
+    "badge.streak-21.name": "New Habit",
+    "badge.streak-21.description": "Maintained a 21-day streak.",
+    "badge.streak-30.name": "Gratitude Master",
+    "badge.streak-30.description": "Maintained a 30-day streak."
 }
