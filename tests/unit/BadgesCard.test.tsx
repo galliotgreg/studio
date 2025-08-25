@@ -1,8 +1,10 @@
+
 import { render, screen } from '@testing-library/react';
 import { expect, test, describe } from 'vitest';
 import { BadgesCard } from '@/components/app/BadgesCard';
 import { LanguageProvider } from '@/components/app/LanguageProvider';
 import { BADGES } from '@/lib/data';
+import fr from '@/lib/locales/fr.json';
 
 // Mock Lucide icons
 vi.mock('lucide-react', async () => {
@@ -30,7 +32,7 @@ describe('BadgesCard', () => {
         renderWithProvider(<BadgesCard allBadges={BADGES} unlockedBadgeIds={unlockedBadgeIds} />);
 
         // Check title
-        expect(screen.getByText('My Badges')).toBeInTheDocument();
+        expect(screen.getByText(fr.myBadges)).toBeInTheDocument();
 
         const badgeElements = screen.getAllByRole('img', { hidden: true });
         expect(badgeElements.length).toBe(BADGES.length);

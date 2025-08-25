@@ -1,3 +1,4 @@
+
 import { render, screen } from '@testing-library/react';
 import { expect, test, describe } from 'vitest';
 import { JournalEntryCard } from '@/components/app/JournalEntryCard';
@@ -5,6 +6,7 @@ import { LanguageProvider } from '@/components/app/LanguageProvider';
 import type { GratitudeEntry } from '@/lib/types';
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import frTranslations from '@/lib/locales/fr.json';
 
 
 describe('JournalEntryCard', () => {
@@ -24,8 +26,9 @@ describe('JournalEntryCard', () => {
     
     // Format the date using the French locale to match the component's output
     const formattedDate = format(new Date(entry.date), 'PPP', { locale: fr });
+    const title = `${frTranslations.dailyGratitude.split(' ')[0]} 5 - ${formattedDate}`;
 
-    expect(screen.getByText(`Day 5 - ${formattedDate}`)).toBeInTheDocument();
+    expect(screen.getByText(title)).toBeInTheDocument();
     expect(screen.getByText(entry.prompt)).toBeInTheDocument();
     expect(screen.getByText(entry.text)).toBeInTheDocument();
   });

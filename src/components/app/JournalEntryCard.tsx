@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import { format } from "date-fns";
-import { fr } from "date-fns/locale";
+import { fr, enUS } from "date-fns/locale";
 
 import type { GratitudeEntry } from "@/lib/types";
 import {
@@ -20,13 +20,13 @@ interface JournalEntryCardProps {
 }
 
 export function JournalEntryCard({ entry }: JournalEntryCardProps) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const date = new Date(entry.date);
 
   return (
     <Card className="bg-secondary/30">
       <CardHeader>
-        <CardTitle className="text-lg">{`Day ${entry.day} - ${format(date, 'PPP', { locale: language === 'fr' ? fr : undefined })}`}</CardTitle>
+        <CardTitle className="text-lg">{`${t('dailyGratitude').split(' ')[0]} ${entry.day} - ${format(date, 'PPP', { locale: language === 'fr' ? fr : enUS })}`}</CardTitle>
         <CardDescription className="italic pt-1">
           {entry.prompt}
         </CardDescription>
@@ -37,4 +37,3 @@ export function JournalEntryCard({ entry }: JournalEntryCardProps) {
     </Card>
   );
 }
-
