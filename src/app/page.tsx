@@ -109,17 +109,23 @@ export default function GratitudeChallengePage() {
       }
     }
   }, [state, isLoading]);
-
+  
   React.useEffect(() => {
     const quotes = getQuotes();
-    if(quotes.length > 0) {
+    if (quotes.length > 0) {
       setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
     }
-    const prompts = getPrompts();
-    if(prompts.length > 0 && state) {
-      setCurrentPrompt(prompts[state.currentDay - 1] || prompts[prompts.length-1]);
+  }, [getQuotes]);
+
+  React.useEffect(() => {
+    if (state) {
+      const prompts = getPrompts();
+      if (prompts.length > 0) {
+        setCurrentPrompt(prompts[state.currentDay - 1] || prompts[prompts.length - 1]);
+      }
     }
-  }, [language, getQuotes, getPrompts, state]);
+  }, [state, getPrompts]);
+
 
   const handleAddEntry = (text: string) => {
     if (!text.trim() || !state) return;
