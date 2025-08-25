@@ -11,11 +11,7 @@ export function Footer() {
   const socialLinks = [
     { name: "LinkedIn", icon: Linkedin, href: "#" },
     { name: "Instagram", icon: Instagram, href: "#" },
-    { name: "Bluesky", icon: () => <Image src="/icons/bluesky.svg" alt="Bluesky" width={24} height={24} />, href: "#" },
-    { name: "Twitter", icon: Twitter, href: "#" },
-    { name: "Facebook", icon: Facebook, href: "#" },
-    { name: "Youtube", icon: Youtube, href: "#" },
-    { name: "Github", icon: Github, href: "#" },
+    { name: "Bluesky", icon: () => <Image src="/icons/bluesky.svg" alt="Bluesky" width={24} height={24} />, href: "#" }
   ];
 
   return (
