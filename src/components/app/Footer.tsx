@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Instagram, Linkedin, Twitter, Facebook, Youtube, Github } from "lucide-react";
+import { Instagram, Linkedin } from "lucide-react";
 import { useLanguage } from "./LanguageProvider";
 
 const BlueskyIcon = () => (
@@ -24,10 +24,6 @@ export function Footer() {
     { name: "LinkedIn", icon: Linkedin, href: "#" },
     { name: "Instagram", icon: Instagram, href: "#" },
     { name: "Bluesky", icon: BlueskyIcon, href: "#" },
-    { name: "Twitter", icon: Twitter, href: "#" },
-    { name: "Facebook", icon: Facebook, href: "#" },
-    { name: "Youtube", icon: Youtube, href: "#" },
-    { name: "Github", icon: Github, href: "#" },
   ];
 
   return (
