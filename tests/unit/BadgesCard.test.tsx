@@ -1,6 +1,6 @@
 
 import { render, screen } from '@testing-library/react';
-import { expect, test, describe } from 'vitest';
+import { expect, test, describe, vi } from 'vitest';
 import { BadgesCard } from '@/components/app/BadgesCard';
 import { LanguageProvider } from '@/components/app/LanguageProvider';
 import { BADGES } from '@/lib/data';
@@ -34,17 +34,21 @@ describe('BadgesCard', () => {
         // Check title
         expect(screen.getByText(fr.myBadges)).toBeInTheDocument();
 
-        const badgeElements = screen.getAllByRole('img', { hidden: true });
-        expect(badgeElements.length).toBe(BADGES.length);
+        // Verify that all icons are rendered by checking their test-ids
+        BADGES.forEach(badge => {
+            const iconTestId = `${badge.icon.name.toLowerCase()}-icon`;
+            expect(screen.getByTestId(iconTestId)).toBeInTheDocument();
+        });
+
 
         // Check if unlocked badges have full opacity
-        const firstStepBadge = screen.getByTestId('star-icon').closest('div');
-        const consistentHeartBadge = screen.getByTestId('award-icon').closest('div');
+        const firstStepBadge = screen.getByTestId('star-icon').closest('div.transition-opacity');
+        const consistentHeartBadge = screen.getByTestId('award-icon').closest('div.transition-opacity');
         expect(firstStepBadge).not.toHaveClass('opacity-30');
         expect(consistentHeartBadge).not.toHaveClass('opacity-30');
 
         // Check if a locked badge is greyed out
-        const weeklyWarriorBadge = screen.getByTestId('trophy-icon').closest('div');
+        const weeklyWarriorBadge = screen.getByTestId('trophy-icon').closest('div.transition-opacity');
         expect(weeklyWarriorBadge).toHaveClass('opacity-30');
         expect(weeklyWarriorBadge).toHaveClass('grayscale');
     });
