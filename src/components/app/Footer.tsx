@@ -1,8 +1,27 @@
 
 "use client";
 
-import { Instagram, Linkedin, MessageSquareText } from "lucide-react";
+import { Instagram, Linkedin } from "lucide-react";
 import { useLanguage } from "./LanguageProvider";
+
+const BlueskyIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M12 10c-3.5 0-7 2.5-7 7s3.5 7 7 7c3.5 0 7-2.5 7-7c0-4-3.5-7-7-7z" />
+      <path d="M12 10c-3.5 0-7-2.5-7-7s3.5-7 7-7c3.5 0 7 2.5 7 7c0 4-3.5 7-7-7z" />
+      <path d="M19 10c-3.5 0-7 2.5-7 7s3.5 7 7 7c3.5 0 7-2.5 7-7c0-4-3.5-7-7-7z" />
+      <path d="M5 10c-3.5 0-7 2.5-7 7s3.5 7 7 7c3.5 0 7-2.5 7-7c0-4-3.5-7-7-7z" />
+    </svg>
+);
 
 export function Footer() {
   const { t } = useLanguage();
@@ -10,7 +29,7 @@ export function Footer() {
   const socialLinks = [
     { name: "LinkedIn", icon: Linkedin, href: "#" },
     { name: "Instagram", icon: Instagram, href: "#" },
-    { name: "Bluesky", icon: MessageSquareText, href: "#" },
+    { name: "Bluesky", icon: BlueskyIcon, href: "#" },
   ];
 
   return (
