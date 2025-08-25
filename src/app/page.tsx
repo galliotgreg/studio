@@ -115,16 +115,13 @@ export default function GratitudeChallengePage() {
     if (quotes.length > 0) {
       setCurrentQuote(quotes[Math.floor(Math.random() * quotes.length)]);
     }
-  }, [getQuotes]);
-
-  React.useEffect(() => {
     if (state) {
       const prompts = getPrompts();
       if (prompts.length > 0) {
         setCurrentPrompt(prompts[state.currentDay - 1] || prompts[prompts.length - 1]);
       }
     }
-  }, [state, getPrompts]);
+  }, [state, getQuotes, getPrompts, language]);
 
 
   const handleAddEntry = (text: string) => {
