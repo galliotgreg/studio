@@ -1,7 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import { expect, test } from 'vitest';
 import { ProgressCard } from '@/components/app/ProgressCard';
-import { LanguageProvider } from '@/components/app/LanguageProvider';
+import { LanguageProvider, useLanguage } from '@/components/app/LanguageProvider';
+import fr from '@/lib/locales/fr.json';
+import en from '@/lib/locales/en.json';
+import React from 'react';
+
+// Wrapper component to provide context and access translation function
+const TestWrapper = ({ children }: { children: React.ReactNode }) => {
+  const { t } = useLanguage();
+  // Pass t to children or use it here if children don't need it directly
+  return <div data-testid="t-function" data-t-challengeProgress={t('challengeProgress')} data-t-progressDescription={t('progressDescription')}>{children}</div>;
+};
+
 
 test('ProgressCard renders correctly', () => {
   render(
@@ -10,11 +21,9 @@ test('ProgressCard renders correctly', () => {
     </LanguageProvider>
   );
 
-  // Check the title
-  expect(screen.getByText('Challenge Progress')).toBeInTheDocument();
-
-  // Check the description text
-  expect(screen.getByText('You are on day 15 of your 30-day journey.')).toBeInTheDocument();
+  // Since default language is french, we check for french text.
+  expect(screen.getByText(fr.challengeProgress)).toBeInTheDocument();
+  expect(screen.getByText(fr.progressDescription.replace('{day}', '15').replace('{totalDays}', '30'))).toBeInTheDocument();
 
   // Check the percentage display
   expect(screen.getByText('50%')).toBeInTheDocument();
@@ -34,4 +43,5 @@ test('ProgressCard handles completion', () => {
     expect(screen.getByText('100%')).toBeInTheDocument();
     const progressBar = screen.getByRole('progressbar');
     expect(progressBar).toHaveAttribute('aria-valuenow', '100');
+    expect(screen.getByText(fr.progressDescription.replace('{day}', '30').replace('{totalDays}', '30'))).toBeInTheDocument();
 });
