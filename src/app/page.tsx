@@ -55,7 +55,7 @@ export default function GratitudeChallengePage() {
     } catch (e) {
       return [];
     }
-  }, [t]);
+  }, [t, language]);
 
   React.useEffect(() => {
     try {
