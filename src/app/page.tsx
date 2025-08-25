@@ -4,6 +4,7 @@
 import * as React from "react";
 import { Star, BrainCircuit, Forward, Badge } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from 'next/link';
 
 import type { GratitudeState, Quote } from "@/lib/types";
 import { BADGES } from "@/lib/data";
@@ -17,6 +18,7 @@ import { StatsCard } from "@/components/app/StatsCard";
 import { ProgressCard } from "@/components/app/ProgressCard";
 import { QuoteCard } from "@/components/app/QuoteCard";
 import { BadgesCard } from "@/components/app/BadgesCard";
+import { JournalCard } from "@/components/app/JournalCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/components/app/LanguageProvider";
 
@@ -262,7 +264,10 @@ export default function GratitudeChallengePage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-3">
                 <ProgressCard currentDay={state.currentDay} totalDays={CHALLENGE_DURATION} />
             </motion.div>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="lg:col-span-3">
+             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="lg:col-span-3">
+                <JournalCard entries={state.entries} />
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
                 <BadgesCard allBadges={BADGES} unlockedBadgeIds={state.unlockedBadges} />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lg:col-span-3">
