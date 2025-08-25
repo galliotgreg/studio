@@ -47,7 +47,7 @@ export function Header({ onReset }: HeaderProps) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={onReset} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                <DropdownMenuItem onClick={onReset} className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
                     {t('resetChallenge')}
                 </DropdownMenuItem>
             </DropdownMenuContent>
