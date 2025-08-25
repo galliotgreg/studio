@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -19,7 +20,7 @@ const LanguageContext = React.createContext<LanguageContextType | undefined>(
 );
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = React.useState<Language>("en");
+  const [language, setLanguage] = React.useState<Language>("fr");
 
   React.useEffect(() => {
     const savedLanguage = localStorage.getItem("gratitudeLanguage") as Language;
