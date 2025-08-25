@@ -1,5 +1,6 @@
 
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { expect, test, describe, vi } from 'vitest';
 import { GratitudeCard } from '@/components/app/GratitudeCard';
 import { LanguageProvider } from '@/components/app/LanguageProvider';
@@ -31,7 +32,7 @@ describe('GratitudeCard', () => {
     expect(screen.getByText(fr.dailyGratitude.replace('{day}', '1'))).toBeInTheDocument();
     expect(screen.getByText('"Pour quoi êtes-vous reconnaissant(e) ?"')).toBeInTheDocument();
     expect(screen.getByPlaceholderText(fr.gratitudePlaceholder)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: fr.saveGratitude })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Enregistrer ma gratitude/i })).toBeInTheDocument();
   });
 
   test('renders the submitted view when an entry has been made today', () => {
@@ -46,7 +47,7 @@ describe('GratitudeCard', () => {
 
     expect(screen.getByText(fr.submittedTitle)).toBeInTheDocument();
     expect(screen.getByText(fr.submittedDescription)).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: fr.saveGratitude })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Enregistrer ma gratitude/i })).not.toBeInTheDocument();
   });
 
   test('shows a validation error for entries that are too short', async () => {
@@ -60,12 +61,11 @@ describe('GratitudeCard', () => {
     );
 
     const textarea = screen.getByPlaceholderText(fr.gratitudePlaceholder);
-    const submitButton = screen.getByRole('button', { name: fr.saveGratitude });
+    const submitButton = screen.getByRole('button', { name: /Enregistrer ma gratitude/i });
 
-    fireEvent.change(textarea, { target: { value: 'court' } });
-    fireEvent.click(submitButton);
+    await userEvent.type(textarea, 'court');
+    await userEvent.click(submitButton);
 
-    // Use findByText for async validation messages
     expect(await screen.findByText(fr.entryTooShort)).toBeInTheDocument();
     expect(mockOnEntrySubmit).not.toHaveBeenCalled();
   });
@@ -82,11 +82,11 @@ describe('GratitudeCard', () => {
     );
 
     const textarea = screen.getByPlaceholderText(fr.gratitudePlaceholder);
-    const submitButton = screen.getByRole('button', { name: fr.saveGratitude });
+    const submitButton = screen.getByRole('button', { name: /Enregistrer ma gratitude/i });
     const validEntry = 'Ceci est une entrée suffisamment longue pour le test.';
 
-    fireEvent.change(textarea, { target: { value: validEntry } });
-    fireEvent.click(submitButton);
+    await userEvent.type(textarea, validEntry);
+    await userEvent.click(submitButton);
     
     // Check if the validation message is NOT there
     expect(screen.queryByText(fr.entryTooShort)).not.toBeInTheDocument();
