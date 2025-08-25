@@ -31,8 +31,8 @@
     "backToChallenge": "Back to Challenge",
     "noEntries": "You haven't written any entries yet. Start your gratitude journey today!",
     "recentEntries": "Recent Entries",
-    "recentEntriesDescription": "A glimpse into your recent moments of gratitude.",
-    "noEntriesYet": "Your recent entries will appear here once you write them.",
+    "recentEntriesDescription": "Review your past moments of gratitude and reflect on your journey.",
+    "noEntriesYet": "Your entries will appear here once you write them.",
     "viewAll": "View All",
     "settings": "Settings",
     "resetChallenge": "Reset Challenge",
@@ -51,5 +51,7 @@
     "badge.streak-21.name": "New Habit",
     "badge.streak-21.description": "Maintained a 21-day streak.",
     "badge.streak-30.name": "Gratitude Master",
-    "badge.streak-30.description": "Maintained a 30-day streak."
+    "badge.streak-30.description": "Maintained a 30-day streak.",
+    "viewAllEntries": "You have {count} entries in your journal.",
+    "viewJournal": "View Journal"
 }

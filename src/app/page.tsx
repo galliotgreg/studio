@@ -162,7 +162,7 @@ export default function GratitudeChallengePage() {
             newUnlockedBadges.push(badge.id);
             toast({
                 title: t('badgeUnlocked'),
-                description: t('badgeUnlockedDescription').replace('{badgeName}', badge.name),
+                description: t('badgeUnlockedDescription').replace('{badgeName}', t(badge.nameKey)),
             });
         }
     });
