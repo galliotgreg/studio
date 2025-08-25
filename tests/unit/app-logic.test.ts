@@ -11,23 +11,27 @@ const getDateString = (offset = 0) => {
 
 // This function simulates the core logic of adding a new entry
 // It's extracted from the page.tsx component to be testable
-function addGratitudeEntry(currentState: GratitudeState, newEntryText: string, prompt: string): GratitudeState {
+function addGratitudeEntry(
+    currentState: GratitudeState, 
+    newEntryText: string, 
+    prompt: string,
+    submissionDate: Date // Allow passing a submission date for testing
+): GratitudeState {
     if (!newEntryText.trim() || newEntryText.length < 10) {
         // In the real app, this would be handled by form validation,
         // but for testing the logic, we just return the state unchanged.
         return currentState;
     }
 
-    const today = new Date();
     const newEntry: GratitudeEntry = {
         day: currentState.currentDay,
-        date: today.toISOString(),
+        date: submissionDate.toISOString(),
         text: newEntryText,
         prompt: prompt,
     };
 
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterday = new Date(submissionDate);
+    yesterday.setDate(submissionDate.getDate() - 1);
     
     const lastEntryDate = currentState.lastEntryDate ? new Date(currentState.lastEntryDate) : null;
     
@@ -56,7 +60,7 @@ function addGratitudeEntry(currentState: GratitudeState, newEntryText: string, p
         streak: newStreak,
         points: newPoints,
         unlockedBadges: newUnlockedBadges,
-        lastEntryDate: today.toISOString(),
+        lastEntryDate: submissionDate.toISOString(),
     };
 }
 
@@ -72,7 +76,8 @@ describe('Gratitude App Logic', () => {
     };
 
     test('should add a new entry and update stats correctly', () => {
-        const newState = addGratitudeEntry(initialState, 'This is a valid gratitude entry.', 'Test Prompt');
+        const today = new Date();
+        const newState = addGratitudeEntry(initialState, 'This is a valid gratitude entry.', 'Test Prompt', today);
         
         expect(newState.entries.length).toBe(1);
         expect(newState.entries[0].text).toBe('This is a valid gratitude entry.');
@@ -84,17 +89,21 @@ describe('Gratitude App Logic', () => {
 
     test('should increment streak for consecutive days', () => {
         // First entry (yesterday)
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
         const stateAfterDay1: GratitudeState = {
             ...initialState,
-            entries: [{ day: 1, date: getDateString(-1), text: 'Yesterday\'s entry', prompt: 'P1'}],
+            entries: [{ day: 1, date: yesterday.toISOString(), text: 'Yesterday\'s entry', prompt: 'P1'}],
             currentDay: 2,
             streak: 1,
             points: 10,
-            lastEntryDate: getDateString(-1),
+            lastEntryDate: yesterday.toISOString(),
         };
 
         // Second entry (today)
-        const stateAfterDay2 = addGratitudeEntry(stateAfterDay1, 'Today\'s entry is also valid.', 'P2');
+        const today = new Date();
+        const stateAfterDay2 = addGratitudeEntry(stateAfterDay1, 'Today\'s entry is also valid.', 'P2', today);
 
         expect(stateAfterDay2.streak).toBe(2);
         expect(stateAfterDay2.points).toBe(10 + 10 + 5); // 10 (base) + 10 (today) + 5 (streak bonus)
@@ -103,17 +112,21 @@ describe('Gratitude App Logic', () => {
 
     test('should reset streak if a day is missed', () => {
         // First entry (two days ago)
+        const twoDaysAgo = new Date();
+        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
         const stateAfterDay1: GratitudeState = {
             ...initialState,
-            entries: [{ day: 1, date: getDateString(-2), text: 'Two days ago entry', prompt: 'P1' }],
+            entries: [{ day: 1, date: twoDaysAgo.toISOString(), text: 'Two days ago entry', prompt: 'P1' }],
             currentDay: 2,
             streak: 1,
             points: 10,
-            lastEntryDate: getDateString(-2),
+            lastEntryDate: twoDaysAgo.toISOString(),
         };
 
         // Second entry (today)
-        const stateAfterDay2 = addGratitudeEntry(stateAfterDay1, 'Today\'s entry after a missed day.', 'P2');
+        const today = new Date();
+        const stateAfterDay2 = addGratitudeEntry(stateAfterDay1, 'Today\'s entry after a missed day.', 'P2', today);
 
         expect(stateAfterDay2.streak).toBe(1); // Streak resets
         expect(stateAfterDay2.points).toBe(10 + 10); // 10 (base) + 10 (today), no streak bonus
@@ -125,8 +138,7 @@ describe('Gratitude App Logic', () => {
         for (let i = 1; i <= 10; i++) {
             const entryDate = new Date();
             entryDate.setDate(entryDate.getDate() - (10 - i));
-            state = { ...state, lastEntryDate: entryDate.toISOString() };
-            state = addGratitudeEntry(state, `Entry number ${i} is long enough.`, `Prompt ${i}`);
+            state = addGratitudeEntry(state, `Entry number ${i} is long enough.`, `Prompt ${i}`, entryDate);
         }
         
         expect(state.unlockedBadges).toContain('entry-1');
@@ -139,9 +151,9 @@ describe('Gratitude App Logic', () => {
         // Simulate a 7-day streak
         for (let i = 1; i <= 7; i++) {
             const entryDate = new Date();
-            entryDate.setDate(entryDate.getDate() - (7 - i));
-            state = { ...state, lastEntryDate: entryDate.toISOString() };
-            state = addGratitudeEntry(state, `Streak entry ${i} is long enough.`, `Prompt ${i}`);
+            // Simulate entries on consecutive days leading up to today
+            entryDate.setDate(new Date().getDate() - (7 - i));
+            state = addGratitudeEntry(state, `Streak entry ${i} is long enough.`, `Prompt ${i}`, entryDate);
         }
         
         expect(state.streak).toBe(7);
