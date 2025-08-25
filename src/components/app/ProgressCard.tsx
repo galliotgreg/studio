@@ -1,3 +1,4 @@
+
 "use client";
 
 import { CalendarDays } from "lucide-react";
@@ -29,7 +30,7 @@ export function ProgressCard({ currentDay, totalDays }: ProgressCardProps) {
             <span>{t('challengeProgress')}</span>
         </CardTitle>
         <CardDescription>
-          {t('progressDescription').replace('{currentDay}', String(currentDay)).replace('{totalDays}', String(totalDays))}
+          {t('progressDescription').replace('{day}', String(currentDay)).replace('{totalDays}', String(totalDays))}
         </CardDescription>
       </CardHeader>
       <CardContent>
