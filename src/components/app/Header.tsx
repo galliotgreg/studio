@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Star, Settings, Share2 } from "lucide-react";
+import { Settings, Share2 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "./LanguageProvider";
@@ -14,6 +14,7 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "../ui/button";
+import { AppIcon } from "./AppIcon";
 
 interface HeaderProps {
     onReset: () => void;
@@ -29,11 +30,11 @@ export function Header({ onReset, onShare }: HeaderProps) {
 
         <div className="flex flex-col items-center justify-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/50 rounded-full border border-primary/20">
-                <Star className="w-5 h-5 text-primary fill-primary" />
+                <AppIcon className="w-8 h-8 text-primary" />
                 <h1 className="text-2xl md:text-4xl font-headline font-bold text-foreground tracking-tight">
                 {t('appTitle')}
                 </h1>
-                <Star className="w-5 h-5 text-primary fill-primary" />
+                <AppIcon className="w-8 h-8 text-primary" />
             </div>
             <p className="mt-3 text-lg text-muted-foreground">
                 {t('appDescription')}
