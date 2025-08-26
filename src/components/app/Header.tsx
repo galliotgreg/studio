@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Star, Settings } from "lucide-react";
+import { Star, Settings, Share2 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "./LanguageProvider";
@@ -15,9 +15,10 @@ import { Button } from "../ui/button";
 
 interface HeaderProps {
     onReset: () => void;
+    onShare: () => void;
 }
 
-export function Header({ onReset }: HeaderProps) {
+export function Header({ onReset, onShare }: HeaderProps) {
   const { t } = useLanguage();
 
   return (
@@ -38,6 +39,10 @@ export function Header({ onReset }: HeaderProps) {
         </a>
       </p>
       <div className="absolute top-0 right-0 flex items-center gap-2">
+        <Button variant="outline" size="icon" onClick={onShare}>
+            <Share2 className="h-[1.2rem] w-[1.2rem]" />
+            <span className="sr-only">{t('share')}</span>
+        </Button>
         <LanguageSwitcher />
         <ThemeToggle />
         <DropdownMenu>

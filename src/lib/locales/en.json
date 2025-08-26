@@ -53,5 +53,10 @@
     "badge.streak-30.name": "Gratitude Master",
     "badge.streak-30.description": "Maintained a 30-day streak.",
     "viewAllEntries": "You have {count} entries in your journal.",
-    "viewJournal": "View Journal"
+    "viewJournal": "View Journal",
+    "share": "Share",
+    "linkCopiedTitle": "Link Copied!",
+    "linkCopiedDescription": "The link has been copied to your clipboard.",
+    "shareErrorTitle": "Could not share",
+    "shareErrorDescription": "Could not share or copy the link."
 }

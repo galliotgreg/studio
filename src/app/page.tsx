@@ -195,11 +195,41 @@ export default function GratitudeChallengePage() {
     window.location.reload();
   };
 
+  const handleShare = async () => {
+    const shareData = {
+      title: t('appTitle'),
+      text: t('appDescription'),
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        throw new Error("Web Share API not supported");
+      }
+    } catch (err) {
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          title: t('linkCopiedTitle'),
+          description: t('linkCopiedDescription'),
+        });
+      } catch (copyErr) {
+        toast({
+          title: t('shareErrorTitle'),
+          description: t('shareErrorDescription'),
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
 
   if (isLoading || !state) {
     return (
       <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <Skeleton className="h-96 lg:col-span-2 md:row-span-2" />
             <div className="flex flex-col gap-6">
@@ -218,7 +248,7 @@ export default function GratitudeChallengePage() {
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 

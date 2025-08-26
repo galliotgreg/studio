@@ -53,5 +53,10 @@
     "badge.streak-30.name": "Maître de la Gratitude",
     "badge.streak-30.description": "A maintenu une série de 30 jours.",
     "viewAllEntries": "Vous avez {count} entrées dans votre journal.",
-    "viewJournal": "Voir le journal"
+    "viewJournal": "Voir le journal",
+    "share": "Partager",
+    "linkCopiedTitle": "Lien copié !",
+    "linkCopiedDescription": "Le lien a été copié dans votre presse-papiers.",
+    "shareErrorTitle": "Impossible de partager",
+    "shareErrorDescription": "Le lien n'a pas pu être partagé ou copié."
 }
