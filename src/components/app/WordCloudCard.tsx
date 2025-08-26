@@ -46,6 +46,9 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                 const result = await extractKeywords({ text: allText });
                 
                 const wordFrequencies: { [key: string]: number } = {};
+                // The AI now returns unique keywords, but we might still want to aggregate
+                // if the same keyword appears across different processing chunks in a larger implementation.
+                // For now, we'll just count them as they come.
                 result.keywords.forEach(word => {
                     const lowerWord = word.toLowerCase();
                     wordFrequencies[lowerWord] = (wordFrequencies[lowerWord] || 0) + 1;
@@ -96,7 +99,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             <CardContent>
                 <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center items-center min-h-[100px]">
                     {isLoading ? (
-                        <Loader className="animate-spin" />
+                        <Loader className="animate-spin" data-testid="loader" />
                     ) : wordCloudData.length > 0 ? (
                         wordCloudData.map((word, index) => (
                             <motion.span
@@ -106,7 +109,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                                 transition={{ delay: index * 0.05 }}
                                 className={cn(colors[index % colors.length], "transition-all duration-300 hover:scale-110")}
                                 style={{ 
-                                    fontSize: `${'0.75 + (word.value / maxFrequency) * 1.5'}rem`,
+                                    fontSize: `${0.75 + (word.value / maxFrequency) * 1.5}rem`,
                                     fontWeight: 400 + Math.round((word.value / maxFrequency) * 300),
                                  }}
                             >
