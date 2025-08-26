@@ -36,8 +36,8 @@ export function JournalStatsCard({ entries }: JournalStatsCardProps) {
                 {hasEntries ? t('viewAllEntries').replace('{count}', String(entries.length)) : t('noEntriesYet')}
             </p>
         </CardContent>
-        <CardFooter className="pt-0">
-            <Button asChild variant="ghost" className="w-full justify-start p-0 h-auto" disabled={!hasEntries}>
+        <CardFooter className="pt-0 justify-center">
+            <Button asChild variant="outline" size="sm" className="w-full" disabled={!hasEntries}>
                 <Link href={hasEntries ? "/journal" : "#"} className={!hasEntries ? "pointer-events-none" : ""}>
                     {t('viewJournal')}
                     <ArrowRight className="ml-2 h-4 w-4" />
