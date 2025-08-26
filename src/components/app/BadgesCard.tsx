@@ -78,7 +78,7 @@ export const BadgesCard = React.forwardRef<HTMLDivElement, BadgesCardProps>(
                             transition={{
                               duration: 1.5,
                               ease: "easeOut",
-                              repeat: Infinity,
+                              repeat: 1,
                               delay: 0.5,
                             }}
                           />
@@ -108,5 +108,3 @@ export const BadgesCard = React.forwardRef<HTMLDivElement, BadgesCardProps>(
   }
 );
 BadgesCard.displayName = "BadgesCard";
-
-
