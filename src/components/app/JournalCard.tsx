@@ -13,9 +13,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useLanguage } from "@/components/app/LanguageProvider";
 import { GratitudeEntry } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 interface JournalCardProps {
   entries: GratitudeEntry[];
@@ -44,19 +45,17 @@ export function JournalCard({ entries }: JournalCardProps) {
         )}
       </CardContent>
       <CardFooter className="justify-end">
-          <Button asChild variant="outline" disabled={!hasEntries}>
-              {hasEntries ? (
-                <Link href="/journal">
-                    {t('viewJournal')}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              ) : (
-                <span>
-                  {t('viewJournal')}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </span>
-              )}
+        {hasEntries ? (
+          <Link href="/journal" className={cn(buttonVariants({ variant: "outline" }))}>
+            {t('viewJournal')}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        ) : (
+          <Button variant="outline" disabled>
+            {t('viewJournal')}
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
+        )}
       </CardFooter>
     </Card>
   );
