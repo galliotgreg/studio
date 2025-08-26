@@ -36,8 +36,7 @@ export const BadgesCard = React.forwardRef<HTMLDivElement, BadgesCardProps>(
       const newBadges = unlockedBadgeIds.filter(id => !prevUnlockedBadgeIdsRef.current.includes(id));
       if (newBadges.length > 0) {
         setNewlyUnlocked(newBadges);
-        const timer = setTimeout(() => setNewlyUnlocked([]), 2500); // Animation duration
-        return () => clearTimeout(timer);
+        // The animation will persist via CSS, no need for a timer to remove it
       }
       prevUnlockedBadgeIdsRef.current = unlockedBadgeIds;
     }, [unlockedBadgeIds]);
@@ -68,14 +67,20 @@ export const BadgesCard = React.forwardRef<HTMLDivElement, BadgesCardProps>(
                         "flex flex-col items-center gap-2 transition-opacity cursor-pointer",
                         !isUnlocked && "opacity-30 grayscale"
                       )}
-                      animate={isNew ? { scale: [1, 1.3, 1], transition: { duration: 0.7, ease: "easeInOut" } } : {}}
+                      animate={isNew ? { scale: [1, 1.2, 1], transition: { duration: 0.8, ease: "easeInOut", repeat: 2 } } : {}}
                     >
                       <div className="p-3 rounded-full bg-secondary relative">
                         {isNew && (
                           <motion.div
                             className="absolute inset-0 rounded-full bg-primary/50"
-                            initial={{ scale: 1, opacity: 1 }}
-                            animate={{ scale: 2, opacity: 0, transition: { duration: 1.5, ease: "easeOut" } }}
+                            initial={{ scale: 0, opacity: 0.7 }}
+                            animate={{ scale: 2.5, opacity: 0 }}
+                            transition={{
+                              duration: 1.5,
+                              ease: "easeOut",
+                              repeat: Infinity,
+                              delay: 0.5,
+                            }}
                           />
                         )}
                         <badge.icon
@@ -103,4 +108,5 @@ export const BadgesCard = React.forwardRef<HTMLDivElement, BadgesCardProps>(
   }
 );
 BadgesCard.displayName = "BadgesCard";
+
 
