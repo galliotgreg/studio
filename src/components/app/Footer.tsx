@@ -21,7 +21,7 @@ export function Footer() {
   const { t } = useLanguage();
 
   const socialLinks = [
-    { name: "LinkedIn", icon: Linkedin, href: "#" },
+    { name: "LinkedIn", icon: Linkedin, href: "https://www.linkedin.com/in/galliot-gregory" },
     { name: "Instagram", icon: Instagram, href: "#" },
     { name: "Bluesky", icon: BlueskyIcon, href: "#" },
   ];
