@@ -16,6 +16,7 @@ import { useLanguage } from "./LanguageProvider";
 import type { GratitudeEntry } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { extractKeywords } from "@/ai/flows/extract-keywords-flow";
+import { Skeleton } from "../ui/skeleton";
 
 interface WordCloudCardProps {
     entries: GratitudeEntry[];
@@ -46,9 +47,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                 const result = await extractKeywords({ text: allText });
                 
                 const wordFrequencies: { [key: string]: number } = {};
-                // The AI now returns unique keywords, but we might still want to aggregate
-                // if the same keyword appears across different processing chunks in a larger implementation.
-                // For now, we'll just count them as they come.
+                
                 result.keywords.forEach(word => {
                     const lowerWord = word.toLowerCase();
                     wordFrequencies[lowerWord] = (wordFrequencies[lowerWord] || 0) + 1;
@@ -88,18 +87,19 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
     return (
         <Card className="transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-base">
                     <Cloud className="text-primary" />
                     <span>{t("wordCloudTitle")}</span>
                 </CardTitle>
-                <CardDescription>
-                    {t("wordCloudDescription")}
-                </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center items-center min-h-[100px]">
+                <div className="flex flex-wrap gap-x-2 gap-y-1 justify-center items-center min-h-[100px]">
                     {isLoading ? (
-                        <Loader className="animate-spin" data-testid="loader" />
+                       <div className="w-full space-y-2">
+                           <Skeleton className="h-4 w-3/4" />
+                           <Skeleton className="h-4 w-1/2" />
+                           <Skeleton className="h-4 w-5/6" />
+                       </div>
                     ) : wordCloudData.length > 0 ? (
                         wordCloudData.map((word, index) => (
                             <motion.span
@@ -109,7 +109,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                                 transition={{ delay: index * 0.05 }}
                                 className={cn(colors[index % colors.length], "transition-all duration-300 hover:scale-110")}
                                 style={{ 
-                                    fontSize: `${0.75 + (word.value / maxFrequency) * 1.5}rem`,
+                                    fontSize: `${0.75 + (word.value / maxFrequency) * 1.25}rem`,
                                     fontWeight: 400 + Math.round((word.value / maxFrequency) * 300),
                                  }}
                             >
@@ -117,10 +117,11 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                             </motion.span>
                         ))
                     ) : (
-                        <p className="text-muted-foreground">{t('noEntriesYet')}</p>
+                        <p className="text-muted-foreground text-sm">{t('noEntriesYet')}</p>
                     )}
                 </div>
             </CardContent>
         </Card>
     );
 }
+

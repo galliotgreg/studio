@@ -15,9 +15,9 @@ import { StatsCard } from "@/components/app/StatsCard";
 import { ProgressCard } from "@/components/app/ProgressCard";
 import { QuoteCard } from "@/components/app/QuoteCard";
 import { BadgesCard } from "@/components/app/BadgesCard";
-import { JournalCard } from "@/components/app/JournalCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLanguage } from "@/components/app/LanguageProvider";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -29,17 +29,21 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { Button, buttonVariants } from "@/components/ui/button";
+import { JournalCard } from "@/components/app/JournalCard";
 
 const CHALLENGE_DURATION = 30;
 
 export default function GratitudeChallengePage() {
   const { toast } = useToast();
   const { t, language } = useLanguage();
+  const isMobile = useIsMobile();
   const [isLoading, setIsLoading] = React.useState(true);
   const [state, setState] = React.useState<GratitudeState | null>(null);
   const [currentPrompt, setCurrentPrompt] = React.useState<string>("");
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
   const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
+  const badgesCardRef = React.useRef<HTMLDivElement>(null);
+
 
   const getQuotes = React.useCallback(() => {
     try {
@@ -156,16 +160,24 @@ export default function GratitudeChallengePage() {
     const newCurrentDay = state.currentDay < CHALLENGE_DURATION ? state.currentDay + 1 : state.currentDay;
 
     const newUnlockedBadges = [...state.unlockedBadges];
+    let hasUnlockedNewBadge = false;
     BADGES.forEach(badge => {
         const isUnlocked = badge.type === 'streak' ? newStreak >= badge.milestone : state.entries.length + 1 >= badge.milestone;
         if (isUnlocked && !newUnlockedBadges.includes(badge.id)) {
             newUnlockedBadges.push(badge.id);
+            hasUnlockedNewBadge = true;
             toast({
                 title: t('badgeUnlocked'),
                 description: t('badgeUnlockedDescription').replace('{badgeName}', t(badge.nameKey)),
             });
         }
     });
+
+    if(hasUnlockedNewBadge && isMobile) {
+        setTimeout(() => {
+            badgesCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 500);
+    }
 
     setState({
       ...state,
@@ -272,7 +284,7 @@ export default function GratitudeChallengePage() {
                 <JournalCard entries={state.entries} />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
-                <BadgesCard allBadges={BADGES} unlockedBadgeIds={state.unlockedBadges} />
+                <BadgesCard ref={badgesCardRef} allBadges={BADGES} unlockedBadgeIds={state.unlockedBadges} />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lg:col-span-3">
                 {currentQuote && <QuoteCard quote={currentQuote.text} author={currentQuote.author} onNewQuote={handleNewQuote}/>}

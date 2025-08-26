@@ -60,5 +60,6 @@
     "shareErrorTitle": "Impossible de partager",
     "shareErrorDescription": "Le lien n'a pas pu être partagé ou copié.",
     "wordCloudTitle": "Votre Nuage de Gratitude",
-    "wordCloudDescription": "Les mots les plus fréquents dans votre journal."
+    "wordCloudDescription": "Les mots les plus fréquents dans votre journal.",
+    "noEntriesForDate": "Aucune entrée pour cette date."
 }

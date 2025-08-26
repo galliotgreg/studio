@@ -17,6 +17,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useLanguage } from "@/components/app/LanguageProvider";
 import { GratitudeEntry } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { WordCloudCard } from "./WordCloudCard";
 
 interface JournalCardProps {
   entries: GratitudeEntry[];
@@ -39,7 +40,14 @@ export function JournalCard({ entries }: JournalCardProps) {
       </CardHeader>
       <CardContent>
         {hasEntries ? (
-           <p className="text-muted-foreground">{t('viewAllEntries').replace('{count}', String(entries.length))}</p>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="md:col-span-2">
+              <p className="text-muted-foreground">{t('viewAllEntries').replace('{count}', String(entries.length))}</p>
+            </div>
+            <div className="md:col-span-1 row-start-1 md:row-start-auto">
+                <WordCloudCard entries={entries} />
+            </div>
+          </div>
         ) : (
             <p className="text-muted-foreground">{t('noEntriesYet')}</p>
         )}

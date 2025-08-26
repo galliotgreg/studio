@@ -60,5 +60,6 @@
     "shareErrorTitle": "Could not share",
     "shareErrorDescription": "Could not share or copy the link.",
     "wordCloudTitle": "Your Gratitude Cloud",
-    "wordCloudDescription": "The most frequent words in your journal."
+    "wordCloudDescription": "The most frequent words in your journal.",
+    "noEntriesForDate": "No entries for this date."
 }

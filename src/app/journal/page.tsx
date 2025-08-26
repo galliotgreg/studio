@@ -123,7 +123,7 @@ export default function JournalPage() {
                 </div>
             ) : (
                 <div className="text-center text-muted-foreground py-16">
-                    <p>{t('noEntries')}</p>
+                    <p>{selectedDate ? t('noEntriesForDate') : t('noEntries')}</p>
                 </div>
             )}
         </div>
