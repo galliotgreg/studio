@@ -10,9 +10,11 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import { useLanguage } from "@/components/app/LanguageProvider";
 import { GratitudeEntry } from "@/lib/types";
+import { Button } from "../ui/button";
 
 interface JournalStatsCardProps {
   entries: GratitudeEntry[];
@@ -29,11 +31,19 @@ export function JournalStatsCard({ entries }: JournalStatsCardProps) {
             <BookMarked className="h-5 w-5 text-primary" />
         </CardHeader>
         <CardContent>
-            <div className="text-4xl font-bold text-primary">{entries.length}</div>
+            <div className="text-2xl font-bold text-primary">{entries.length}</div>
             <p className="text-xs text-muted-foreground pt-1">
-                {hasEntries ? t('viewJournal') : t('noEntriesYet')}
+                {hasEntries ? t('viewAllEntries').replace('{count}', String(entries.length)) : t('noEntriesYet')}
             </p>
         </CardContent>
+        <CardFooter className="pt-0">
+            <Button asChild variant="ghost" className="w-full justify-start p-0 h-auto" disabled={!hasEntries}>
+                <Link href={hasEntries ? "/journal" : "#"} className={!hasEntries ? "pointer-events-none" : ""}>
+                    {t('viewJournal')}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+            </Button>
+        </CardFooter>
     </Card>
   );
 }

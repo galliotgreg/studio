@@ -260,6 +260,7 @@ export default function GratitudeChallengePage() {
   }
 
   const isTodayEntrySubmitted = state.lastEntryDate ? new Date(state.lastEntryDate).toDateString() === new Date().toDateString() : false;
+  const displayDay = isTodayEntrySubmitted ? state.currentDay - 1 : state.currentDay;
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
@@ -268,7 +269,7 @@ export default function GratitudeChallengePage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="md:col-span-2 md:row-span-2">
                 <GratitudeCard 
                     prompt={currentPrompt}
-                    day={isTodayEntrySubmitted ? state.currentDay - 1 : state.currentDay}
+                    day={displayDay}
                     isSubmittedToday={isTodayEntrySubmitted}
                     onEntrySubmit={handleAddEntry}
                 />
