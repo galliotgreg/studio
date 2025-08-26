@@ -1,22 +1,24 @@
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { extractKeywords, extractKeywordsFlow } from '@/ai/flows/extract-keywords-flow';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { extractKeywords } from '@/ai/flows/extract-keywords-flow';
 import type { ExtractKeywordsInput, ExtractKeywordsOutput } from '@/ai/flows/extract-keywords-flow';
-import * as aiFlow from '@/ai/flows/extract-keywords-flow';
+
+// We mock the AI dependency to prevent actual API calls during tests.
+const mockPromptFn = vi.fn().mockResolvedValue({
+  output: { keywords: ['test', 'gratitude', 'journey'] }
+});
+
+vi.mock('@/ai/genkit', () => ({
+  ai: {
+    definePrompt: vi.fn(() => mockPromptFn),
+  },
+}));
 
 describe('extractKeywordsFlow', () => {
 
-  let flowSpy: any;
-
   beforeEach(() => {
-    // We spy on the internal flow function to isolate our wrapper function's logic.
-    flowSpy = vi.spyOn(aiFlow, 'extractKeywordsFlow').mockResolvedValue({
-        keywords: ['test', 'gratitude', 'journey']
-    });
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
+    // Clear mock history before each test
+    vi.clearAllMocks();
   });
 
   it('should return an empty array if the input text is empty or just whitespace', async () => {
@@ -24,17 +26,18 @@ describe('extractKeywordsFlow', () => {
     const result: ExtractKeywordsOutput = await extractKeywords(input);
     
     expect(result.keywords).toEqual([]);
-    // The actual flow should not have been called due to the early return logic in the wrapper.
-    expect(flowSpy).not.toHaveBeenCalled();
+    // The actual prompt function should not have been called.
+    expect(mockPromptFn).not.toHaveBeenCalled();
   });
 
   it('should call the AI flow and return keywords for valid text', async () => {
     const input: ExtractKeywordsInput = { text: 'This is a test of gratitude on my journey.' };
     const result: ExtractKeywordsOutput = await extractKeywords(input);
 
-    // The flow function should be called with the correct input
-    expect(flowSpy).toHaveBeenCalledWith(input);
-    // The result should be the mocked output
+    // The prompt function should be called with the correct input.
+    expect(mockPromptFn).toHaveBeenCalledWith(input);
+    
+    // The result should be the mocked output.
     expect(result.keywords).toEqual(['test', 'gratitude', 'journey']);
   });
 });
