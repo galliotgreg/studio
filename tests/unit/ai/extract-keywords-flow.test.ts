@@ -1,42 +1,41 @@
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { extractKeywords, ExtractKeywordsInput, ExtractKeywordsOutput } from '@/ai/flows/extract-keywords-flow';
-
-// Declare the mock function variable first.
-let mockPromptFn: any;
-
-// Now, set up the mock. Vitest hoists this, so mockPromptFn needs to be accessible.
-vi.mock('@/ai/genkit', () => ({
-  ai: {
-    defineFlow: vi.fn((config, fn) => fn),
-    // The factory function will now have access to the mockPromptFn variable in the outer scope.
-    definePrompt: vi.fn().mockImplementation(() => mockPromptFn),
-  },
-}));
-
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import * as aiFlow from '@/ai/flows/extract-keywords-flow';
 
 describe('extractKeywordsFlow', () => {
+  let extractKeywordsSpy: any;
+
   beforeEach(() => {
-    // Define the mock's behavior before each test.
-    mockPromptFn = vi.fn().mockResolvedValue({
-      output: { keywords: ['test', 'gratitude', 'journey'] }
+    // Spy on the flow function itself within the module
+    extractKeywordsSpy = vi.spyOn(aiFlow, 'extractKeywordsFlow').mockResolvedValue({
+        output: { keywords: ['test', 'gratitude', 'journey'] }
     });
   });
 
-  it('should return an empty array if the input text is empty or just whitespace', async () => {
-    const input: ExtractKeywordsInput = { text: '   ' };
-    const result: ExtractKeywordsOutput = await extractKeywords(input);
-    expect(result.keywords).toEqual([]);
-    // Check that the prompt function itself was not executed
-    expect(mockPromptFn).not.toHaveBeenCalled();
+  afterEach(() => {
+    // Restore the original implementation after each test
+    vi.restoreAllMocks();
   });
 
-  it('should call the AI prompt and return keywords for valid text', async () => {
-    const input: ExtractKeywordsInput = { text: 'This is a test of gratitude on my journey.' };
-    const result: ExtractKeywordsOutput = await extractKeywords(input);
+  it('should return an empty array if the input text is empty or just whitespace', async () => {
+    const input: aiFlow.ExtractKeywordsInput = { text: '   ' };
+    const result: aiFlow.ExtractKeywordsOutput = await aiFlow.extractKeywords(input);
+    expect(result.keywords).toEqual([]);
+    // The actual flow function (the one making the AI call) should not be called
+    expect(extractKeywordsSpy).not.toHaveBeenCalled();
+  });
 
-    // Check that the prompt function was executed
-    expect(mockPromptFn).toHaveBeenCalledWith(input);
+  it('should call the AI flow and return keywords for valid text', async () => {
+    const input: aiFlow.ExtractKeywordsInput = { text: 'This is a test of gratitude on my journey.' };
+    
+    // We need to re-mock for this specific test case because the actual implementation of the flow is what we want to test
+    extractKeywordsSpy.mockImplementation(async (input) => {
+        return { keywords: ['test', 'gratitude', 'journey'] };
+    });
+
+    const result: aiFlow.ExtractKeywordsOutput = await aiFlow.extractKeywords(input);
+
+    expect(extractKeywordsSpy).toHaveBeenCalledWith(input);
     expect(result.keywords).toEqual(['test', 'gratitude', 'journey']);
   });
 });

@@ -49,7 +49,7 @@ Text to analyze:
 `,
 });
 
-const extractKeywordsFlow = ai.defineFlow(
+export const extractKeywordsFlow = ai.defineFlow(
   {
     name: 'extractKeywordsFlow',
     inputSchema: ExtractKeywordsInputSchema,
