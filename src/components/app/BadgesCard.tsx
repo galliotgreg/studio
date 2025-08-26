@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -11,11 +12,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useLanguage } from "@/components/app/LanguageProvider";
 import { Badge as BadgeType } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -39,38 +39,38 @@ export function BadgesCard({ allBadges, unlockedBadgeIds }: BadgesCardProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <TooltipProvider>
-          <div className="flex flex-row flex-wrap gap-4">
-            {allBadges.map((badge) => {
-              const isUnlocked = unlockedBadgeIds.includes(badge.id);
-              return (
-                <Tooltip key={badge.id} delayDuration={100}>
-                  <TooltipTrigger asChild>
-                    <div
-                      className={cn(
-                        "flex flex-col items-center gap-2 transition-opacity",
-                        !isUnlocked && "opacity-30 grayscale"
-                      )}
-                    >
-                      <div className="p-3 rounded-full bg-secondary">
-                        <badge.icon
-                          className={cn(
-                            "h-8 w-8",
-                            isUnlocked ? "text-primary" : "text-muted-foreground"
-                          )}
-                        />
-                      </div>
+        <div className="flex flex-row flex-wrap gap-4">
+          {allBadges.map((badge) => {
+            const isUnlocked = unlockedBadgeIds.includes(badge.id);
+            return (
+              <Popover key={badge.id}>
+                <PopoverTrigger asChild>
+                  <div
+                    className={cn(
+                      "flex flex-col items-center gap-2 transition-opacity cursor-pointer",
+                      !isUnlocked && "opacity-30 grayscale"
+                    )}
+                  >
+                    <div className="p-3 rounded-full bg-secondary">
+                      <badge.icon
+                        className={cn(
+                          "h-8 w-8",
+                          isUnlocked ? "text-primary" : "text-muted-foreground"
+                        )}
+                      />
                     </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto">
+                  <div className="p-2">
                     <p className="font-bold">{t(badge.nameKey)}</p>
                     <p>{t(badge.descriptionKey)}</p>
-                  </TooltipContent>
-                </Tooltip>
-              );
-            })}
-          </div>
-        </TooltipProvider>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );
