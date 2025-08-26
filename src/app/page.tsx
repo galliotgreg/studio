@@ -181,11 +181,6 @@ export default function GratitudeChallengePage() {
         title: t('gratitudeSaved'),
         description: t('gratitudeSavedDescription'),
     });
-    
-    const prompts = getPrompts();
-    if(prompts.length > 0) {
-      setCurrentPrompt(prompts[newCurrentDay - 1] || prompts[prompts.length-1]);
-    }
   };
 
   const handleNewQuote = () => {

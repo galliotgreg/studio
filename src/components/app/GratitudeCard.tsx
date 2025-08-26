@@ -71,9 +71,9 @@ export function GratitudeCard({
   return (
     <Card className="h-full flex flex-col transform transition-transform duration-300 hover:scale-[1.01] hover:shadow-xl">
         <CardHeader>
-          <CardTitle className="text-primary">{t('dailyGratitude').replace('{day}', String(day))}</CardTitle>
+          <CardTitle className="text-primary">{t('dailyGratitude').replace('{day}', isSubmittedToday ? String(day - 1) : String(day))}</CardTitle>
           <CardDescription className="text-lg font-serif italic pt-2">
-            "{prompt}"
+            {!isSubmittedToday ? `"${prompt}"` : t('submittedDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex-grow">
@@ -89,9 +89,6 @@ export function GratitudeCard({
               >
                 <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
                 <h3 className="text-xl font-semibold">{t('submittedTitle')}</h3>
-                <p className="text-muted-foreground mt-2">
-                  {t('submittedDescription')}
-                </p>
               </motion.div>
             ) : (
               <motion.div
