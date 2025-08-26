@@ -1,13 +1,13 @@
 
 import { test, expect } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
-  // Clear local storage before each test to ensure a clean state
-  await page.evaluate(() => localStorage.clear());
-  await page.goto('/');
-});
-
 test.describe('Gratitude Challenge App', () => {
+  test.beforeEach(async ({ page }) => {
+    // Clear local storage before each test to ensure a clean state
+    await page.evaluate(() => localStorage.clear());
+    await page.goto('/');
+  });
+
   test('should display the main page correctly', async ({ page }) => {
     // Check for the header
     await expect(page.getByRole('heading', { name: 'Défi de la Gratitude' })).toBeVisible();
