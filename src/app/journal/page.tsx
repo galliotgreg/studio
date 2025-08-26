@@ -2,21 +2,26 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { ArrowLeft, BookOpen, CalendarIcon } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { format } from "date-fns";
 
 import type { GratitudeState } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { JournalEntryCard } from "@/components/app/JournalEntryCard";
 import { useLanguage } from "@/components/app/LanguageProvider";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent } from "@/components/ui/card";
+
 
 export default function JournalPage() {
   const { t } = useLanguage();
   const [state, setState] = React.useState<GratitudeState | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
-
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(undefined);
+  
   React.useEffect(() => {
     try {
       const savedData = localStorage.getItem("gratitudeChallengeData");
@@ -28,7 +33,13 @@ export default function JournalPage() {
     }
     setIsLoading(false);
   }, []);
-  
+
+  const entryDates = React.useMemo(() => {
+    if (!state) return [];
+    return state.entries.map(entry => new Date(entry.date));
+  }, [state]);
+
+
   if (isLoading || !state) {
     return (
         <div className="container mx-auto p-4 md:p-8">
@@ -36,16 +47,25 @@ export default function JournalPage() {
                 <Skeleton className="h-12 w-1/2" />
                 <Skeleton className="h-10 w-24" />
             </header>
-            <div className="space-y-4">
-                <Skeleton className="h-40 w-full" />
-                <Skeleton className="h-40 w-full" />
-                <Skeleton className="h-40 w-full" />
+            <div className="grid md:grid-cols-3 gap-8">
+                <div className="md:col-span-1">
+                    <Skeleton className="h-80 w-full" />
+                </div>
+                <div className="md:col-span-2 space-y-4">
+                    <Skeleton className="h-40 w-full" />
+                    <Skeleton className="h-40 w-full" />
+                </div>
             </div>
         </div>
     )
   }
 
-  const sortedEntries = [...state.entries].sort((a, b) => b.day - a.day);
+  const sortedEntries = [...state.entries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  
+  const filteredEntries = selectedDate
+    ? sortedEntries.filter(entry => new Date(entry.date).toDateString() === selectedDate.toDateString())
+    : sortedEntries;
+
 
   return (
     <div className="container mx-auto p-4 md:p-8">
@@ -62,24 +82,50 @@ export default function JournalPage() {
         </Button>
       </header>
 
-      {sortedEntries.length > 0 ? (
-        <div className="space-y-4">
-          {sortedEntries.map((entry, index) => (
-            <motion.div
-                key={entry.day}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-            >
-                <JournalEntryCard entry={entry} />
-            </motion.div>
-          ))}
+      <div className="grid md:grid-cols-3 gap-8">
+        <div className="md:col-span-1">
+            <Card className="transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
+                <CardContent className="p-2">
+                    <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        modifiers={{ entered: entryDates }}
+                        modifiersClassNames={{
+                            entered: "bg-primary/20 text-primary-foreground rounded-full",
+                        }}
+                        className="p-0"
+                    />
+                </CardContent>
+            </Card>
+            {selectedDate && (
+                <Button variant="outline" onClick={() => setSelectedDate(undefined)} className="w-full mt-4">
+                    {t('viewAll')}
+                </Button>
+            )}
         </div>
-      ) : (
-        <div className="text-center text-muted-foreground py-16">
-          <p>{t('noEntries')}</p>
+        <div className="md:col-span-2">
+            {filteredEntries.length > 0 ? (
+                <div className="space-y-4">
+                {filteredEntries.map((entry, index) => (
+                    <motion.div
+                        key={entry.day}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        layout
+                    >
+                        <JournalEntryCard entry={entry} />
+                    </motion.div>
+                ))}
+                </div>
+            ) : (
+                <div className="text-center text-muted-foreground py-16">
+                    <p>{t('noEntries')}</p>
+                </div>
+            )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
