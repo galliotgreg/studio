@@ -68,12 +68,10 @@ export function GratitudeCard({
     exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: "easeIn" } },
   };
 
-  const displayDay = isSubmittedToday ? day - 1 : day;
-
   return (
     <Card className="h-full flex flex-col transform transition-transform duration-300 hover:scale-[1.01] hover:shadow-xl">
         <CardHeader>
-          <CardTitle className="text-primary">{t('dailyGratitude').replace('{day}', String(displayDay))}</CardTitle>
+          <CardTitle className="text-primary">{t('dailyGratitude').replace('{day}', String(day))}</CardTitle>
           <CardDescription className="text-lg font-serif italic pt-2">
             {!isSubmittedToday ? `"${prompt}"` : t('submittedDescription')}
           </CardDescription>

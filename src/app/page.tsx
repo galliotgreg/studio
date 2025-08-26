@@ -260,16 +260,16 @@ export default function GratitudeChallengePage() {
   }
 
   const isTodayEntrySubmitted = state.lastEntryDate ? new Date(state.lastEntryDate).toDateString() === new Date().toDateString() : false;
-  const displayDay = isTodayEntrySubmitted ? state.currentDay - 1 : state.currentDay;
+  const gratitudeCardDay = isTodayEntrySubmitted ? state.currentDay - 1 : state.currentDay;
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
         <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="md:col-span-2 md:row-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 
                     prompt={currentPrompt}
-                    day={displayDay}
+                    day={gratitudeCardDay}
                     isSubmittedToday={isTodayEntrySubmitted}
                     onEntrySubmit={handleAddEntry}
                 />
@@ -287,15 +287,15 @@ export default function GratitudeChallengePage() {
                 </motion.div>
             </div>
             
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="md:col-span-3">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-2">
                 <ProgressCard currentDay={state.currentDay} totalDays={CHALLENGE_DURATION} isCompleted={isTodayEntrySubmitted}/>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="md:col-span-3">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
                 <BadgesCard ref={badgesCardRef} allBadges={BADGES} unlockedBadgeIds={state.unlockedBadges} />
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="md:col-span-3">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lg:col-span-3">
                 {currentQuote && <QuoteCard quote={currentQuote.text} author={currentQuote.author} onNewQuote={handleNewQuote}/>}
             </motion.div>
         </div>
