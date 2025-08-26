@@ -2,13 +2,12 @@
 "use client";
 
 import * as React from "react";
-import { Cloud, Loader } from "lucide-react";
+import { Cloud } from "lucide-react";
 import { motion } from "framer-motion";
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -48,9 +47,14 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                 
                 const wordFrequencies: { [key: string]: number } = {};
                 
-                result.keywords.forEach(word => {
-                    const lowerWord = word.toLowerCase();
-                    wordFrequencies[lowerWord] = (wordFrequencies[lowerWord] || 0) + 1;
+                // Use the raw keywords from the AI for frequency counting
+                const allWords = allText.toLowerCase().match(/\b(\w+)\b/g) || [];
+                const keywordSet = new Set(result.keywords.map(k => k.toLowerCase()));
+
+                allWords.forEach(word => {
+                    if(keywordSet.has(word)) {
+                       wordFrequencies[word] = (wordFrequencies[word] || 0) + 1;
+                    }
                 });
                 
                 const formattedData = Object.entries(wordFrequencies)
@@ -95,7 +99,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             <CardContent>
                 <div className="flex flex-wrap gap-x-2 gap-y-1 justify-center items-center min-h-[100px]">
                     {isLoading ? (
-                       <div className="w-full space-y-2">
+                       <div data-testid="loader" className="w-full space-y-2">
                            <Skeleton className="h-4 w-3/4" />
                            <Skeleton className="h-4 w-1/2" />
                            <Skeleton className="h-4 w-5/6" />
@@ -124,4 +128,3 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
         </Card>
     );
 }
-

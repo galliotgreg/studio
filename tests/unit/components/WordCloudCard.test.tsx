@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
@@ -13,7 +14,7 @@ vi.mock('@/ai/flows/extract-keywords-flow', () => ({
 
 const mockEntries: GratitudeEntry[] = [
   { day: 1, date: '2024-01-01', text: 'Grateful for the sun', prompt: '' },
-  { day: 2, date: '2024-01-02', text: 'Grateful for my family', prompt: '' },
+  { day: 2, date: '2024-01-02', text: 'Grateful for my family and the sun', prompt: '' },
 ];
 
 const mockKeywords = { keywords: ['sun', 'family', 'grateful'] };
@@ -25,10 +26,10 @@ describe('WordCloudCard', () => {
         <WordCloudCard entries={[]} />
       </LanguageProvider>
     );
-    expect(screen.queryByText('Your Gratitude Cloud')).not.toBeInTheDocument();
+    expect(screen.queryByText(/gratitude cloud/i)).not.toBeInTheDocument();
   });
 
-  it('should show a loading spinner initially', () => {
+  it('should show a loading skeleton initially', () => {
     vi.mocked(aiFlow.extractKeywords).mockImplementation(() => new Promise(() => {})); // Never resolves
     render(
       <LanguageProvider>
@@ -67,13 +68,4 @@ describe('WordCloudCard', () => {
         expect(screen.getByText("Vos entrées apparaîtront ici une fois que vous les aurez écrites.")).toBeInTheDocument();
     });
   });
-});
-
-// Add a mock for the Loader component to avoid issues with Lucide icons in tests
-vi.mock('lucide-react', async () => {
-    const original = await vi.importActual('lucide-react');
-    return {
-        ...original,
-        Loader: (props) => <div data-testid="loader" {...props} />,
-    };
 });
