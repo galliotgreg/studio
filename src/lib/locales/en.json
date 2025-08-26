@@ -11,7 +11,7 @@
     "days": "{count} Days",
     "totalPoints": "Total Points",
     "challengeProgress": "Challenge Progress",
-    "progressDescription": "You are on day {day} of your {totalDays}-day journey.",
+    "progressDescription": "You have completed {day} days of your {totalDays}-day journey.",
     "myBadges": "My Badges",
     "badgesDescription": "Achievements you've unlocked on your gratitude journey.",
     "quoteTitle": "A Moment of Insight",

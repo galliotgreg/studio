@@ -11,7 +11,7 @@
     "days": "{count} Jours",
     "totalPoints": "Total des points",
     "challengeProgress": "Progression du défi",
-    "progressDescription": "Vous êtes au jour {day} de votre parcours de {totalDays} jours.",
+    "progressDescription": "Vous avez terminé {day} jours sur votre parcours de {totalDays} jours.",
     "myBadges": "Mes Badges",
     "badgesDescription": "Succès que vous avez débloqués dans votre parcours de gratitude.",
     "quoteTitle": "Un Moment d'Inspiration",

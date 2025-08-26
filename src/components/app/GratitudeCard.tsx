@@ -71,7 +71,7 @@ export function GratitudeCard({
   return (
     <Card className="h-full flex flex-col transform transition-transform duration-300 hover:scale-[1.01] hover:shadow-xl">
         <CardHeader>
-          <CardTitle className="text-primary">{t('dailyGratitude').replace('{day}', isSubmittedToday ? String(day - 1) : String(day))}</CardTitle>
+          <CardTitle className="text-primary">{t('dailyGratitude').replace('{day}', String(day))}</CardTitle>
           <CardDescription className="text-lg font-serif italic pt-2">
             {!isSubmittedToday ? `"${prompt}"` : t('submittedDescription')}
           </CardDescription>

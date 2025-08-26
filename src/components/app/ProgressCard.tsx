@@ -20,7 +20,8 @@ interface ProgressCardProps {
 
 export function ProgressCard({ currentDay, totalDays }: ProgressCardProps) {
   const { t } = useLanguage();
-  const progressPercentage = (Math.min(currentDay, totalDays) / totalDays) * 100;
+  const completedDays = Math.max(0, currentDay - 1);
+  const progressPercentage = (completedDays / totalDays) * 100;
   
   return (
     <Card className="transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
@@ -30,7 +31,7 @@ export function ProgressCard({ currentDay, totalDays }: ProgressCardProps) {
             <span>{t('challengeProgress')}</span>
         </CardTitle>
         <CardDescription>
-          {t('progressDescription').replace('{day}', String(currentDay)).replace('{totalDays}', String(totalDays))}
+          {t('progressDescription').replace('{day}', String(completedDays)).replace('{totalDays}', String(totalDays))}
         </CardDescription>
       </CardHeader>
       <CardContent>
