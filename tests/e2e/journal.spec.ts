@@ -41,12 +41,13 @@ const setupInitialState = async (page) => {
     (state) => localStorage.setItem('gratitudeChallengeData', JSON.stringify(state)),
     gratitudeState
   );
+  // Reload to apply the init script and local storage
+  await page.goto('/');
 };
 
 test.describe('Journal Page', () => {
   test.beforeEach(async ({ page }) => {
     await setupInitialState(page);
-    await page.goto('/');
   });
 
   test('should navigate to journal, display entries, filter by date, and reset filter', async ({ page }) => {
