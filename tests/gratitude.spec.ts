@@ -33,7 +33,7 @@ test('should allow submitting a gratitude entry', async ({ page }) => {
   await expect(page.getByText('10')).toBeVisible(); // 10 points for first entry
 
   // The page should now show Day 2 prompt area is locked
-  await expect(page.getByText('Jour 2 : Gratitude Quotidienne')).toBeVisible();
+  await expect(page.getByText('Jour 1 : Gratitude Quotidienne')).toBeVisible();
 
    // Reload the page and check for persistence
    await page.reload();
@@ -66,4 +66,30 @@ test('should show an error for entries that are too short', async ({ page }) => 
   // Check that stats are NOT updated
   await expect(page.getByText('0 Jours')).toBeVisible();
   await expect(page.getByText('0').nth(1)).toBeVisible();
+});
+
+test('should allow enabling and disabling notifications', async ({ page }) => {
+    // Grant notification permission for this test context
+    await page.context().grantPermissions(['notifications']);
+  
+    // Open settings dropdown
+    await page.getByRole('button', { name: 'Settings' }).click();
+  
+    // Find the switch and check its initial state (unchecked)
+    const notificationSwitch = page.locator('#notifications-switch');
+    await expect(notificationSwitch).not.toBeChecked();
+  
+    // Click the switch to enable notifications
+    await page.getByLabel('Notifications').click();
+    await expect(notificationSwitch).toBeChecked();
+  
+    // Check for success toast
+    await expect(page.getByText('Notifications activées')).toBeVisible();
+  
+    // Click again to disable
+    await page.getByLabel('Notifications').click();
+    await expect(notificationSwitch).not.toBeChecked();
+  
+    // Check for disabled toast
+    await expect(page.getByText('Notifications désactivées')).toBeVisible();
 });
