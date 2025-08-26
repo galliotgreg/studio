@@ -22,31 +22,11 @@ export function Header({ onReset, onShare }: HeaderProps) {
   const { t } = useLanguage();
 
   return (
-    <header className="flex flex-col items-center justify-center text-center p-4 relative">
-        <div className="w-full flex justify-end md:absolute md:top-4 md:right-4">
-            <div className="flex items-center gap-2">
-                <Button variant="outline" size="icon" onClick={onShare}>
-                    <Share2 className="h-[1.2rem] w-[1.2rem]" />
-                    <span className="sr-only">{t('share')}</span>
-                </Button>
-                <LanguageSwitcher />
-                <ThemeToggle />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon">
-                            <Settings className="h-[1.2rem] w-[1.2rem]" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={onReset} className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
-                            {t('resetChallenge')}
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </div>
-        </div>
+    <header className="flex flex-col md:flex-row items-center justify-between text-center p-4 gap-4">
+        {/* Spacer for large screens */}
+        <div className="hidden md:flex w-1/3"></div>
 
-        <div className="mt-12 md:mt-0">
+        <div className="flex flex-col items-center justify-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/50 rounded-full border border-primary/20">
                 <Star className="w-5 h-5 text-primary fill-primary" />
                 <h1 className="text-2xl md:text-4xl font-headline font-bold text-foreground tracking-tight">
@@ -62,6 +42,27 @@ export function Header({ onReset, onShare }: HeaderProps) {
                 {t('blogLinkText')}
                 </a>
             </p>
+        </div>
+
+        <div className="flex items-center justify-center md:justify-end gap-2 w-full md:w-1/3">
+            <Button variant="outline" size="icon" onClick={onShare}>
+                <Share2 className="h-[1.2rem] w-[1.2rem]" />
+                <span className="sr-only">{t('share')}</span>
+            </Button>
+            <LanguageSwitcher />
+            <ThemeToggle />
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="icon">
+                        <Settings className="h-[1.2rem] w-[1.2rem]" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={onReset} className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
+                        {t('resetChallenge')}
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </div>
     </header>
   );
