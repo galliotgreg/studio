@@ -58,5 +58,7 @@
     "linkCopiedTitle": "Lien copié !",
     "linkCopiedDescription": "Le lien a été copié dans votre presse-papiers.",
     "shareErrorTitle": "Impossible de partager",
-    "shareErrorDescription": "Le lien n'a pas pu être partagé ou copié."
+    "shareErrorDescription": "Le lien n'a pas pu être partagé ou copié.",
+    "wordCloudTitle": "Votre Nuage de Gratitude",
+    "wordCloudDescription": "Les mots les plus fréquents dans votre journal."
 }

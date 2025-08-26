@@ -14,6 +14,7 @@ import { useLanguage } from "@/components/app/LanguageProvider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
+import { WordCloudCard } from "@/components/app/WordCloudCard";
 
 
 export default function JournalPage() {
@@ -83,7 +84,7 @@ export default function JournalPage() {
       </header>
 
       <div className="grid md:grid-cols-3 gap-8">
-        <div className="md:col-span-1">
+        <div className="md:col-span-1 space-y-8">
             <Card className="transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
                 <CardContent className="p-2">
                     <Calendar
@@ -99,10 +100,11 @@ export default function JournalPage() {
                 </CardContent>
             </Card>
             {selectedDate && (
-                <Button variant="outline" onClick={() => setSelectedDate(undefined)} className="w-full mt-4">
+                <Button variant="outline" onClick={() => setSelectedDate(undefined)} className="w-full">
                     {t('viewAll')}
                 </Button>
             )}
+             <WordCloudCard entries={state.entries} />
         </div>
         <div className="md:col-span-2">
             {filteredEntries.length > 0 ? (

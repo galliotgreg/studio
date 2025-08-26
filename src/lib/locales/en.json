@@ -58,5 +58,7 @@
     "linkCopiedTitle": "Link Copied!",
     "linkCopiedDescription": "The link has been copied to your clipboard.",
     "shareErrorTitle": "Could not share",
-    "shareErrorDescription": "Could not share or copy the link."
+    "shareErrorDescription": "Could not share or copy the link.",
+    "wordCloudTitle": "Your Gratitude Cloud",
+    "wordCloudDescription": "The most frequent words in your journal."
 }
