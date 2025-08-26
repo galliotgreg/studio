@@ -106,7 +106,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                                 transition={{ delay: index * 0.05 }}
                                 className={cn(colors[index % colors.length], "transition-all duration-300 hover:scale-110")}
                                 style={{ 
-                                    fontSize: `${0.75 + (word.value / maxFrequency) * 1.5}rem`,
+                                    fontSize: `${'0.75 + (word.value / maxFrequency) * 1.5'}rem`,
                                     fontWeight: 400 + Math.round((word.value / maxFrequency) * 300),
                                  }}
                             >
