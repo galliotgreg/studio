@@ -58,17 +58,5 @@
     "linkCopiedTitle": "Link Copied!",
     "linkCopiedDescription": "The link has been copied to your clipboard.",
     "shareErrorTitle": "Could not share",
-    "shareErrorDescription": "Could not share or copy the link.",
-    "notifications": "Enable Notifications",
-    "notificationsNotSupportedTitle": "Notifications Not Supported",
-    "notificationsNotSupportedDescription": "Your browser does not support notifications.",
-    "notificationsEnabledTitle": "Notifications Enabled!",
-    "notificationsEnabledDescription": "You'll receive a test notification shortly.",
-    "notificationsDisabledTitle": "Notifications Disabled",
-    "notificationsDisabledDescription": "You will no longer receive reminders.",
-    "notificationPermissionDeniedTitle": "Permission Denied",
-    "notificationPermissionDeniedDescription": "You've blocked notifications. You can change this in your browser settings.",
-    "notificationErrorTitle": "Notification Error",
-    "notificationErrorDescription": "Something went wrong while setting up notifications.",
-    "notificationBody": "It's time for your daily gratitude entry. What are you thankful for today?"
+    "shareErrorDescription": "Could not share or copy the link."
 }

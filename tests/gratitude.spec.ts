@@ -67,22 +67,3 @@ test('should show an error for entries that are too short', async ({ page }) => 
   await expect(page.getByText('0 Jours')).toBeVisible();
   await expect(page.getByText('0').nth(1)).toBeVisible();
 });
-
-test('should allow enabling notifications', async ({ page }) => {
-    // Grant notification permission for this test context
-    await page.context().grantPermissions(['notifications']);
-  
-    // Open settings dropdown
-    await page.getByRole('button', { name: 'Settings' }).click();
-  
-    // Find the switch and check its initial state (unchecked)
-    const notificationSwitch = page.locator('#notifications-switch');
-    await expect(notificationSwitch).not.toBeChecked();
-  
-    // Click the switch to enable notifications
-    await page.getByLabel('Enable Notifications').click();
-    await expect(notificationSwitch).toBeChecked();
-  
-    // Check for success toast
-    await expect(page.getByText('Notifications activées !')).toBeVisible();
-});

@@ -9,7 +9,6 @@ import { Footer } from '@/components/app/Footer';
 export const metadata: Metadata = {
   title: 'Gratitude Challenge',
   description: 'A 30-day challenge to cultivate gratitude.',
-  manifest: '/manifest.json',
 };
 
 export default function RootLayout({

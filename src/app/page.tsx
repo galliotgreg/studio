@@ -40,7 +40,6 @@ export default function GratitudeChallengePage() {
   const [currentPrompt, setCurrentPrompt] = React.useState<string>("");
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
   const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
-  const [notificationsEnabled, setNotificationsEnabled] = React.useState(false);
 
   const getQuotes = React.useCallback(() => {
     try {
@@ -57,15 +56,6 @@ export default function GratitudeChallengePage() {
       return [];
     }
   }, [t, language]);
-
-  React.useEffect(() => {
-    // Check notification permission status on load
-    if ('Notification' in window) {
-      if (Notification.permission === 'granted') {
-        setNotificationsEnabled(true);
-      }
-    }
-  }, []);
 
   React.useEffect(() => {
     try {
@@ -235,35 +225,10 @@ export default function GratitudeChallengePage() {
     }
   };
 
-  const handleNotificationsToggle = async (enabled: boolean) => {
-    if (!('Notification' in window)) {
-        toast({ title: t('notificationsNotSupportedTitle'), description: t('notificationsNotSupportedDescription'), variant: 'destructive' });
-        return;
-    }
-
-    if (enabled) {
-      const permission = await Notification.requestPermission();
-      if (permission === 'granted') {
-          // Send a test notification to confirm
-          new Notification(t('notificationsEnabledTitle'), {
-            body: t('notificationsEnabledDescription'),
-            icon: '/icons/icon-192x192.png',
-          });
-          setNotificationsEnabled(true);
-      } else {
-          toast({ title: t('notificationPermissionDeniedTitle'), description: t('notificationPermissionDeniedDescription'), variant: 'destructive' });
-          setNotificationsEnabled(false);
-      }
-    } else {
-        setNotificationsEnabled(false);
-    }
-  };
-
-
   if (isLoading || !state) {
     return (
       <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onNotificationsToggle={handleNotificationsToggle} notificationsEnabled={notificationsEnabled} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <Skeleton className="h-96 lg:col-span-2 md:row-span-2" />
             <div className="flex flex-col gap-6">
@@ -282,7 +247,7 @@ export default function GratitudeChallengePage() {
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onNotificationsToggle={handleNotificationsToggle} notificationsEnabled={notificationsEnabled} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 
