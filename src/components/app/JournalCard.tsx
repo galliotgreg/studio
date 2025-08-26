@@ -23,6 +23,7 @@ interface JournalCardProps {
 
 export function JournalCard({ entries }: JournalCardProps) {
   const { t } = useLanguage();
+  const hasEntries = entries.length > 0;
   
   return (
     <Card className="h-full transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
@@ -36,18 +37,25 @@ export function JournalCard({ entries }: JournalCardProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {entries.length > 0 ? (
+        {hasEntries ? (
            <p className="text-muted-foreground">{t('viewAllEntries').replace('{count}', String(entries.length))}</p>
         ) : (
             <p className="text-muted-foreground">{t('noEntriesYet')}</p>
         )}
       </CardContent>
       <CardFooter className="justify-end">
-          <Button asChild variant="outline" disabled={entries.length === 0}>
-              <Link href="/journal">
+          <Button asChild variant="outline" disabled={!hasEntries}>
+              {hasEntries ? (
+                <Link href="/journal">
+                    {t('viewJournal')}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              ) : (
+                <span>
                   {t('viewJournal')}
                   <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+                </span>
+              )}
           </Button>
       </CardFooter>
     </Card>
