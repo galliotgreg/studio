@@ -107,25 +107,29 @@ export default function JournalPage() {
              <WordCloudCard entries={state.entries} />
         </aside>
         <main className="md:col-span-2">
-            {filteredEntries.length > 0 ? (
-                <div className="space-y-4">
-                {filteredEntries.map((entry, index) => (
-                    <motion.div
-                        key={entry.day}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        layout
-                    >
-                        <JournalEntryCard entry={entry} />
-                    </motion.div>
-                ))}
-                </div>
-            ) : (
-                <div className="text-center text-muted-foreground py-16">
-                    <p>{selectedDate ? t('noEntriesForDate') : t('noEntries')}</p>
-                </div>
-            )}
+          {filteredEntries.length > 0 ? (
+            <div className="relative border-l-2 border-primary/20 pl-8 space-y-10">
+              {filteredEntries.map((entry, index) => (
+                <motion.div
+                  key={entry.day}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.15 }}
+                  layout
+                  className="relative"
+                >
+                  <span className="absolute -left-[45px] top-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold ring-8 ring-background">
+                    {entry.day}
+                  </span>
+                  <JournalEntryCard entry={entry} />
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center text-muted-foreground py-16">
+              <p>{selectedDate ? t('noEntriesForDate') : t('noEntries')}</p>
+            </div>
+          )}
         </main>
       </div>
     </div>
