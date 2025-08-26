@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { BookMarked, ArrowRight } from "lucide-react";
+import { BookMarked, ArrowRight, BookOpen } from "lucide-react";
 import Link from 'next/link';
 
 import {
@@ -17,7 +17,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useLanguage } from "@/components/app/LanguageProvider";
 import { GratitudeEntry } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { WordCloudCard } from "./WordCloudCard";
 
 interface JournalCardProps {
   entries: GratitudeEntry[];
@@ -28,7 +27,7 @@ export function JournalCard({ entries }: JournalCardProps) {
   const hasEntries = entries.length > 0;
   
   return (
-    <Card className="h-full transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
+    <Card className="h-full transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <BookMarked className="text-primary" />
@@ -38,18 +37,18 @@ export function JournalCard({ entries }: JournalCardProps) {
           {t('recentEntriesDescription')}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow flex flex-col items-center justify-center text-center">
         {hasEntries ? (
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="md:col-span-2">
-              <p className="text-muted-foreground">{t('viewAllEntries').replace('{count}', String(entries.length))}</p>
-            </div>
-            <div className="md:col-span-1 row-start-1 md:row-start-auto">
-                <WordCloudCard entries={entries} />
-            </div>
-          </div>
+          <>
+            <BookOpen className="w-16 h-16 text-primary/20 mb-4" />
+            <p className="text-4xl font-bold">{entries.length}</p>
+            <p className="text-muted-foreground mt-1">{t('viewAllEntries').replace('{count}', '')}</p>
+          </>
         ) : (
-            <p className="text-muted-foreground">{t('noEntriesYet')}</p>
+            <div className="text-center text-muted-foreground py-8">
+                <BookOpen className="w-16 h-16 mx-auto text-primary/20 mb-4" />
+                <p>{t('noEntriesYet')}</p>
+            </div>
         )}
       </CardContent>
       <CardFooter className="justify-end">

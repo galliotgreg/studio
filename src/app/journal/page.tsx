@@ -2,10 +2,9 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, BookOpen, CalendarIcon } from "lucide-react";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { format } from "date-fns";
 
 import type { GratitudeState } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -50,7 +49,8 @@ export default function JournalPage() {
             </header>
             <div className="grid md:grid-cols-3 gap-8">
                 <div className="md:col-span-1">
-                    <Skeleton className="h-80 w-full" />
+                    <Skeleton className="h-80 w-full mb-8" />
+                    <Skeleton className="h-64 w-full" />
                 </div>
                 <div className="md:col-span-2 space-y-4">
                     <Skeleton className="h-40 w-full" />
@@ -84,7 +84,7 @@ export default function JournalPage() {
       </header>
 
       <div className="grid md:grid-cols-3 gap-8">
-        <div className="md:col-span-1 space-y-8">
+        <aside className="md:col-span-1 space-y-8">
             <Card className="transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
                 <CardContent className="p-2">
                     <Calendar
@@ -105,8 +105,8 @@ export default function JournalPage() {
                 </Button>
             )}
              <WordCloudCard entries={state.entries} />
-        </div>
-        <div className="md:col-span-2">
+        </aside>
+        <main className="md:col-span-2">
             {filteredEntries.length > 0 ? (
                 <div className="space-y-4">
                 {filteredEntries.map((entry, index) => (
@@ -126,7 +126,7 @@ export default function JournalPage() {
                     <p>{selectedDate ? t('noEntriesForDate') : t('noEntries')}</p>
                 </div>
             )}
-        </div>
+        </main>
       </div>
     </div>
   );
