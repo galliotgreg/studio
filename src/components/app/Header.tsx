@@ -25,8 +25,7 @@ export function Header({ onReset, onShare }: HeaderProps) {
 
   return (
     <header className="flex flex-col md:flex-row items-center justify-between text-center p-4 gap-4">
-        {/* Spacer for large screens */}
-        <div className="hidden md:flex w-1/3"></div>
+        <div className="w-full md:w-1/3"></div>
 
         <div className="flex flex-col items-center justify-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/50 rounded-full border border-primary/20">

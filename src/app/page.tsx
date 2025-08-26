@@ -157,7 +157,11 @@ export default function GratitudeChallengePage() {
 
     const newStreak = lastEntryDate === yesterday.toDateString() ? state.streak + 1 : 1;
     const newPoints = state.points + 10 + (newStreak > 1 ? 5 * (newStreak-1) : 0); // 10 points per entry + 5 bonus for each consecutive day
-    const newCurrentDay = state.currentDay < CHALLENGE_DURATION ? state.currentDay + 1 : state.currentDay;
+    
+    // Only increment day if the challenge is not complete
+    const isCompleted = state.currentDay >= CHALLENGE_DURATION && lastEntryDate !== todayStr
+    const newCurrentDay = !isCompleted ? state.currentDay + 1 : state.currentDay;
+
 
     const newUnlockedBadges = [...state.unlockedBadges];
     let hasUnlockedNewBadge = false;
@@ -260,11 +264,11 @@ export default function GratitudeChallengePage() {
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
         <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="md:col-span-2 md:row-span-2">
                 <GratitudeCard 
                     prompt={currentPrompt}
-                    day={state.currentDay}
+                    day={isTodayEntrySubmitted ? state.currentDay - 1 : state.currentDay}
                     isSubmittedToday={isTodayEntrySubmitted}
                     onEntrySubmit={handleAddEntry}
                 />
@@ -282,15 +286,15 @@ export default function GratitudeChallengePage() {
                 </motion.div>
             </div>
             
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-2">
-                <ProgressCard currentDay={state.currentDay} totalDays={CHALLENGE_DURATION} />
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="md:col-span-3">
+                <ProgressCard currentDay={state.currentDay} totalDays={CHALLENGE_DURATION} isCompleted={isTodayEntrySubmitted}/>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="md:col-span-3">
                 <BadgesCard ref={badgesCardRef} allBadges={BADGES} unlockedBadgeIds={state.unlockedBadges} />
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lg:col-span-3">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="md:col-span-3">
                 {currentQuote && <QuoteCard quote={currentQuote.text} author={currentQuote.author} onNewQuote={handleNewQuote}/>}
             </motion.div>
         </div>

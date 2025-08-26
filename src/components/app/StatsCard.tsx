@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -22,7 +23,7 @@ export function StatsCard({ icon: Icon, title, value }: StatsCardProps) {
         <Icon className="h-5 w-5 text-primary" />
       </CardHeader>
       <CardContent>
-        <div className="text-4xl font-bold text-primary">{value}</div>
+        <div className="text-2xl font-bold text-primary">{value}</div>
       </CardContent>
     </Card>
   );
