@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Star, Settings, Share2 } from "lucide-react";
+import { Star, Settings, Share2, Bell } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "./LanguageProvider";
@@ -10,15 +10,21 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "../ui/button";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
 
 interface HeaderProps {
     onReset: () => void;
     onShare: () => void;
+    onNotificationsToggle: (enabled: boolean) => void;
+    notificationsEnabled: boolean;
 }
 
-export function Header({ onReset, onShare }: HeaderProps) {
+export function Header({ onReset, onShare, onNotificationsToggle, notificationsEnabled }: HeaderProps) {
   const { t } = useLanguage();
 
   return (
@@ -58,6 +64,20 @@ export function Header({ onReset, onShare }: HeaderProps) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>{t('settings')}</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="flex items-center justify-between">
+                      <Label htmlFor="notifications-switch" className="flex items-center gap-2 pr-2">
+                        <Bell className="w-4 h-4" />
+                        <span>{t('notifications')}</span>
+                      </Label>
+                      <Switch
+                        id="notifications-switch"
+                        checked={notificationsEnabled}
+                        onCheckedChange={onNotificationsToggle}
+                      />
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={onReset} className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
                         {t('resetChallenge')}
                     </DropdownMenuItem>

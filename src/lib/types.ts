@@ -29,3 +29,13 @@ export interface GratitudeState {
   unlockedBadges: string[];
   lastEntryDate: string | null;
 }
+
+declare global {
+    interface Window {
+        TimestampTrigger: any;
+    }
+    interface NotificationOptions {
+        showTrigger?: any;
+        renotify?: boolean;
+    }
+}

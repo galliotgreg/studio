@@ -40,7 +40,8 @@ export default function GratitudeChallengePage() {
   const [currentPrompt, setCurrentPrompt] = React.useState<string>("");
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
   const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
-  
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(false);
+
   const getQuotes = React.useCallback(() => {
     try {
       return JSON.parse(t('quotesJson'));
@@ -56,6 +57,18 @@ export default function GratitudeChallengePage() {
       return [];
     }
   }, [t, language]);
+
+  React.useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+        return registration.getNotifications({includeTriggered: true});
+      }).then(notifications => {
+        setNotificationsEnabled(notifications.length > 0);
+      }).catch(error => {
+        console.error('Service Worker registration failed:', error);
+      });
+    }
+  }, []);
 
   React.useEffect(() => {
     try {
@@ -225,11 +238,54 @@ export default function GratitudeChallengePage() {
     }
   };
 
+  const handleNotificationsToggle = async (enabled: boolean) => {
+    if (!('serviceWorker' in navigator) || !('Notification' in window) || !('showTrigger' in Notification.prototype)) {
+      toast({ title: t('notificationsNotSupportedTitle'), description: t('notificationsNotSupportedDescription'), variant: 'destructive' });
+      return;
+    }
+  
+    const registration = await navigator.serviceWorker.ready;
+    const existingNotifications = await registration.getNotifications({ includeTriggered: true });
+  
+    // Cancel all existing notifications before setting a new one or disabling them
+    existingNotifications.forEach(notification => notification.close());
+    setNotificationsEnabled(false);
+  
+    if (enabled) {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        const targetTime = new Date();
+        targetTime.setHours(19, 0, 0, 0); // 7 PM
+        if (targetTime.getTime() < Date.now()) {
+          targetTime.setDate(targetTime.getDate() + 1); // If it's already past 7 PM, schedule for tomorrow
+        }
+  
+        try {
+          await registration.showNotification(t('appTitle'), {
+            tag: 'gratitude-reminder',
+            body: t('notificationBody'),
+            showTrigger: new (window as any).TimestampTrigger(targetTime.getTime()),
+            renotify: true,
+          });
+          setNotificationsEnabled(true);
+          toast({ title: t('notificationsEnabledTitle'), description: t('notificationsEnabledDescription') });
+        } catch (e) {
+          console.error("Error showing notification:", e);
+          toast({ title: t('notificationErrorTitle'), description: t('notificationErrorDescription'), variant: 'destructive' });
+        }
+      } else {
+        toast({ title: t('notificationPermissionDeniedTitle'), description: t('notificationPermissionDeniedDescription'), variant: 'destructive' });
+      }
+    } else {
+      toast({ title: t('notificationsDisabledTitle'), description: t('notificationsDisabledDescription') });
+    }
+  };
+
 
   if (isLoading || !state) {
     return (
       <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onNotificationsToggle={handleNotificationsToggle} notificationsEnabled={notificationsEnabled} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <Skeleton className="h-96 lg:col-span-2 md:row-span-2" />
             <div className="flex flex-col gap-6">
@@ -248,7 +304,7 @@ export default function GratitudeChallengePage() {
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onNotificationsToggle={handleNotificationsToggle} notificationsEnabled={notificationsEnabled} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 

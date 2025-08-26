@@ -9,6 +9,7 @@ import { Footer } from '@/components/app/Footer';
 export const metadata: Metadata = {
   title: 'Gratitude Challenge',
   description: 'A 30-day challenge to cultivate gratitude.',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
@@ -22,6 +23,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap" rel="stylesheet" />
+        <link rel="icon" href="/icons/favicon.ico" sizes="any" />
       </head>
       <body className="font-body antialiased min-h-screen bg-background flex flex-col">
         <LanguageProvider>
