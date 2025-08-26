@@ -261,6 +261,7 @@ export default function GratitudeChallengePage() {
 
   const isTodayEntrySubmitted = state.lastEntryDate ? new Date(state.lastEntryDate).toDateString() === new Date().toDateString() : false;
   const gratitudeCardDay = isTodayEntrySubmitted ? state.currentDay - 1 : state.currentDay;
+  const completedDays = state.entries.length;
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
@@ -288,7 +289,7 @@ export default function GratitudeChallengePage() {
             </div>
             
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-2">
-                <ProgressCard currentDay={state.currentDay} totalDays={CHALLENGE_DURATION} isCompleted={isTodayEntrySubmitted}/>
+                <ProgressCard completedDays={completedDays} totalDays={CHALLENGE_DURATION} isCompleted={isTodayEntrySubmitted}/>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
