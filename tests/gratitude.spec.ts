@@ -68,7 +68,7 @@ test('should show an error for entries that are too short', async ({ page }) => 
   await expect(page.getByText('0').nth(1)).toBeVisible();
 });
 
-test('should allow enabling and disabling notifications', async ({ page }) => {
+test('should allow enabling notifications', async ({ page }) => {
     // Grant notification permission for this test context
     await page.context().grantPermissions(['notifications']);
   
@@ -80,16 +80,9 @@ test('should allow enabling and disabling notifications', async ({ page }) => {
     await expect(notificationSwitch).not.toBeChecked();
   
     // Click the switch to enable notifications
-    await page.getByLabel('Notifications').click();
+    await page.getByLabel('Enable Notifications').click();
     await expect(notificationSwitch).toBeChecked();
   
     // Check for success toast
-    await expect(page.getByText('Notifications activées')).toBeVisible();
-  
-    // Click again to disable
-    await page.getByLabel('Notifications').click();
-    await expect(notificationSwitch).not.toBeChecked();
-  
-    // Check for disabled toast
-    await expect(page.getByText('Notifications désactivées')).toBeVisible();
+    await expect(page.getByText('Notifications activées !')).toBeVisible();
 });

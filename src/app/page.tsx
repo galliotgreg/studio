@@ -59,17 +59,11 @@ export default function GratitudeChallengePage() {
   }, [t, language]);
 
   React.useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready.then(registration => {
-        if (!registration) return;
-        return registration.getNotifications({includeTriggered: true});
-      }).then(notifications => {
-        if (notifications) {
-            setNotificationsEnabled(notifications.length > 0);
-        }
-      }).catch(error => {
-        console.error('Service Worker notifications check failed:', error);
-      });
+    // Check notification permission status on load
+    if ('Notification' in window) {
+      if (Notification.permission === 'granted') {
+        setNotificationsEnabled(true);
+      }
     }
   }, []);
 
@@ -242,47 +236,26 @@ export default function GratitudeChallengePage() {
   };
 
   const handleNotificationsToggle = async (enabled: boolean) => {
-    if (!('serviceWorker' in navigator) || !('Notification' in window) || !(typeof window !== 'undefined' && 'TimestampTrigger' in window)) {
+    if (!('Notification' in window)) {
         toast({ title: t('notificationsNotSupportedTitle'), description: t('notificationsNotSupportedDescription'), variant: 'destructive' });
         return;
     }
-  
-    const registration = await navigator.serviceWorker.ready;
-    if (!registration) return;
 
-    const existingNotifications = await registration.getNotifications({ includeTriggered: true });
-  
-    // Cancel all existing notifications before setting a new one or disabling them
-    existingNotifications.forEach(notification => notification.close());
-    setNotificationsEnabled(false);
-  
     if (enabled) {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
-        const targetTime = new Date();
-        targetTime.setHours(19, 0, 0, 0); // 7 PM
-        if (targetTime.getTime() < Date.now()) {
-          targetTime.setDate(targetTime.getDate() + 1); // If it's already past 7 PM, schedule for tomorrow
-        }
-  
-        try {
-          await registration.showNotification(t('appTitle'), {
-            tag: 'gratitude-reminder',
-            body: t('notificationBody'),
-            showTrigger: new (window as any).TimestampTrigger(targetTime.getTime()),
-            renotify: true,
+          // Send a test notification to confirm
+          new Notification(t('notificationsEnabledTitle'), {
+            body: t('notificationsEnabledDescription'),
+            icon: '/icons/icon-192x192.png',
           });
           setNotificationsEnabled(true);
-          toast({ title: t('notificationsEnabledTitle'), description: t('notificationsEnabledDescription') });
-        } catch (e) {
-          console.error("Error showing notification:", e);
-          toast({ title: t('notificationErrorTitle'), description: t('notificationErrorDescription'), variant: 'destructive' });
-        }
       } else {
-        toast({ title: t('notificationPermissionDeniedTitle'), description: t('notificationPermissionDeniedDescription'), variant: 'destructive' });
+          toast({ title: t('notificationPermissionDeniedTitle'), description: t('notificationPermissionDeniedDescription'), variant: 'destructive' });
+          setNotificationsEnabled(false);
       }
     } else {
-      toast({ title: t('notificationsDisabledTitle'), description: t('notificationsDisabledDescription') });
+        setNotificationsEnabled(false);
     }
   };
 
