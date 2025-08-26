@@ -1,23 +1,26 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { extractKeywords, ExtractKeywordsInput, ExtractKeywordsOutput } from '@/ai/flows/extract-keywords-flow';
-import { ai } from '@/ai/genkit';
 
-const mockPromptFn = vi.fn().mockResolvedValue({
-  output: { keywords: ['test', 'gratitude', 'journey'] }
-});
+// Declare the mock function variable first.
+let mockPromptFn: any;
 
+// Now, set up the mock. Vitest hoists this, so mockPromptFn needs to be accessible.
 vi.mock('@/ai/genkit', () => ({
   ai: {
     defineFlow: vi.fn((config, fn) => fn),
+    // The factory function will now have access to the mockPromptFn variable in the outer scope.
     definePrompt: vi.fn().mockImplementation(() => mockPromptFn),
   },
 }));
 
+
 describe('extractKeywordsFlow', () => {
   beforeEach(() => {
-    // Clear mock history before each test
-    mockPromptFn.mockClear();
+    // Define the mock's behavior before each test.
+    mockPromptFn = vi.fn().mockResolvedValue({
+      output: { keywords: ['test', 'gratitude', 'journey'] }
+    });
   });
 
   it('should return an empty array if the input text is empty or just whitespace', async () => {
