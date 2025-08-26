@@ -60,12 +60,15 @@ export default function GratitudeChallengePage() {
 
   React.useEffect(() => {
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(registration => {
+      navigator.serviceWorker.ready.then(registration => {
+        if (!registration) return;
         return registration.getNotifications({includeTriggered: true});
       }).then(notifications => {
-        setNotificationsEnabled(notifications.length > 0);
+        if (notifications) {
+            setNotificationsEnabled(notifications.length > 0);
+        }
       }).catch(error => {
-        console.error('Service Worker registration failed:', error);
+        console.error('Service Worker notifications check failed:', error);
       });
     }
   }, []);
@@ -355,3 +358,5 @@ export default function GratitudeChallengePage() {
     </main>
   );
 }
+
+    
