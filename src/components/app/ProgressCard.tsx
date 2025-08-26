@@ -16,11 +16,12 @@ import { useLanguage } from "./LanguageProvider";
 interface ProgressCardProps {
   currentDay: number;
   totalDays: number;
+  isCompleted: boolean;
 }
 
-export function ProgressCard({ currentDay, totalDays }: ProgressCardProps) {
+export function ProgressCard({ currentDay, totalDays, isCompleted }: ProgressCardProps) {
   const { t } = useLanguage();
-  const completedDays = Math.max(0, currentDay - 1);
+  const completedDays = isCompleted ? currentDay - 1 : Math.max(0, currentDay -1);
   const progressPercentage = (completedDays / totalDays) * 100;
   
   return (
