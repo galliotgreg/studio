@@ -22,7 +22,7 @@ export function Footer() {
 
   const socialLinks = [
     { name: "LinkedIn", icon: Linkedin, href: "https://www.linkedin.com/in/galliot-gregory" },
-    { name: "Instagram", icon: Instagram, href: "#" },
+    { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/greg_ggt" },
     { name: "Bluesky", icon: BlueskyIcon, href: "https://bsky.app/profile/gregggt.bsky.social" },
   ];
 
