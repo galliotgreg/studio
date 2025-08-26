@@ -1,21 +1,19 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { extractKeywords, type ExtractKeywordsInput, type ExtractKeywordsOutput } from '@/ai/flows/extract-keywords-flow';
-import { ai } from '@/ai/genkit';
+
+// We define the mock prompt function here, and it will be captured by the mock factory below.
+const mockPromptFn = vi.fn().mockResolvedValue({
+  output: { keywords: ['test', 'gratitude', 'journey'] }
+});
 
 // This mock needs to be hoisted before imports, so we use vi.mock at the top level.
-// We declare mockPromptFn here so it's in scope for the mock factory.
-let mockPromptFn: any;
-
 vi.mock('@/ai/genkit', () => {
-    // The factory function is now where we define the mock's behavior.
-    mockPromptFn = vi.fn().mockResolvedValue({
-      output: { keywords: ['test', 'gratitude', 'journey'] }
-    });
     return {
         ai: {
             definePrompt: vi.fn().mockReturnValue(mockPromptFn),
-            defineFlow: vi.fn().mockImplementation((_, fn) => fn), // Pass through the flow function
+            // The flow function itself is passed through, so we can test its internal logic.
+            defineFlow: vi.fn().mockImplementation((_, fn) => fn), 
         }
     };
 });
@@ -23,7 +21,7 @@ vi.mock('@/ai/genkit', () => {
 describe('extractKeywordsFlow', () => {
 
   beforeEach(() => {
-    // Clear mock history before each test
+    // Clear mock history before each test to ensure a clean slate
     vi.clearAllMocks();
   });
 
@@ -32,7 +30,7 @@ describe('extractKeywordsFlow', () => {
     const result: ExtractKeywordsOutput = await extractKeywords(input);
     
     expect(result.keywords).toEqual([]);
-    // The actual prompt function should not be called because of the early return
+    // The actual prompt function should not have been called due to the early return logic.
     expect(mockPromptFn).not.toHaveBeenCalled();
   });
 
@@ -46,4 +44,3 @@ describe('extractKeywordsFlow', () => {
     expect(result.keywords).toEqual(['test', 'gratitude', 'journey']);
   });
 });
-
