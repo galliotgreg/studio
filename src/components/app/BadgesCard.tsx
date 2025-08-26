@@ -28,11 +28,18 @@ interface BadgesCardProps {
 
 export function BadgesCard({ allBadges, unlockedBadgeIds }: BadgesCardProps) {
   const { t } = useLanguage();
-  const prevUnlockedBadgeIdsRef = React.useRef<string[]>([]);
+  const prevUnlockedBadgeIdsRef = React.useRef<string[]>(unlockedBadgeIds);
+  const [newlyUnlocked, setNewlyUnlocked] = React.useState<string[]>([]);
 
   React.useEffect(() => {
+    const newBadges = unlockedBadgeIds.filter(id => !prevUnlockedBadgeIdsRef.current.includes(id));
+    if (newBadges.length > 0) {
+      setNewlyUnlocked(newBadges);
+      setTimeout(() => setNewlyUnlocked([]), 2000); // Animation duration
+    }
     prevUnlockedBadgeIdsRef.current = unlockedBadgeIds;
   }, [unlockedBadgeIds]);
+
 
   return (
     <Card className="h-full transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
@@ -49,7 +56,7 @@ export function BadgesCard({ allBadges, unlockedBadgeIds }: BadgesCardProps) {
         <div className="flex flex-row flex-wrap gap-4">
           {allBadges.map((badge) => {
             const isUnlocked = unlockedBadgeIds.includes(badge.id);
-            const isNew = isUnlocked && !prevUnlockedBadgeIdsRef.current.includes(badge.id);
+            const isNew = newlyUnlocked.includes(badge.id);
             
             return (
               <Popover key={badge.id}>
@@ -59,15 +66,14 @@ export function BadgesCard({ allBadges, unlockedBadgeIds }: BadgesCardProps) {
                       "flex flex-col items-center gap-2 transition-opacity cursor-pointer",
                       !isUnlocked && "opacity-30 grayscale"
                     )}
-                    initial={{ scale: 1 }}
-                    animate={isNew ? { scale: [1, 1.2, 1], transition: { duration: 0.5, ease: "easeInOut" } } : {}}
+                    animate={isNew ? { scale: [1, 1.3, 1], transition: { duration: 0.7, ease: "easeInOut" } } : {}}
                   >
                     <div className="p-3 rounded-full bg-secondary relative">
                        {isNew && (
                         <motion.div
                           className="absolute inset-0 rounded-full bg-primary/50"
                           initial={{ scale: 1, opacity: 1 }}
-                          animate={{ scale: 2, opacity: 0, transition: { duration: 1, ease: "easeOut" } }}
+                          animate={{ scale: 2, opacity: 0, transition: { duration: 1.5, ease: "easeOut" } }}
                         />
                       )}
                       <badge.icon
