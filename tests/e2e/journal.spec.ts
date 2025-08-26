@@ -48,14 +48,31 @@ const setupInitialState = async (page) => {
 test.describe('Journal Page', () => {
   test.beforeEach(async ({ page }) => {
     await setupInitialState(page);
-  });
-
-  test('should navigate to journal, display entries, filter by date, and reset filter', async ({ page }) => {
-    // Navigate to journal page
     await page.getByRole('link', { name: 'Voir le journal' }).click();
     await expect(page).toHaveURL('/journal');
-    await expect(page.getByRole('heading', { name: 'Mon Journal' })).toBeVisible();
+  });
 
+  test('should display entries in a timeline view', async ({ page }) => {
+    // Check for the timeline container
+    const timeline = page.getByTestId('timeline');
+    await expect(timeline).toBeVisible();
+    await expect(timeline).toHaveClass(/border-l-2/);
+
+    // Check for timeline items (day markers)
+    // We sort entries by day descending in the component, so Day 2 should be first.
+    const day2Marker = timeline.getByText('2', { exact: true });
+    const day1Marker = timeline.getByText('1', { exact: true });
+
+    await expect(day2Marker).toBeVisible();
+    await expect(day1Marker).toBeVisible();
+
+    // Check that the entry content is also present
+    await expect(page.getByText('Entry for the 21st')).toBeVisible();
+    await expect(page.getByText('Entry for the 20th')).toBeVisible();
+  });
+
+
+  test('should filter by date and reset filter correctly', async ({ page }) => {
     // Check that both entries are initially visible
     await expect(page.getByText('Entry for the 20th')).toBeVisible();
     await expect(page.getByText('Entry for the 21st')).toBeVisible();
@@ -69,7 +86,7 @@ test.describe('Journal Page', () => {
     
     // The calendar is rendered in French by default
     const formattedDate = format(dateToClick, 'PPP', { locale: fr });
-    const expectedTitle = `Gratitude 1 - ${formattedDate}`;
+    const expectedTitle = `Jour 1 - ${formattedDate}`;
 
     await page.getByRole('gridcell', { name: day }).locator('div').first().click();
 

@@ -108,7 +108,7 @@ export default function JournalPage() {
         </aside>
         <main className="md:col-span-2">
           {filteredEntries.length > 0 ? (
-            <div className="relative border-l-2 border-primary/20 pl-8 space-y-10">
+            <div data-testid="timeline" className="relative border-l-2 border-primary/20 pl-8 space-y-10">
               {filteredEntries.map((entry, index) => (
                 <motion.div
                   key={entry.day}
