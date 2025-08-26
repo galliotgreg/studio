@@ -242,12 +242,14 @@ export default function GratitudeChallengePage() {
   };
 
   const handleNotificationsToggle = async (enabled: boolean) => {
-    if (!('serviceWorker' in navigator) || !('Notification' in window) || !('showTrigger' in Notification.prototype)) {
-      toast({ title: t('notificationsNotSupportedTitle'), description: t('notificationsNotSupportedDescription'), variant: 'destructive' });
-      return;
+    if (!('serviceWorker' in navigator) || !('Notification' in window) || !(typeof window !== 'undefined' && 'TimestampTrigger' in window)) {
+        toast({ title: t('notificationsNotSupportedTitle'), description: t('notificationsNotSupportedDescription'), variant: 'destructive' });
+        return;
     }
   
     const registration = await navigator.serviceWorker.ready;
+    if (!registration) return;
+
     const existingNotifications = await registration.getNotifications({ includeTriggered: true });
   
     // Cancel all existing notifications before setting a new one or disabling them
