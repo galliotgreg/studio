@@ -1,3 +1,4 @@
+
 import { defineConfig, devices } from '@playwright/test';
 
 const port = 9002;
@@ -31,7 +32,7 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     },
   ],
 
