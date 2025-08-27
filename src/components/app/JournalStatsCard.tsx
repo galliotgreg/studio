@@ -35,7 +35,7 @@ export function JournalStatsCard({ entries }: JournalStatsCardProps) {
             <div className="text-2xl font-bold text-primary flex items-baseline gap-2">
               <span>{entryCount}</span>
               <span className="text-sm font-medium text-muted-foreground">
-                {entryCount > 1 ? t('entries') : t('entry')}
+                {entryCount !== 1 ? t('entries') : t('entry')}
               </span>
             </div>
             {!hasEntries && (
