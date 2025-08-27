@@ -33,10 +33,7 @@ export function JournalStatsCard({ entries }: JournalStatsCardProps) {
         </CardHeader>
         <CardContent>
             <div className="text-2xl font-bold text-primary">
-              {entryCount}
-              <span className="ml-2 text-sm font-medium text-muted-foreground">
-                {entryCount > 1 ? t('entries') : t('entry')}
-              </span>
+              {`${entryCount} ${entryCount > 1 ? t('entries') : t('entry')}`}
             </div>
             {!hasEntries && (
               <p className="text-xs text-muted-foreground pt-1">
