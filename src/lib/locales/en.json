@@ -61,6 +61,6 @@
     "wordCloudTitle": "Your Gratitude Cloud",
     "wordCloudDescription": "The most frequent words in your journal.",
     "noEntriesForDate": "No entries for this date.",
-    "entry": "entry",
-    "entries": "entries"
+    "entry": "Entry",
+    "entries": "Entries"
 }
