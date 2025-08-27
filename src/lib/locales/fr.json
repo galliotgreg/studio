@@ -36,7 +36,7 @@
     "settings": "Paramètres",
     "resetChallenge": "Réinitialiser le défi",
     "resetWarningTitle": "Êtes-vous sûr(e) ?",
-    "resetWarningDescription": "Cela supprimera définitivefinitivement toutes vos entrées de journal, points et badges. Cette action est irréversible.",
+    "resetWarningDescription": "Cela supprimera définitivement toutes vos entrées de journal, points et badges. Cette action est irréversible.",
     "cancel": "Annuler",
     "confirm": "Confirmer",
     "badge.entry-1.name": "Premier Pas",
@@ -60,5 +60,7 @@
     "shareErrorDescription": "Le lien n'a pas pu être partagé ou copié.",
     "wordCloudTitle": "Votre Nuage de Gratitude",
     "wordCloudDescription": "Les mots les plus fréquents dans votre journal.",
-    "noEntriesForDate": "Aucune entrée pour cette date."
+    "noEntriesForDate": "Aucune entrée pour cette date.",
+    "entry": "entrée",
+    "entries": "entrées"
 }

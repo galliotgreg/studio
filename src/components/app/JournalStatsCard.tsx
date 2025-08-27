@@ -23,6 +23,7 @@ interface JournalStatsCardProps {
 export function JournalStatsCard({ entries }: JournalStatsCardProps) {
   const { t } = useLanguage();
   const hasEntries = entries.length > 0;
+  const entryCount = entries.length;
   
   return (
     <Card className="h-full transform transition-transform duration-300 hover:scale-[1.05] hover:shadow-xl flex flex-col justify-between">
@@ -31,10 +32,17 @@ export function JournalStatsCard({ entries }: JournalStatsCardProps) {
             <BookMarked className="h-5 w-5 text-primary" />
         </CardHeader>
         <CardContent>
-            <div className="text-2xl font-bold text-primary">{entries.length}</div>
-            <p className="text-xs text-muted-foreground pt-1">
-                {hasEntries ? t('viewAllEntries').replace('{count}', String(entries.length)) : t('noEntriesYet')}
-            </p>
+            <div className="text-2xl font-bold text-primary flex items-baseline gap-2">
+              <span>{entryCount}</span>
+              <span className="text-sm font-medium text-muted-foreground">
+                {entryCount > 1 ? t('entries') : t('entry')}
+              </span>
+            </div>
+            {!hasEntries && (
+              <p className="text-xs text-muted-foreground pt-1">
+                {t('noEntriesYet')}
+              </p>
+            )}
         </CardContent>
         <CardFooter className="pt-0 justify-center">
             <Button asChild variant="outline" size="sm" className="w-full" disabled={!hasEntries}>
