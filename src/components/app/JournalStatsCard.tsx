@@ -32,9 +32,9 @@ export function JournalStatsCard({ entries }: JournalStatsCardProps) {
             <BookMarked className="h-5 w-5 text-primary" />
         </CardHeader>
         <CardContent>
-            <div className="text-2xl font-bold text-primary flex items-baseline gap-2">
-              <span>{entryCount}</span>
-              <span className="text-sm font-medium text-muted-foreground">
+            <div className="text-2xl font-bold text-primary">
+              {entryCount}
+              <span className="ml-2 text-sm font-medium text-muted-foreground">
                 {entryCount > 1 ? t('entries') : t('entry')}
               </span>
             </div>
