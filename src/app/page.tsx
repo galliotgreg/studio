@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import * as React from "react";
@@ -337,6 +338,7 @@ export default function GratitudeChallengePage() {
             onChange={handleImportData}
             accept="application/json"
             className="hidden"
+            data-testid="file-input"
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
@@ -361,7 +363,7 @@ export default function GratitudeChallengePage() {
             </div>
             
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-2">
-                <ProgressCard completedDays={completedDays} totalDays={CHALLENGE_DURATION} isCompleted={isTodayEntrySubmitted}/>
+                <ProgressCard completedDays={completedDays} totalDays={CHALLENGE_DURATION} />
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">

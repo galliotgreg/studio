@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { CalendarDays } from "lucide-react";
@@ -14,10 +15,8 @@ import { Progress } from "@/components/ui/progress";
 import { useLanguage } from "./LanguageProvider";
 
 interface ProgressCardProps {
-  currentDay: number;
-  totalDays: number;
-  isCompleted: boolean;
   completedDays: number;
+  totalDays: number;
 }
 
 export function ProgressCard({ completedDays, totalDays }: ProgressCardProps) {
