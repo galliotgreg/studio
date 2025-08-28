@@ -64,11 +64,11 @@ export function Header({ onReset, onShare, onExport, onImport }: HeaderProps) {
                     <DropdownMenuLabel>{t('settings')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                      <DropdownMenuItem onClick={onImport}>
-                        <Upload className="mr-2 h-4 w-4" />
+                        <Download className="mr-2 h-4 w-4" />
                         <span>{t('importData')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={onExport}>
-                        <Download className="mr-2 h-4 w-4" />
+                        <Upload className="mr-2 h-4 w-4" />
                         <span>{t('exportData')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
