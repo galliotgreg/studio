@@ -51,7 +51,6 @@
     "badge.streak-21.description": "Maintained a 21-day streak.",
     "badge.streak-30.name": "Gratitude Master",
     "badge.streak-30.description": "Maintained a 30-day streak.",
-    "viewAllEntries": "{count} entries in your journal.",
     "viewJournal": "View Journal",
     "share": "Share",
     "linkCopiedTitle": "Link Copied!",
@@ -62,5 +61,16 @@
     "wordCloudDescription": "The most frequent words in your journal.",
     "noEntriesForDate": "No entries for this date.",
     "entry": "Entry",
-    "entries": "Entries"
+    "entries": "Entries",
+    "importData": "Import Data",
+    "exportData": "Export Data",
+    "importSuccessTitle": "Import Successful",
+    "importSuccessDescription": "Your data has been imported. The page will now reload.",
+    "importErrorTitle": "Import Failed",
+    "importErrorDescription": "The selected file is not a valid backup file.",
+    "exportSuccessTitle": "Export Successful",
+    "exportSuccessDescription": "Your data is being downloaded as gratitude-backup.json.",
+    "exportErrorTitle": "Export Failed",
+    "exportErrorDescription": "There was a problem exporting your data.",
+    "noDataToExport": "There is no data to export."
 }

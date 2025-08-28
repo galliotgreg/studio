@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Settings, Share2, Star } from "lucide-react";
+import { Settings, Share2, Star, Upload, Download, Trash2 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "./LanguageProvider";
@@ -18,9 +18,11 @@ import { Button } from "../ui/button";
 interface HeaderProps {
     onReset: () => void;
     onShare: () => void;
+    onExport: () => void;
+    onImport: () => void;
 }
 
-export function Header({ onReset, onShare }: HeaderProps) {
+export function Header({ onReset, onShare, onExport, onImport }: HeaderProps) {
   const { t } = useLanguage();
 
   return (
@@ -61,7 +63,17 @@ export function Header({ onReset, onShare }: HeaderProps) {
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>{t('settings')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                     <DropdownMenuItem onClick={onImport}>
+                        <Upload className="mr-2 h-4 w-4" />
+                        <span>{t('importData')}</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={onExport}>
+                        <Download className="mr-2 h-4 w-4" />
+                        <span>{t('exportData')}</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={onReset} className="text-destructive focus:bg-destructive focus:text-destructive-foreground">
+                        <Trash2 className="mr-2 h-4 w-4" />
                         {t('resetChallenge')}
                     </DropdownMenuItem>
                 </DropdownMenuContent>

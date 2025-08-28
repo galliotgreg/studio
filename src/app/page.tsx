@@ -43,6 +43,7 @@ export default function GratitudeChallengePage() {
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
   const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
   const badgesCardRef = React.useRef<HTMLDivElement>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
 
   const getQuotes = React.useCallback(() => {
@@ -241,10 +242,74 @@ export default function GratitudeChallengePage() {
     }
   };
 
+  const handleExportData = () => {
+    try {
+        const data = localStorage.getItem("gratitudeChallengeData");
+        if (!data) {
+            toast({ title: t('exportErrorTitle'), description: t('noDataToExport'), variant: 'destructive' });
+            return;
+        }
+        const blob = new Blob([data], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "gratitude-backup.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        toast({ title: t('exportSuccessTitle'), description: t('exportSuccessDescription') });
+    } catch (error) {
+        console.error("Export failed", error);
+        toast({ title: t('exportErrorTitle'), description: t('exportErrorDescription'), variant: "destructive" });
+    }
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImportData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const text = e.target?.result;
+            if (typeof text !== 'string') {
+                throw new Error("File is not readable");
+            }
+            const importedState = JSON.parse(text) as GratitudeState;
+
+            // Basic validation
+            if (
+                !importedState ||
+                typeof importedState.currentDay !== 'number' ||
+                !Array.isArray(importedState.entries)
+            ) {
+                throw new Error("Invalid file format");
+            }
+
+            localStorage.setItem("gratitudeChallengeData", text);
+            toast({ title: t('importSuccessTitle'), description: t('importSuccessDescription') });
+            setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+            console.error("Import failed", error);
+            toast({ title: t('importErrorTitle'), description: t('importErrorDescription'), variant: "destructive" });
+        } finally {
+            // Reset file input
+            if(event.target) event.target.value = '';
+        }
+    };
+    reader.readAsText(file);
+  };
+
+
   if (isLoading || !state) {
     return (
       <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onExport={handleExportData} onImport={handleImportClick} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <Skeleton className="h-96 lg:col-span-2 md:row-span-2" />
             <div className="flex flex-col gap-6">
@@ -260,12 +325,19 @@ export default function GratitudeChallengePage() {
   }
 
   const isTodayEntrySubmitted = state.lastEntryDate ? new Date(state.lastEntryDate).toDateString() === new Date().toDateString() : false;
-  const gratitudeCardDay = isTodayEntrySubmitted ? state.currentDay - 1 : state.currentDay;
+  const gratitudeCardDay = isTodayEntrySubmitted && state.currentDay > 1 ? state.currentDay - 1 : state.currentDay;
   const completedDays = state.entries.length;
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onExport={handleExportData} onImport={handleImportClick} />
+        <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImportData}
+            accept="application/json"
+            className="hidden"
+        />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 
@@ -320,5 +392,3 @@ export default function GratitudeChallengePage() {
     </main>
   );
 }
-
-    
