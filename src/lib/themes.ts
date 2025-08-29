@@ -1,3 +1,4 @@
+
 import type { Badge } from "./types";
 import { Star, Award, Zap, Trophy, Crown, BookMarked, Share2 } from "lucide-react";
 
@@ -18,37 +19,37 @@ export const THEMES: Theme[] = [
   {
     id: 'theme-nature',
     nameKey: 'theme.nature',
-    unlockBadgeId: 'streak-3',
+    unlockBadgeId: null,
     isTreasure: true,
   },
   {
     id: 'theme-ocean',
     nameKey: 'theme.ocean',
-    unlockBadgeId: 'streak-7',
+    unlockBadgeId: null,
     isTreasure: true,
   },
   {
     id: 'theme-grimoire',
     nameKey: 'theme.grimoire',
-    unlockBadgeId: 'share-1',
+    unlockBadgeId: null,
     isTreasure: true,
   },
     {
     id: 'theme-starlight',
     nameKey: 'theme.starlight',
-    unlockBadgeId: 'entry-10',
+    unlockBadgeId: null,
     isTreasure: true,
   },
   {
     id: 'theme-lavender',
     nameKey: 'theme.lavender',
-    unlockBadgeId: 'streak-21',
+    unlockBadgeId: null,
     isTreasure: true,
   },
   {
     id: 'theme-sunset',
     nameKey: 'theme.sunset',
-    unlockBadgeId: 'streak-30',
+    unlockBadgeId: null,
     isTreasure: true,
   },
 ];
