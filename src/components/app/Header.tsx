@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Settings, Share2, Star, Upload, Download, Trash2, Palette, Sun, Moon } from "lucide-react";
+import { Settings, Share2, Upload, Download, Trash2, Palette, Sun, Moon, Star } from "lucide-react";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "./LanguageProvider";
@@ -49,7 +49,7 @@ export function Header({ onReset, onShare, onExport, onImport }: HeaderProps) {
 
         <div className="flex items-center justify-center md:justify-end gap-2 w-full md:w-1/3">
             <Button variant="outline" size="icon" onClick={onShare}>
-                <Share2 className="h-[1.2rem] w-[1.2rem]" />
+                <Share2 className="h-[1.2rem] w-[1.2rem] text-foreground" />
                 <span className="sr-only">{t('share')}</span>
             </Button>
             <LanguageSwitcher />
@@ -57,7 +57,7 @@ export function Header({ onReset, onShare, onExport, onImport }: HeaderProps) {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="icon">
-                        <Settings className="h-[1.2rem] w-[1.2rem]" />
+                        <Settings className="h-[1.2rem] w-[1.2rem] text-foreground" />
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
