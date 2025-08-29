@@ -2,7 +2,7 @@
 "use client"
 
 import * as React from "react"
-import { Lock, Unlock, Palette } from "lucide-react"
+import { Lock, Unlock, Palette, Sun, Moon } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
@@ -18,12 +18,20 @@ import { cn } from "@/lib/utils"
 import { useLanguage } from "./LanguageProvider"
 import type { GratitudeState } from "@/lib/types"
 import { BADGES } from "@/lib/data"
+import { Switch } from "@/components/ui/switch"
 
 
 export function ThemeSwitcher() {
-  const { setTheme, theme } = useTheme()
+  const { setTheme, theme, resolvedTheme } = useTheme()
   const { t } = useLanguage();
   const [unlockedBadges, setUnlockedBadges] = React.useState<string[]>([]);
+  
+  const [isDark, setIsDark] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsDark(resolvedTheme === 'dark');
+  }, [resolvedTheme]);
+
 
   const loadBadges = React.useCallback(() => {
     try {
@@ -38,7 +46,7 @@ export function ThemeSwitcher() {
   }, []);
 
   React.useEffect(() => {
-    loadBadges(); // Initial load
+    loadBadges();
 
     const handleStorageUpdate = () => {
       loadBadges();
@@ -52,8 +60,7 @@ export function ThemeSwitcher() {
   }, [loadBadges]);
   
   const themes = [
-    { nameKey: 'theme.light', value: 'light', unlockBadgeId: null },
-    { nameKey: 'theme.dark', value: 'dark', unlockBadgeId: null },
+    { nameKey: 'theme.default', value: 'system', unlockBadgeId: null },
     { nameKey: 'theme.sunrise', value: 'theme-sunrise', unlockBadgeId: 'entry-1' },
     { nameKey: 'theme.forest', value: 'theme-forest', unlockBadgeId: 'streak-3' },
     { nameKey: 'theme.ocean', value: 'theme-ocean', unlockBadgeId: 'streak-7' },
@@ -64,7 +71,7 @@ export function ThemeSwitcher() {
   ]
 
   const getBadgeName = (badgeId: string | null) => {
-    if (!badgeId) return t("badge.default.unlock");
+    if (!badgeId) return "";
     const badge = BADGES.find(b => b.id === badgeId);
     return badge ? t(badge.nameKey) : '';
   }
@@ -80,6 +87,21 @@ export function ThemeSwitcher() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
+        <div className="flex items-center justify-between px-2 py-1.5">
+            <div className="flex items-center gap-2">
+                <Sun className={cn("h-4 w-4", !isDark && "text-primary")} />
+                <span className={cn("text-sm", !isDark && "font-semibold")}>{t('theme.light')}</span>
+            </div>
+            <Switch
+                checked={isDark}
+                onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+                aria-label="Toggle dark mode"
+            />
+             <div className="flex items-center gap-2">
+                <Moon className={cn("h-4 w-4", isDark && "text-primary")} />
+                 <span className={cn("text-sm", isDark && "font-semibold")}>{t('theme.dark')}</span>
+            </div>
+        </div>
         <DropdownMenuSeparator />
         {themes.map((item) => {
           const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);

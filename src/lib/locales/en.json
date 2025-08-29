@@ -89,6 +89,7 @@
     "changeTheme": "Change theme",
     "theme.light": "Light",
     "theme.dark": "Dark",
+    "theme.default": "Default",
     "theme.sunrise": "Sunrise",
     "theme.forest": "Forest",
     "theme.ocean": "Ocean",

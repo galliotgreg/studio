@@ -19,7 +19,8 @@ vi.mock('next-themes', async () => {
     useTheme: () => ({
       setTheme: mockSetTheme,
       theme: 'light',
-      themes: ['light', 'dark', 'theme-sunrise'],
+      resolvedTheme: 'light',
+      themes: ['light', 'dark', 'theme-sunrise', 'system'],
     }),
   };
 });
@@ -66,35 +67,29 @@ describe('ThemeSwitcher', () => {
     expect(screen.getByRole('button', { name: /changer le thème/i })).toBeInTheDocument();
   });
 
-  it('should show basic themes as unlocked by default', async () => {
+  it('should show the light/dark switch', async () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
     
-    // Wait for the menu to appear, then check the items
-    const menu = await screen.findByRole('menu');
+    await screen.findByRole('menu');
     
-    const lightThemeItem = screen.getByText('Clair').closest('div[role="menuitem"]');
-    const darkThemeItem = screen.getByText('Sombre').closest('div[role="menuitem"]');
-    
-    expect(lightThemeItem).toBeInTheDocument();
-    expect(darkThemeItem).toBeInTheDocument();
-    
-    expect(lightThemeItem).not.toHaveAttribute('aria-disabled', 'true');
-    expect(darkThemeItem).not.toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByRole('switch', {name: /toggle dark mode/i})).toBeInTheDocument();
+    expect(screen.getByText('Clair')).toBeInTheDocument();
+    expect(screen.getByText('Sombre')).toBeInTheDocument();
   });
 
-  it('should call setTheme when a theme is clicked', async () => {
+
+  it('should call setTheme when the dark mode switch is clicked', async () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
-    const darkThemeItem = await screen.findByText('Sombre');
-    fireEvent.click(darkThemeItem);
+    const switchControl = await screen.findByRole('switch');
+    fireEvent.click(switchControl);
 
     expect(mockSetTheme).toHaveBeenCalledWith('dark');
   });
 
   it('should show themes as locked if required badge is not present', async () => {
-    // No badges unlocked in local storage
     localStorageMock.setItem('gratitudeChallengeData', JSON.stringify({ unlockedBadges: [] }));
 
     renderComponent();
@@ -121,12 +116,11 @@ describe('ThemeSwitcher', () => {
 
   it('should not call setTheme if a locked theme is clicked', async () => {
     localStorageMock.setItem('gratitudeChallengeData', JSON.stringify({ unlockedBadges: [] }));
-
     renderComponent();
+    
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
     
-    // Wait for the menu, then get the item
-    await screen.findByRole('menu');
+    const menu = await screen.findByRole('menu');
     const sunriseItem = screen.getByText('Aurore');
     
     fireEvent.click(sunriseItem);
