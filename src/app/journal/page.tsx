@@ -83,7 +83,17 @@ export default function JournalPage() {
     if (!imagePreviewRef.current) return;
     setIsGeneratingImage(true);
     try {
-        const dataUrl = await toPng(imagePreviewRef.current, { cacheBust: true, pixelRatio: 2 });
+        const fontEmbedCss = `
+          @font-face {
+            font-family: 'Literata';
+            src: url('https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap');
+          }
+        `;
+        const dataUrl = await toPng(imagePreviewRef.current, { 
+            cacheBust: true, 
+            pixelRatio: 2,
+            fontEmbedCss: fontEmbedCss
+        });
         const link = document.createElement('a');
         link.download = `gratitude-day-${entryToShare?.day}.png`;
         link.href = dataUrl;
