@@ -234,4 +234,51 @@
     --input: 215 20% 20%;
     --ring: 190 80% 60%;
   }
+
+   /* Thème Starlight (Sombre) */
+  .dark.theme-starlight {
+    --background: 240 10% 10%;
+    --foreground: 240 15% 85%;
+    --card: 240 8% 14%;
+    --card-foreground: 240 15% 85%;
+    --popover: 240 8% 14%;
+    --popover-foreground: 240 15% 85%;
+    --primary: 250 70% 75%;
+    --primary-foreground: 250 40% 10%;
+    --secondary: 240 10% 18%;
+    --secondary-foreground: 240 15% 85%;
+    --muted: 240 10% 18%;
+    --muted-foreground: 240 10% 55%;
+    --accent: 260 80% 80%;
+    --accent-foreground: 260 40% 15%;
+    --destructive: 350 60% 50%;
+    --destructive-foreground: 350 0% 100%;
+    --border: 240 8% 22%;
+    --input: 240 8% 18%;
+    --ring: 250 70% 70%;
+  }
+
+  /* Thème Rose Gold (Clair) */
+  .theme-rose-gold {
+    --background: 25 60% 98%;
+    --foreground: 20 40% 25%;
+    --card: 20 50% 95%;
+    --card-foreground: 20 40% 25%;
+    --popover: 20 50% 95%;
+    --popover-foreground: 20 40% 25%;
+    --primary: 0 50% 65%;
+    --primary-foreground: 0 30% 98%;
+    --secondary: 15 40% 92%;
+    --secondary-foreground: 10 50% 35%;
+    --muted: 15 40% 92%;
+    --muted-foreground: 20 20% 50%;
+    --accent: 350 60% 75%;
+    --accent-foreground: 20 40% 25%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 15 30% 88%;
+    --input: 15 30% 92%;
+    --ring: 0 50% 70%;
+  }
 }
+
