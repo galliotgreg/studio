@@ -14,44 +14,51 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 import { useLanguage } from "./LanguageProvider"
 import { GratitudeState } from "@/lib/types"
 import { BADGES } from "@/lib/data"
 
-// MOCKUP: In a real implementation, this would come from the user's state.
-const MOCK_UNLOCKED_BADGE_IDS = ['entry-1', 'streak-3'];
-const MOCK_POINTS = 150;
-
-const getUnlockedThemes = (state: GratitudeState | null) => {
-    // For mockup purposes, we'll use a simplified logic
-    // In a real implementation, this would check against the user's actual state
+// This function determines which themes are unlocked based on the user's badges.
+const getUnlockedThemes = (unlockedBadgeIds: string[] | undefined) => {
     const unlocked = new Set<string>(['light', 'dark', 'system']);
-    if (MOCK_UNLOCKED_BADGE_IDS.includes('streak-7')) {
-        unlocked.add('theme-forest');
-    }
-    if (MOCK_POINTS >= 500) {
-        unlocked.add('theme-starlight');
-    }
+    if (!unlockedBadgeIds) return unlocked;
+
+    if (unlockedBadgeIds.includes('entry-1')) unlocked.add('theme-sunrise');
+    if (unlockedBadgeIds.includes('streak-3')) unlocked.add('theme-forest');
+    if (unlockedBadgeIds.includes('streak-7')) unlocked.add('theme-ocean');
+    if (unlockedBadgeIds.includes('entry-10')) unlocked.add('theme-starlight');
+    if (unlockedBadgeIds.includes('streak-21')) unlocked.add('theme-lavender');
+    if (unlockedBadgeIds.includes('streak-30')) unlocked.add('theme-rose-gold');
+
     return unlocked;
 }
-
 
 export function ThemeSwitcher() {
   const { setTheme, theme } = useTheme()
   const { t } = useLanguage();
+  const [state, setState] = React.useState<GratitudeState | null>(null);
+
+  React.useEffect(() => {
+    // This component now needs to read from localStorage to get the user's state
+    const savedData = localStorage.getItem("gratitudeChallengeData");
+    if (savedData) {
+      setState(JSON.parse(savedData));
+    }
+  }, []);
   
-  // MOCKUP: In a real app, we'd get the real state.
-  // For now, we pass null to get our mocked data.
-  const unlockedThemes = getUnlockedThemes(null);
+  const unlockedThemes = getUnlockedThemes(state?.unlockedBadges);
 
   const themes = [
-    { name: 'Clair', value: 'light', unlocked: true, unlockCondition: "Disponible par défaut" },
-    { name: 'Sombre', value: 'dark', unlocked: true, unlockCondition: "Disponible par défaut" },
-    { name: 'Système', value: 'system', unlocked: true, unlockCondition: "Disponible par défaut" },
-    { name: 'Forêt', value: 'theme-forest', unlocked: unlockedThemes.has('theme-forest'), unlockCondition: "Obtenir le badge 'Guerrier de la Semaine' (série de 7 jours)." },
-    { name: 'Nuit Étoilée', value: 'theme-starlight', unlocked: unlockedThemes.has('theme-starlight'), unlockCondition: "Atteindre 500 points de gratitude." },
-    { name: 'Mystère', value: 'theme-mystery', unlocked: false, unlockCondition: "Condition de déblocage secrète..." },
+    { name: 'Clair', value: 'light', unlocked: true, unlockConditionKey: "badge.default.unlock" },
+    { name: 'Sombre', value: 'dark', unlocked: true, unlockConditionKey: "badge.default.unlock" },
+    { name: 'Système', value: 'system', unlocked: true, unlockConditionKey: "badge.default.unlock" },
+    { name: 'Aurore', value: 'theme-sunrise', unlocked: unlockedThemes.has('theme-sunrise'), unlockConditionKey: "badge.entry-1.name" },
+    { name: 'Forêt', value: 'theme-forest', unlocked: unlockedThemes.has('theme-forest'), unlockConditionKey: "badge.streak-3.name" },
+    { name: 'Océan', value: 'theme-ocean', unlocked: unlockedThemes.has('theme-ocean'), unlockConditionKey: "badge.streak-7.name" },
+    { name: 'Nuit Étoilée', value: 'theme-starlight', unlocked: unlockedThemes.has('theme-starlight'), unlockConditionKey: "badge.entry-10.name" },
+    { name: 'Lavande', value: 'theme-lavender', unlocked: unlockedThemes.has('theme-lavender'), unlockConditionKey: "badge.streak-21.name" },
+    { name: 'Or Rose', value: 'theme-rose-gold', unlocked: unlockedThemes.has('theme-rose-gold'), unlockConditionKey: "badge.streak-30.name" },
   ]
 
   return (
@@ -63,7 +70,7 @@ export function ThemeSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
-        <DropdownMenuLabel>Thèmes</DropdownMenuLabel>
+        <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {themes.map((item) => (
           <DropdownMenuItem
@@ -77,7 +84,7 @@ export function ThemeSwitcher() {
                <span className={cn(!item.unlocked && "text-muted-foreground")}>{item.name}</span>
             </div>
             {!item.unlocked && (
-                <small className="text-xs text-muted-foreground pl-6">{item.unlockCondition}</small>
+                <small className="text-xs text-muted-foreground pl-6">{t('unlockCondition')} {t(item.unlockConditionKey)}</small>
             )}
           </DropdownMenuItem>
         ))}
