@@ -129,7 +129,7 @@ export default {
                 '--ring': '255 47% 60%',
                 '--radius': '0.8rem',
             },
-            '[data-theme="dark"]': {
+            '.dark': {
                 '--background': '255 10% 10%',
                 '--foreground': '0 0% 98%',
                 '--card': '255 10% 15%',
@@ -150,7 +150,7 @@ export default {
                 '--input': '255 10% 25%',
                 '--ring': '255 47% 70%',
             },
-            '[data-theme="theme-sunrise"]': {
+            '.theme-sunrise': {
                 '--background': '20 80% 95%',
                 '--foreground': '20 40% 10%',
                 '--card': '15 60% 99%',
@@ -169,7 +169,7 @@ export default {
                 '--input': '20 60% 90%',
                 '--ring': '15 90% 60%',
             },
-            '[data-theme="dark-theme-sunrise"]': {
+            '.dark.theme-sunrise': {
                 '--background': '20 50% 10%',
                 '--foreground': '25 40% 95%',
                 '--card': '20 45% 14%',
@@ -188,7 +188,7 @@ export default {
                 '--input': '20 35% 25%',
                 '--ring': '15 85% 70%',
             },
-            '[data-theme="theme-forest"]': {
+            '.theme-forest': {
                 '--background': '120 25% 95%',
                 '--foreground': '120 40% 10%',
                 '--card': '110 20% 99%',
@@ -207,7 +207,7 @@ export default {
                 '--input': '120 20% 88%',
                 '--ring': '140 60% 45%',
             },
-            '[data-theme="dark-theme-forest"]': {
+            '.dark.theme-forest': {
                 '--background': '120 30% 10%',
                 '--foreground': '110 20% 95%',
                 '--card': '120 25% 15%',
@@ -226,7 +226,7 @@ export default {
                 '--input': '120 20% 25%',
                 '--ring': '140 60% 65%',
             },
-            '[data-theme="theme-ocean"]': {
+            '.theme-ocean': {
                 '--background': '210 70% 96%',
                 '--foreground': '215 50% 18%',
                 '--card': '210 50% 100%',
@@ -245,7 +245,7 @@ export default {
                 '--input': '210 50% 90%',
                 '--ring': '220 85% 60%',
             },
-            '[data-theme="dark-theme-ocean"]': {
+            '.dark.theme-ocean': {
                 '--background': '220 60% 10%',
                 '--foreground': '210 40% 95%',
                 '--card': '220 50% 15%',
@@ -264,7 +264,7 @@ export default {
                 '--input': '220 40% 25%',
                 '--ring': '210 90% 70%',
             },
-            '[data-theme="theme-starlight"]': {
+            '.theme-starlight': {
                 '--background': '220 60% 96%',
                 '--foreground': '220 50% 15%',
                 '--card': '220 40% 100%',
@@ -283,7 +283,7 @@ export default {
                 '--input': '220 40% 90%',
                 '--ring': '250 80% 65%',
             },
-            '[data-theme="dark-theme-starlight"]': {
+            '.dark.theme-starlight': {
                 '--background': '240 50% 8%',
                 '--foreground': '220 30% 96%',
                 '--card': '240 40% 12%',
@@ -302,7 +302,7 @@ export default {
                 '--input': '240 30% 22%',
                 '--ring': '250 80% 75%',
             },
-            '[data-theme="theme-lavender"]': {
+            '.theme-lavender': {
                 '--background': '260 80% 97%',
                 '--foreground': '260 60% 20%',
                 '--card': '260 60% 100%',
@@ -321,7 +321,7 @@ export default {
                 '--input': '260 50% 92%',
                 '--ring': '255 75% 70%',
             },
-            '[data-theme="dark-theme-lavender"]': {
+            '.dark.theme-lavender': {
                 '--background': '260 50% 12%',
                 '--foreground': '260 40% 96%',
                 '--card': '260 45% 16%',
@@ -340,7 +340,7 @@ export default {
                 '--input': '260 35% 28%',
                 '--ring': '255 80% 80%',
             },
-            '[data-theme="themerosegold"]': {
+            '.themerosegold': {
                 '--background': '350 70% 97%',
                 '--foreground': '350 50% 25%',
                 '--card': '350 50% 100%',
@@ -359,7 +359,7 @@ export default {
                 '--input': '350 60% 93%',
                 '--ring': '345 90% 70%',
             },
-            '[data-theme="dark-themerosegold"]': {
+            '.dark.themerosegold': {
                 '--background': '350 40% 10%',
                 '--foreground': '350 30% 96%',
                 '--card': '350 35% 15%',
@@ -378,7 +378,7 @@ export default {
                 '--input': '350 30% 25%',
                 '--ring': '345 85% 80%',
             },
-            '[data-theme="theme-grimoire"]': {
+            '.theme-grimoire': {
                 '--background': '45 40% 94%', // Parchment
                 '--foreground': '35 25% 20%', // Dark Ink
                 '--card': '45 50% 98%', // Lighter Parchment
@@ -397,7 +397,7 @@ export default {
                 '--input': '35 25% 88%',
                 '--ring': '30 30% 40%',
             },
-            '[data-theme="dark-theme-grimoire"]': {
+            '.dark.theme-grimoire': {
                 '--background': '35 25% 15%', // Dark leather
                 '--foreground': '45 30% 85%', // Aged text
                 '--card': '35 25% 20%',
