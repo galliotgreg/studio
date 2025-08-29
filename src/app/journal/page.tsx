@@ -86,7 +86,7 @@ export default function JournalPage() {
       <div className="grid md:grid-cols-3 gap-8">
         <aside className="md:col-span-1 space-y-8">
             <Card className="transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
-                <CardContent className="p-2">
+                <CardContent className="p-0">
                     <Calendar
                         mode="single"
                         selected={selectedDate}
