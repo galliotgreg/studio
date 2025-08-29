@@ -48,6 +48,7 @@ describe('WordCloudCard', () => {
     });
   });
 
+
   it('should display the word cloud after fetching keywords', async () => {
     vi.mocked(aiFlow.extractKeywords).mockResolvedValue(mockKeywords);
     render(
