@@ -26,12 +26,7 @@ export function ThemeSwitcher() {
   const { t } = useLanguage();
   const [unlockedBadges, setUnlockedBadges] = React.useState<string[]>([]);
   
-  const [isDark, setIsDark] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsDark(resolvedTheme === 'dark');
-  }, [resolvedTheme]);
-
+  const isDark = resolvedTheme === 'dark';
 
   const loadBadges = React.useCallback(() => {
     try {
