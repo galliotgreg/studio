@@ -62,7 +62,7 @@ export function ThemeSwitcher() {
     { nameKey: 'theme.starlight', value: 'theme-starlight', unlockBadgeId: 'entry-10' },
     { nameKey: 'theme.lavender', value: 'theme-lavender', unlockBadgeId: 'streak-21' },
     { nameKey: 'theme.grimoire', value: 'theme-grimoire', unlockBadgeId: 'share-1' },
-    { nameKey: 'theme.rose-gold', value: 'theme-rose-gold', unlockBadgeId: 'streak-30' },
+    { nameKey: 'theme.rose-gold', value: 'themerosegold', unlockBadgeId: 'streak-30' },
   ]
 
   const getBadgeName = (badgeId: string | null) => {
@@ -80,7 +80,7 @@ export function ThemeSwitcher() {
           <span className="sr-only">{t('changeTheme')}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64">
+      <DropdownMenuContent align="end" className="w-64 bg-popover">
         <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
         <div className="flex items-center justify-between px-2 py-1.5">
             <div className="flex items-center gap-2">

@@ -340,7 +340,7 @@ export default {
                 '--input': '260 35% 28%',
                 '--ring': '255 80% 80%',
             },
-            '.theme-rose-gold': {
+            '.themerosegold': {
                 '--background': '350 70% 97%',
                 '--foreground': '350 50% 25%',
                 '--card': '350 50% 100%',
@@ -359,7 +359,7 @@ export default {
                 '--input': '350 60% 93%',
                 '--ring': '345 90% 70%',
             },
-            '.dark.theme-rose-gold': {
+            '.dark.themerosegold': {
                 '--background': '350 40% 10%',
                 '--foreground': '350 30% 96%',
                 '--card': '350 35% 15%',
@@ -420,5 +420,3 @@ export default {
     }
   ],
 } satisfies Config;
-
-    
