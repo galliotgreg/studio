@@ -73,7 +73,7 @@
     "exportErrorTitle": "Export Failed",
     "exportErrorDescription": "There was a problem exporting your data.",
     "noDataToExport": "There is no data to export.",
-    "heatmapTitle": "My Consistency",
-    "heatmapDescription": "A visual map of your gratitude journey.",
-    "noEntry": "No entry"
+    "shareYourGratitude": "Share your Gratitude",
+    "sharePreviewDescription": "This is a preview of the image that will be shared.",
+    "shareNow": "Share Now"
 }

@@ -6,7 +6,7 @@ import { ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-import type { GratitudeState } from "@/lib/types";
+import type { GratitudeState, GratitudeEntry } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { JournalEntryCard } from "@/components/app/JournalEntryCard";
 import { useLanguage } from "@/components/app/LanguageProvider";
@@ -14,6 +14,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { WordCloudCard } from "@/components/app/WordCloudCard";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { ShareImagePreviewCard } from "@/components/app/ShareImagePreviewCard";
 
 
 export default function JournalPage() {
@@ -21,6 +23,7 @@ export default function JournalPage() {
   const [state, setState] = React.useState<GratitudeState | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(undefined);
+  const [entryToShare, setEntryToShare] = React.useState<GratitudeEntry | null>(null);
   
   React.useEffect(() => {
     try {
@@ -66,6 +69,10 @@ export default function JournalPage() {
   const filteredEntries = selectedDate
     ? sortedEntries.filter(entry => new Date(entry.date).toDateString() === selectedDate.toDateString())
     : sortedEntries;
+
+  const handleShare = (entry: GratitudeEntry) => {
+    setEntryToShare(entry);
+  };
 
 
   return (
@@ -121,7 +128,7 @@ export default function JournalPage() {
                   <span className="absolute -left-[45px] top-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold ring-8 ring-background">
                     {entry.day}
                   </span>
-                  <JournalEntryCard entry={entry} />
+                  <JournalEntryCard entry={entry} onShare={handleShare} />
                 </motion.div>
               ))}
             </div>
@@ -132,6 +139,20 @@ export default function JournalPage() {
           )}
         </main>
       </div>
+       <Dialog open={!!entryToShare} onOpenChange={(open) => !open && setEntryToShare(null)}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('shareYourGratitude')}</DialogTitle>
+            <DialogDescription>
+              {t('sharePreviewDescription')}
+            </DialogDescription>
+          </DialogHeader>
+          {entryToShare && <ShareImagePreviewCard entry={entryToShare} />}
+           <Button onClick={() => alert("This would open the native share dialog!")}>
+              {t('shareNow')}
+            </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
