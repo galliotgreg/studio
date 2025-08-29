@@ -17,7 +17,7 @@ import {
 import { cn } from "@/lib/utils"
 import { useLanguage } from "./LanguageProvider"
 import { BADGES } from "@/lib/data"
-import { Theme } from "@/lib/themes"
+import { THEMES, Theme } from "@/lib/themes"
 import { Switch } from "@/components/ui/switch"
 import { ThemeInfoDialog } from "./ThemeInfoDialog"
 
@@ -73,11 +73,8 @@ export function ThemeSwitcher() {
             <DropdownMenuSeparator />
             <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
             
-            {getThemeById && unlockedThemes.map((item) => {
-              const themeData = getThemeById(item.id);
-              if (!themeData) return null;
-
-              const isUnlocked = !themeData.unlockBadgeId || unlockedThemes.some(ut => ut.id === themeData.id);
+            {THEMES.map((themeData) => {
+              const isUnlocked = unlockedThemes.some(ut => ut.id === themeData.id);
               const isActive = themeData.id === palette;
               
               const badge = themeData.unlockBadgeId ? BADGES.find(b => b.id === themeData.unlockBadgeId) : null;

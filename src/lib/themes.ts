@@ -17,6 +17,24 @@ export const THEMES: Theme[] = [
     isTreasure: false,
   },
   {
+    id: 'theme-sunrise',
+    nameKey: 'theme.sunrise',
+    unlockBadgeId: 'entry-1', 
+    isTreasure: true,
+  },
+  {
+    id: 'theme-forest',
+    nameKey: 'theme.forest',
+    unlockBadgeId: 'streak-3',
+    isTreasure: true,
+  },
+  {
+    id: 'theme-ocean',
+    nameKey: 'theme.ocean',
+    unlockBadgeId: 'streak-7',
+    isTreasure: true,
+  },
+  {
     id: 'theme-grimoire',
     nameKey: 'theme.grimoire',
     unlockBadgeId: 'share-1',
