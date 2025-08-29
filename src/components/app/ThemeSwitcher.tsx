@@ -60,8 +60,8 @@ export function ThemeSwitcher() {
     setTheme(newTheme);
   };
   
-  const toggleBaseTheme = (isDarkNow: boolean) => {
-    setTheme(isDarkNow ? 'dark' : 'light');
+  const toggleBaseTheme = () => {
+    setTheme(isDark ? 'light' : 'dark');
   };
 
   const currentThemeId = theme?.startsWith('theme-') || theme?.startsWith('themerosegold') ? theme : 'default';
@@ -96,7 +96,7 @@ export function ThemeSwitcher() {
         {THEMES.filter(th => th.id === 'default').map((item) => (
           <DropdownMenuItem
               key={item.id}
-              onClick={() => handleThemeChange('default')}
+              onClick={() => handleThemeChange(resolvedTheme === 'dark' ? 'dark' : 'light')}
               className={cn("flex flex-col items-start gap-1 p-2", currentThemeId === 'default' && "bg-accent")}
           >
             <div className="flex items-center w-full">

@@ -6,7 +6,6 @@ export interface Theme {
   nameKey: string;
   unlockBadgeId: string | null;
   isTreasure: boolean;
-  // CSS variables are defined in globals.css now
 }
 
 export const THEMES: Theme[] = [
