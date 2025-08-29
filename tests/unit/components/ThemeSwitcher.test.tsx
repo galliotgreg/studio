@@ -71,11 +71,11 @@ describe('ThemeSwitcher', () => {
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
     
     await waitFor(() => {
-        expect(screen.getByText('theme.light')).toBeInTheDocument();
+        expect(screen.getByText('Clair')).toBeInTheDocument();
     });
     
-    const lightThemeItem = screen.getByText('theme.light').closest('div[role="menuitem"]');
-    const darkThemeItem = screen.getByText('theme.dark').closest('div[role="menuitem"]');
+    const lightThemeItem = screen.getByText('Clair').closest('div[role="menuitem"]');
+    const darkThemeItem = screen.getByText('Sombre').closest('div[role="menuitem"]');
     
     expect(lightThemeItem).not.toHaveAttribute('aria-disabled', 'true');
     expect(darkThemeItem).not.toHaveAttribute('aria-disabled', 'true');
@@ -85,7 +85,7 @@ describe('ThemeSwitcher', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
-    const darkThemeItem = await screen.findByText('theme.dark');
+    const darkThemeItem = await screen.findByText('Sombre');
     fireEvent.click(darkThemeItem);
 
     expect(mockSetTheme).toHaveBeenCalledWith('dark');
@@ -100,7 +100,7 @@ describe('ThemeSwitcher', () => {
 
     await waitFor(() => {
       // Example: 'Aurore' theme requires 'entry-1' badge
-      const sunriseThemeItem = screen.getByText('theme.sunrise').closest('div[role="menuitem"]');
+      const sunriseThemeItem = screen.getByText('Aurore').closest('div[role="menuitem"]');
       expect(sunriseThemeItem).toHaveAttribute('aria-disabled', 'true');
     });
   });
@@ -112,7 +112,7 @@ describe('ThemeSwitcher', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
-    const sunriseThemeItem = await screen.findByText('theme.sunrise');
+    const sunriseThemeItem = await screen.findByText('Aurore');
     expect(sunriseThemeItem.closest('div[role="menuitem"]')).not.toHaveAttribute('aria-disabled', 'true');
 
     // Verify it's clickable
@@ -126,7 +126,7 @@ describe('ThemeSwitcher', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
-    const sunriseItem = await screen.findByText('theme.sunrise');
+    const sunriseItem = await screen.findByText('Aurore');
     fireEvent.click(sunriseItem);
     
     expect(mockSetTheme).not.toHaveBeenCalled();
