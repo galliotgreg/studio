@@ -1,21 +1,24 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { extractKeywords } from '@/ai/flows/extract-keywords-flow';
-import type { ExtractKeywordsInput, ExtractKeywordsOutput } from '@/ai/flows/extract-keywords-flow';
+
+// We must define the mock function before it is used in the vi.mock call.
+const mockPromptFn = vi.fn();
 
 // We mock the AI dependency to prevent actual API calls during tests.
-const mockPromptFn = vi.fn().mockResolvedValue({
-  output: { keywords: ['test', 'gratitude', 'journey'] }
-});
-
 vi.mock('@/ai/genkit', () => ({
   ai: {
+    defineFlow: vi.fn((config, fn) => fn), // Pass through the implementation
     definePrompt: vi.fn(() => mockPromptFn),
   },
 }));
 
-describe('extractKeywordsFlow', () => {
+// Now we can import the module that uses the mocked dependency.
+import { extractKeywords } from '@/ai/flows/extract-keywords-flow';
+import type { ExtractKeywordsInput, ExtractKeywordsOutput } from '@/ai/flows/extract-keywords-flow';
 
+
+describe('extractKeywordsFlow', () => {
+    
   beforeEach(() => {
     // Clear mock history before each test
     vi.clearAllMocks();
@@ -31,6 +34,9 @@ describe('extractKeywordsFlow', () => {
   });
 
   it('should call the AI flow and return keywords for valid text', async () => {
+    mockPromptFn.mockResolvedValue({
+      output: { keywords: ['test', 'gratitude', 'journey'] }
+    });
     const input: ExtractKeywordsInput = { text: 'This is a test of gratitude on my journey.' };
     const result: ExtractKeywordsOutput = await extractKeywords(input);
 

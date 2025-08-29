@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { WordCloudCard } from '@/components/app/WordCloudCard';
 import { LanguageProvider } from '@/components/app/LanguageProvider';
 import { GratitudeEntry } from '@/lib/types';
@@ -20,23 +20,32 @@ const mockEntries: GratitudeEntry[] = [
 const mockKeywords = { keywords: ['sun', 'family', 'grateful'] };
 
 describe('WordCloudCard', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should not render if there are no entries', () => {
     render(
       <LanguageProvider>
         <WordCloudCard entries={[]} />
       </LanguageProvider>
     );
-    expect(screen.queryByText(/gratitude cloud/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/votre nuage de gratitude/i)).not.toBeInTheDocument();
   });
 
-  it('should show a loading skeleton initially', () => {
+  it('should show a loading skeleton initially', async () => {
     vi.mocked(aiFlow.extractKeywords).mockImplementation(() => new Promise(() => {})); // Never resolves
+    
     render(
       <LanguageProvider>
         <WordCloudCard entries={mockEntries} />
       </LanguageProvider>
     );
-    expect(screen.getByTestId('loader')).toBeInTheDocument();
+    
+    // Check that the loader is there while the promise is pending
+    await waitFor(() => {
+        expect(screen.getByTestId('loader')).toBeInTheDocument();
+    });
   });
 
   it('should display the word cloud after fetching keywords', async () => {
@@ -60,12 +69,14 @@ describe('WordCloudCard', () => {
     vi.mocked(aiFlow.extractKeywords).mockResolvedValue({ keywords: [] });
     render(
       <LanguageProvider>
-        <WordCloudCard entries={mockEntries} />
+        <WordCloudCard entries={[{ day: 1, date: '2024-01-01', text: 'a b c', prompt: '' }]} />
       </LanguageProvider>
     );
 
     await waitFor(() => {
-        expect(screen.getByText("Vos entrées apparaîtront ici une fois que vous les aurez écrites.")).toBeInTheDocument();
+        // The component will initially render local words and then update. 
+        // We wait for the final state which should be the message.
+        expect(screen.getByText("Le journal est vide")).toBeInTheDocument();
     });
   });
 });

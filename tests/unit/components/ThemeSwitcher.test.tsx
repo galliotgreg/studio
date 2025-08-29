@@ -10,10 +10,14 @@ import * as NextThemes from 'next-themes';
 
 // Mock the useTheme hook from next-themes
 const mockSetTheme = vi.fn();
-vi.spyOn(NextThemes, 'useTheme').mockImplementation(() => ({
-  setTheme: mockSetTheme,
-  theme: 'light',
-  themes: ['light', 'dark', 'theme-sunrise'],
+
+// Use vi.mock to replace the module entirely
+vi.mock('next-themes', () => ({
+  useTheme: () => ({
+    setTheme: mockSetTheme,
+    theme: 'light',
+    themes: ['light', 'dark', 'theme-sunrise'],
+  }),
 }));
 
 
