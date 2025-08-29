@@ -26,6 +26,9 @@ interface WordFrequency {
     value: number;
 }
 
+const commonWords = new Set(["le", "la", "les", "un", "une", "des", "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "suis", "es", "est", "sommes", "etes", "sont", "pour", "de", "du", "et", "à", "en", "que", "qui", "dans", "avec", "ce", "cet", "cette", "ces", "mon", "ma", "mes", "the", "a", "an", "i", "you", "he", "she", "it", "we", "they", "am", "is", "are", "for", "of", "and", "in", "with", "that", "this", "my"]);
+
+
 export function WordCloudCard({ entries }: WordCloudCardProps) {
     const { t } = useLanguage();
     const [wordCloudData, setWordCloudData] = React.useState<WordFrequency[]>([]);
@@ -42,32 +45,50 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             setIsLoading(true);
             const allText = entries.map(e => e.text).join(" ");
             
+            // --- Step 1: Immediate local processing for quick feedback ---
+            const localWordFrequencies: { [key: string]: number } = {};
+            const allWords = allText.toLowerCase().match(/\b(\w{3,})\b/g) || [];
+
+            allWords.forEach(word => {
+                if (!commonWords.has(word)) {
+                    localWordFrequencies[word] = (localWordFrequencies[word] || 0) + 1;
+                }
+            });
+            
+            const initialData = Object.entries(localWordFrequencies)
+                .map(([text, value]) => ({ text, value }))
+                .sort((a, b) => b.value - a.value)
+                .slice(0, 30);
+            
+            setWordCloudData(initialData);
+            setIsLoading(false);
+
+
+            // --- Step 2: AI-powered keyword extraction in the background ---
             try {
                 const result = await extractKeywords({ text: allText });
-                
-                const wordFrequencies: { [key: string]: number } = {};
-                
-                // Use the raw keywords from the AI for frequency counting
-                const allWords = allText.toLowerCase().match(/\b(\w+)\b/g) || [];
-                const keywordSet = new Set(result.keywords.map(k => k.toLowerCase()));
+                if (result.keywords.length > 0) {
+                    const aiKeywordSet = new Set(result.keywords.map(k => k.toLowerCase()));
+                    
+                    const refinedFrequencies: { [key: string]: number } = {};
+                     allText.toLowerCase().match(/\b(\w+)\b/g)?.forEach(word => {
+                        if (aiKeywordSet.has(word)) {
+                            refinedFrequencies[word] = (refinedFrequencies[word] || 0) + 1;
+                        }
+                    });
 
-                allWords.forEach(word => {
-                    if(keywordSet.has(word)) {
-                       wordFrequencies[word] = (wordFrequencies[word] || 0) + 1;
+                    const refinedData = Object.entries(refinedFrequencies)
+                        .map(([text, value]) => ({ text, value }))
+                        .sort((a, b) => b.value - a.value)
+                        .slice(0, 30);
+                    
+                    if (refinedData.length > 0) {
+                        setWordCloudData(refinedData);
                     }
-                });
-                
-                const formattedData = Object.entries(wordFrequencies)
-                    .map(([text, value]) => ({ text, value }))
-                    .sort((a, b) => b.value - a.value)
-                    .slice(0, 30);
-
-                setWordCloudData(formattedData);
+                }
             } catch (error) {
-                console.error("Failed to generate word cloud:", error);
-                setWordCloudData([]);
-            } finally {
-                setIsLoading(false);
+                console.error("Failed to generate AI word cloud, using local fallback:", error);
+                // We already have the local data, so no need to do anything here.
             }
         };
 
