@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Settings, Share2, Star, Upload, Download, Trash2 } from "lucide-react";
+import { Settings, Share2, Star, Upload, Download, Trash2, Palette, Sun, Moon } from "lucide-react";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "./LanguageProvider";

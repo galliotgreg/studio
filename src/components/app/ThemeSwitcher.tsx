@@ -39,7 +39,7 @@ export function ThemeSwitcher() {
       
       const themeClass = document.documentElement.className
         .split(' ')
-        .find(c => c.startsWith('theme-') || c === 'themerosegold');
+        .find(c => c.startsWith('theme-'));
       setCurrentThemeClass(themeClass || '');
 
     } catch (error) {
@@ -57,7 +57,7 @@ export function ThemeSwitcher() {
             if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
                 const themeClass = (mutation.target as HTMLElement).className
                     .split(' ')
-                    .find(c => c.startsWith('theme-') || c === 'themerosegold');
+                    .find(c => c.startsWith('theme-'));
                 setCurrentThemeClass(themeClass || '');
             }
         });
@@ -88,6 +88,9 @@ export function ThemeSwitcher() {
   };
   
   const toggleBaseTheme = () => {
+    const currentTheme = theme || 'light';
+    // If we are on a custom theme, switch to its dark/light variant if available
+    // For now, we simplify and just toggle between 'light' and 'dark' as base.
     setTheme(isDark ? 'light' : 'dark');
   };
   

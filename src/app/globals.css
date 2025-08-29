@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 @layer base {
-  /* Thème par Défaut (Mode Clair) - VALEURS D'ORIGINE RESTAURÉES */
+  /* Thème par Défaut (Mode Clair) */
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -28,7 +28,7 @@
     --radius: 0.5rem;
   }
  
-  /* Thème par Défaut (Mode Sombre) - VALEURS D'ORIGINE RESTAURÉES */
+  /* Thème par Défaut (Mode Sombre) */
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -49,5 +49,51 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+  }
+
+  /* Thème Grimoire (Mode Clair) */
+  .theme-grimoire {
+    --background: 35 63% 94%;
+    --foreground: 30 50% 15%;
+    --card: 40 50% 88%;
+    --card-foreground: 30 50% 15%;
+    --popover: 40 50% 88%;
+    --popover-foreground: 30 50% 15%;
+    --primary: 25 80% 40%;
+    --primary-foreground: 35 70% 95%;
+    --secondary: 35 40% 85%;
+    --secondary-foreground: 25 80% 30%;
+    --muted: 35 40% 90%;
+    --muted-foreground: 30 30% 35%;
+    --accent: 25 80% 60%;
+    --accent-foreground: 30 50% 15%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 35 40% 80%;
+    --input: 35 40% 85%;
+    --ring: 25 80% 50%;
+  }
+
+  /* Thème Grimoire (Mode Sombre) */
+  .dark .theme-grimoire {
+    --background: 40 10% 10%;
+    --foreground: 40 20% 88%;
+    --card: 40 12% 15%;
+    --card-foreground: 40 20% 88%;
+    --popover: 40 10% 10%;
+    --popover-foreground: 40 20% 88%;
+    --primary: 35 60% 65%;
+    --primary-foreground: 30 30% 10%;
+    --secondary: 40 15% 20%;
+    --secondary-foreground: 40 20% 88%;
+    --muted: 40 15% 20%;
+    --muted-foreground: 40 15% 60%;
+    --accent: 35 60% 55%;
+    --accent-foreground: 40 10% 10%;
+    --destructive: 0 50% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 15% 25%;
+    --input: 40 15% 20%;
+    --ring: 35 60% 55%;
   }
 }
