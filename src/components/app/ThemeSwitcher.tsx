@@ -61,27 +61,10 @@ export function ThemeSwitcher() {
   };
   
   const toggleBaseTheme = (isDarkNow: boolean) => {
-    const currentTheme = theme || 'light';
-    
-    // If we are on a custom theme, switch to its dark/light variant
-    if (currentTheme.startsWith('theme-')) {
-       // We can just toggle dark class, next-themes handles the rest
-       setTheme(isDarkNow ? 'dark' : 'light');
-       // Re-apply the custom theme class if it was removed by setting 'light' or 'dark'
-       setTimeout(() => {
-            const currentThemeClass = document.documentElement.className.split(' ').find(c => c.startsWith('theme-'));
-            if (!currentThemeClass || currentThemeClass !== currentTheme) {
-                 setTheme(currentTheme);
-            }
-       }, 50);
+    setTheme(isDarkNow ? 'dark' : 'light');
+  };
 
-    } else {
-        // If on default light/dark, just toggle
-        setTheme(isDarkNow ? 'dark' : 'light');
-    }
-};
-
-  const currentThemeId = theme?.replace('dark-', '').replace('light-', '') || 'default';
+  const currentThemeId = theme?.startsWith('theme-') || theme?.startsWith('themerosegold') ? theme : 'default';
 
   return (
     <DropdownMenu>
@@ -113,8 +96,8 @@ export function ThemeSwitcher() {
         {THEMES.filter(th => th.id === 'default').map((item) => (
           <DropdownMenuItem
               key={item.id}
-              onClick={() => handleThemeChange(isDark ? 'dark' : 'light')}
-              className={cn("flex flex-col items-start gap-1 p-2", (theme === 'light' || theme === 'dark') && "bg-accent")}
+              onClick={() => handleThemeChange('default')}
+              className={cn("flex flex-col items-start gap-1 p-2", currentThemeId === 'default' && "bg-accent")}
           >
             <div className="flex items-center w-full">
                <Unlock className="mr-2 h-4 w-4 text-primary" />
@@ -130,7 +113,7 @@ export function ThemeSwitcher() {
               key={item.id}
               disabled={!isUnlocked}
               onClick={() => isUnlocked && handleThemeChange(item.id)}
-              className={cn("flex flex-col items-start gap-1 p-2", theme === item.id && "bg-accent")}
+              className={cn("flex flex-col items-start gap-1 p-2", currentThemeId === item.id && "bg-accent")}
             >
               <div className="flex items-center w-full">
                  {isUnlocked ? <Unlock className="mr-2 h-4 w-4 text-primary" /> : <Lock className="mr-2 h-4 w-4 text-muted-foreground" />}
@@ -154,7 +137,7 @@ export function ThemeSwitcher() {
             <DropdownMenuItem
               key={item.id}
               onClick={() => handleThemeChange(item.id)}
-              className={cn("flex flex-col items-start gap-1 p-2", theme === item.id && "bg-accent")}
+              className={cn("flex flex-col items-start gap-1 p-2", currentThemeId === item.id && "bg-accent")}
             >
                <div className="flex items-center w-full">
                  <Unlock className="mr-2 h-4 w-4 text-primary" />
