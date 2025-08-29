@@ -71,9 +71,10 @@
     "exportSuccessTitle": "Export Successful",
     "exportSuccessDescription": "Your data is being downloaded as gratitude-backup.json.",
     "exportErrorTitle": "Export Failed",
-    "exportErrorDescription": "There was a problem exporting your data.",
+    "exportErrorDescription": "There was a problem exporting your data or generating the image.",
     "noDataToExport": "There is no data to export.",
     "shareYourGratitude": "Share your Gratitude",
-    "sharePreviewDescription": "This is a preview of the image that will be shared.",
-    "shareNow": "Share Now"
+    "sharePreviewDescription": "This is a preview of the image that will be generated.",
+    "downloadImage": "Download Image",
+    "generatingImage": "Generating..."
 }

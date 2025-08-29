@@ -71,9 +71,10 @@
     "exportSuccessTitle": "Exportation réussie",
     "exportSuccessDescription": "Vos données sont en cours de téléchargement sous le nom de gratitude-backup.json.",
     "exportErrorTitle": "Échec de l'exportation",
-    "exportErrorDescription": "Un problème est survenu lors de l'exportation de vos données.",
+    "exportErrorDescription": "Un problème est survenu lors de l'exportation de vos données ou la génération de l'image.",
     "noDataToExport": "Il n'y a aucune donnée à exporter.",
     "shareYourGratitude": "Partagez votre gratitude",
-    "sharePreviewDescription": "Ceci est un aperçu de l'image qui sera partagée.",
-    "shareNow": "Partager maintenant"
+    "sharePreviewDescription": "Ceci est un aperçu de l'image qui sera générée.",
+    "downloadImage": "Télécharger l'image",
+    "generatingImage": "Génération en cours..."
 }

@@ -1,6 +1,7 @@
 
 "use client";
 
+import * as React from "react";
 import { AppIcon } from "./AppIcon";
 import { useLanguage } from "./LanguageProvider";
 import { GratitudeEntry } from "@/lib/types";
@@ -11,12 +12,16 @@ interface ShareImagePreviewCardProps {
   entry: GratitudeEntry;
 }
 
-export function ShareImagePreviewCard({ entry }: ShareImagePreviewCardProps) {
+export const ShareImagePreviewCard = React.forwardRef<HTMLDivElement, ShareImagePreviewCardProps>(
+  ({ entry }, ref) => {
     const { t, language } = useLanguage();
     const date = new Date(entry.date);
 
     return (
-        <div className="aspect-[9/16] w-full bg-gradient-to-br from-primary/10 via-background to-background border rounded-lg p-6 flex flex-col shadow-2xl">
+        <div 
+            ref={ref}
+            className="aspect-[9/16] w-full bg-gradient-to-br from-primary/10 via-background to-background border rounded-lg p-6 flex flex-col shadow-2xl"
+        >
             <div className="flex-grow flex flex-col justify-center items-center text-center">
                 <p className="text-sm text-muted-foreground italic mb-4">
                     &ldquo;{entry.prompt}&rdquo;
@@ -34,5 +39,6 @@ export function ShareImagePreviewCard({ entry }: ShareImagePreviewCardProps) {
             </div>
         </div>
     );
-}
-
+  }
+);
+ShareImagePreviewCard.displayName = "ShareImagePreviewCard";

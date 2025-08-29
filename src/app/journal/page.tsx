@@ -2,9 +2,10 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { ArrowLeft, BookOpen, Download } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { toPng } from 'html-to-image';
 
 import type { GratitudeState, GratitudeEntry } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -16,14 +17,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { WordCloudCard } from "@/components/app/WordCloudCard";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { ShareImagePreviewCard } from "@/components/app/ShareImagePreviewCard";
+import { useToast } from "@/hooks/use-toast";
 
 
 export default function JournalPage() {
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [state, setState] = React.useState<GratitudeState | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(undefined);
   const [entryToShare, setEntryToShare] = React.useState<GratitudeEntry | null>(null);
+  const imagePreviewRef = React.useRef<HTMLDivElement>(null);
+  const [isGeneratingImage, setIsGeneratingImage] = React.useState(false);
   
   React.useEffect(() => {
     try {
@@ -72,6 +77,28 @@ export default function JournalPage() {
 
   const handleShare = (entry: GratitudeEntry) => {
     setEntryToShare(entry);
+  };
+  
+  const handleDownloadImage = async () => {
+    if (!imagePreviewRef.current) return;
+    setIsGeneratingImage(true);
+    try {
+        const dataUrl = await toPng(imagePreviewRef.current, { cacheBust: true, pixelRatio: 2 });
+        const link = document.createElement('a');
+        link.download = `gratitude-day-${entryToShare?.day}.png`;
+        link.href = dataUrl;
+        link.click();
+        setEntryToShare(null);
+    } catch (err) {
+        console.error('Failed to generate image', err);
+        toast({
+            title: t('exportErrorTitle'),
+            description: t('exportErrorDescription'),
+            variant: "destructive"
+        });
+    } finally {
+        setIsGeneratingImage(false);
+    }
   };
 
 
@@ -147,9 +174,10 @@ export default function JournalPage() {
               {t('sharePreviewDescription')}
             </DialogDescription>
           </DialogHeader>
-          {entryToShare && <ShareImagePreviewCard entry={entryToShare} />}
-           <Button onClick={() => alert("This would open the native share dialog!")}>
-              {t('shareNow')}
+          {entryToShare && <ShareImagePreviewCard ref={imagePreviewRef} entry={entryToShare} />}
+           <Button onClick={handleDownloadImage} disabled={isGeneratingImage}>
+              <Download className="mr-2 h-4 w-4" />
+              {isGeneratingImage ? t('generatingImage') : t('downloadImage')}
             </Button>
         </DialogContent>
       </Dialog>
