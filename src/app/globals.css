@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 @layer base {
-  /* Thème Moderne (Mode Clair) */
+  /* Thème Moderne (Mode Clair) - Par défaut */
   :root {
     --background: 220 13% 95%; /* gray-50 */
     --foreground: 220 13% 9%;   /* gray-900 */
@@ -234,7 +234,7 @@
     --ring: 35 60% 55%;
   }
 
-  /* Thème Starlight (Sombre) */
+  /* Thème Starlight (Sombre uniquement) */
   .dark.theme-starlight {
     --background: 240 10% 10%;
     --foreground: 240 15% 85%;
