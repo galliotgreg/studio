@@ -25,31 +25,54 @@ export function ThemeSwitcher() {
   const { setTheme, theme, resolvedTheme } = useTheme()
   const { t } = useLanguage();
   const [unlockedBadges, setUnlockedBadges] = React.useState<string[]>([]);
-  
+  const [currentThemeClass, setCurrentThemeClass] = React.useState('');
+
   const isDark = resolvedTheme === 'dark';
 
-  const loadBadges = React.useCallback(() => {
+  const loadData = React.useCallback(() => {
     try {
       const savedData = localStorage.getItem("gratitudeChallengeData");
       if (savedData) {
         const parsedData = JSON.parse(savedData) as GratitudeState;
         setUnlockedBadges(parsedData.unlockedBadges || []);
       }
+      
+      const themeClass = document.documentElement.className
+        .split(' ')
+        .find(c => c.startsWith('theme-') || c === 'themerosegold');
+      setCurrentThemeClass(themeClass || 'default');
+
     } catch (error) {
-      console.error("Failed to load badge data from local storage", error);
+      console.error("Failed to load data from local storage", error);
     }
   }, []);
 
   React.useEffect(() => {
-    loadBadges();
-    const handleStorageUpdate = () => loadBadges();
+    loadData();
+    const handleStorageUpdate = () => loadData();
     window.addEventListener('storageUpdated', handleStorageUpdate);
-    return () => window.removeEventListener('storageUpdated', handleStorageUpdate);
-  }, [loadBadges]);
 
-  const progressionThemes = THEMES.filter(th => !th.isTreasure && th.id !== 'default');
-  const treasureThemes = THEMES.filter(th => th.isTreasure);
-  
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                const themeClass = (mutation.target as HTMLElement).className
+                    .split(' ')
+                    .find(c => c.startsWith('theme-') || c === 'themerosegold');
+                setCurrentThemeClass(themeClass || 'default');
+            }
+        });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true
+    });
+    
+    return () => {
+        window.removeEventListener('storageUpdated', handleStorageUpdate);
+        observer.disconnect();
+    }
+  }, [loadData]);
+
   const getBadgeName = (badgeId: string | null) => {
     if (!badgeId) return "";
     const badge = BADGES.find(b => b.id === badgeId);
@@ -63,8 +86,8 @@ export function ThemeSwitcher() {
   const toggleBaseTheme = () => {
     setTheme(isDark ? 'light' : 'dark');
   };
-
-  const currentThemeId = theme?.startsWith('theme-') || theme?.startsWith('themerosegold') ? theme : 'default';
+  
+  const currentThemeId = currentThemeClass;
 
   return (
     <DropdownMenu>
@@ -106,7 +129,7 @@ export function ThemeSwitcher() {
           </DropdownMenuItem>
         ))}
 
-        {progressionThemes.map((item) => {
+        {THEMES.filter(th => !th.isTreasure && th.id !== 'default').map((item) => {
           const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
           return (
             <DropdownMenuItem
@@ -128,9 +151,9 @@ export function ThemeSwitcher() {
           )
         })}
 
-        {treasureThemes.length > 0 && <DropdownMenuSeparator />}
+        {THEMES.filter(th => th.isTreasure).length > 0 && <DropdownMenuSeparator />}
         
-        {treasureThemes.map((item) => {
+        {THEMES.filter(th => th.isTreasure).map((item) => {
           const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
           if (!isUnlocked) return null;
           return (
