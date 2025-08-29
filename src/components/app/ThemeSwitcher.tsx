@@ -80,7 +80,7 @@ export function ThemeSwitcher() {
           <span className="sr-only">{t('changeTheme')}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64 bg-popover">
+      <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
         <div className="flex items-center justify-between px-2 py-1.5">
             <div className="flex items-center gap-2">
