@@ -85,5 +85,14 @@
     "treasureDiscovered": "Trésors Découverts",
     "treasureUnlockedTitle": "Trésor Débloqué !",
     "treasureUnlockedDescription": "Pour avoir partagé votre gratitude, vous avez débloqué le badge \"{badgeName}\" et le thème qui lui est associé !",
-    "noEntriesYetCloud": "Le journal est vide"
+    "noEntriesYetCloud": "Le journal est vide.",
+    "theme.light": "Clair",
+    "theme.dark": "Sombre",
+    "theme.sunrise": "Aurore",
+    "theme.forest": "Forêt",
+    "theme.ocean": "Océan",
+    "theme.starlight": "Nuit Étoilée",
+    "theme.lavender": "Lavande",
+    "theme.grimoire": "Vieux Grimoire",
+    "theme.rose-gold": "Or Rose"
 }

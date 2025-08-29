@@ -84,5 +84,15 @@
     "generatingImage": "Generating...",
     "treasureDiscovered": "Discovered Treasures",
     "treasureUnlockedTitle": "Treasure Unlocked!",
-    "treasureUnlockedDescription": "For sharing your gratitude, you have unlocked the \"{badgeName}\" badge and its associated theme!"
+    "treasureUnlockedDescription": "For sharing your gratitude, you have unlocked the \"{badgeName}\" badge and its associated theme!",
+    "noEntriesYetCloud": "Journal is empty.",
+    "theme.light": "Light",
+    "theme.dark": "Dark",
+    "theme.sunrise": "Sunrise",
+    "theme.forest": "Forest",
+    "theme.ocean": "Ocean",
+    "theme.starlight": "Starlight",
+    "theme.lavender": "Lavender",
+    "theme.grimoire": "Old Grimoire",
+    "theme.rose-gold": "Rose Gold"
 }

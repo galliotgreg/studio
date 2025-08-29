@@ -38,15 +38,15 @@ export function ThemeSwitcher() {
   }, []);
   
   const themes = [
-    { name: 'Clair', value: 'light', unlockBadgeId: null },
-    { name: 'Sombre', value: 'dark', unlockBadgeId: null },
-    { name: 'Aurore', value: 'theme-sunrise', unlockBadgeId: 'entry-1' },
-    { name: 'Forêt', value: 'theme-forest', unlockBadgeId: 'streak-3' },
-    { name: 'Océan', value: 'theme-ocean', unlockBadgeId: 'streak-7' },
-    { name: 'Nuit Étoilée', value: 'theme-starlight', unlockBadgeId: 'entry-10' },
-    { name: 'Lavande', value: 'theme-lavender', unlockBadgeId: 'streak-21' },
-    { name: 'Vieux Grimoire', value: 'theme-grimoire', unlockBadgeId: 'share-1' },
-    { name: 'Or Rose', value: 'theme-rose-gold', unlockBadgeId: 'streak-30' },
+    { nameKey: 'theme.light', value: 'light', unlockBadgeId: null },
+    { nameKey: 'theme.dark', value: 'dark', unlockBadgeId: null },
+    { nameKey: 'theme.sunrise', value: 'theme-sunrise', unlockBadgeId: 'entry-1' },
+    { nameKey: 'theme.forest', value: 'theme-forest', unlockBadgeId: 'streak-3' },
+    { nameKey: 'theme.ocean', value: 'theme-ocean', unlockBadgeId: 'streak-7' },
+    { nameKey: 'theme.starlight', value: 'theme-starlight', unlockBadgeId: 'entry-10' },
+    { nameKey: 'theme.lavender', value: 'theme-lavender', unlockBadgeId: 'streak-21' },
+    { nameKey: 'theme.grimoire', value: 'theme-grimoire', unlockBadgeId: 'share-1' },
+    { nameKey: 'theme.rose-gold', value: 'theme-rose-gold', unlockBadgeId: 'streak-30' },
   ]
 
   const getBadgeName = (badgeId: string | null) => {
@@ -78,7 +78,7 @@ export function ThemeSwitcher() {
           >
             <div className="flex items-center w-full">
                {isUnlocked ? <Unlock className="mr-2 h-4 w-4 text-primary" /> : <Lock className="mr-2 h-4 w-4 text-muted-foreground" />}
-               <span className={cn(!isUnlocked && "text-muted-foreground")}>{t(item.name)}</span>
+               <span className={cn(!isUnlocked && "text-muted-foreground")}>{t(item.nameKey)}</span>
             </div>
             {!isUnlocked && (
               <small className="text-xs text-muted-foreground ml-6">
