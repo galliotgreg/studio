@@ -2,7 +2,7 @@
 "use client";
 
 import { Settings, Share2, Star, Upload, Download, Trash2 } from "lucide-react";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "./LanguageProvider";
 import {
@@ -53,7 +53,7 @@ export function Header({ onReset, onShare, onExport, onImport }: HeaderProps) {
                 <span className="sr-only">{t('share')}</span>
             </Button>
             <LanguageSwitcher />
-            <ThemeToggle />
+            <ThemeSwitcher />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="icon">
