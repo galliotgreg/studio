@@ -79,12 +79,11 @@ export function ThemeSwitcher() {
     return badge ? t(badge.nameKey) : '';
   }
   
-  const handleThemeChange = (newTheme: string) => {
-    // Correctly handle the default theme case
-    if (newTheme === 'default') {
+  const handlePaletteChange = (newPalette: string) => {
+    if (newPalette === 'default') {
       setTheme(resolvedTheme === 'dark' ? 'dark' : 'light');
     } else {
-      setTheme(newTheme);
+      setTheme(newPalette);
     }
   };
   
@@ -123,7 +122,6 @@ export function ThemeSwitcher() {
         
         {THEMES.map((item) => {
           const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
-          // Handle 'default' case separately for the checkmark logic
           const isActive = item.id === 'default' ? currentThemeId === 'default' : currentThemeClass === item.id;
           
           if (item.isTreasure && !isUnlocked) {
@@ -134,7 +132,7 @@ export function ThemeSwitcher() {
             <DropdownMenuItem
               key={item.id}
               disabled={!isUnlocked}
-              onClick={() => isUnlocked && handleThemeChange(item.id)}
+              onClick={() => isUnlocked && handlePaletteChange(item.id)}
               className={cn("flex flex-col items-start gap-1 p-2", isActive && "bg-accent")}
             >
               <div className="flex items-center w-full">
