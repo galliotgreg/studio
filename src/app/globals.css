@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +8,7 @@ body {
 }
 
 @layer base {
+  /* Default Theme (Light Mode) */
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -30,6 +32,7 @@ body {
     --radius: 0.5rem;
   }
  
+  /* Default Theme (Dark Mode) */
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 60 9.1% 97.8%;
@@ -52,6 +55,7 @@ body {
     --ring: 215 20.2% 65.1%;
   }
 
+  /* Custom Palettes */
   .theme-sunrise {
     --background: 20 80% 95%; --foreground: 20 40% 10%; --card: 15 60% 99%; --card-foreground: 20 40% 10%; --popover: 15 60% 99%; --popover-foreground: 20 40% 10%; --primary: 15 90% 60%; --primary-foreground: 15 30% 98%; --secondary: 30 70% 92%; --secondary-foreground: 30 50% 25%; --muted: 25 60% 94%; --muted-foreground: 25 40% 45%; --accent: 40 100% 88%; --accent-foreground: 40 60% 25%; --border: 20 60% 90%; --input: 20 60% 90%; --ring: 15 90% 60%;
   }
