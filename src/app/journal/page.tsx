@@ -132,11 +132,11 @@ export default function JournalPage() {
   return (
     <div className="container mx-auto p-4 md:p-8">
       <header className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
+        <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3 text-foreground">
           <BookOpen className="w-8 h-8 text-primary" />
           {t('myJournal')}
         </h1>
-        <Button asChild variant="outline">
+        <Button asChild variant="outline" className="text-foreground">
           <Link href="/">
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t('backToChallenge')}
