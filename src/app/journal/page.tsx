@@ -95,7 +95,7 @@ export default function JournalPage() {
                         modifiersClassNames={{
                             entered: "bg-primary/20 text-primary-foreground rounded-full",
                         }}
-                        className="p-0"
+                        className="w-full"
                     />
                 </CardContent>
             </Card>
