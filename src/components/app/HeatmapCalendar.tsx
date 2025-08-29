@@ -41,8 +41,9 @@ export function HeatmapCalendar({ entries, onDayClick, days = 98 }: HeatmapCalen
   }, [entries]);
 
   const today = new Date();
-  const weekStartsOn = locale.options?.weekStartsOn ?? 1;
-  const startDate = startOfWeek(subDays(today, days - 1), { weekStartsOn });
+  const weekStartsOn = locale.options?.weekStartsOn ?? 0;
+  const daysToSubtract = days - 1;
+  const startDate = startOfWeek(subDays(today, daysToSubtract), { weekStartsOn });
   
   const calendarDays = React.useMemo(() => {
     return Array.from({ length: days }).map((_, i) => addDays(startDate, i));
@@ -76,40 +77,49 @@ export function HeatmapCalendar({ entries, onDayClick, days = 98 }: HeatmapCalen
         </CardHeader>
         <CardContent>
           <div className="relative">
-            <div className="grid grid-flow-col grid-rows-7 gap-1">
-              {calendarDays.map((day) => {
-                const dateStr = format(day, 'yyyy-MM-dd');
-                const count = entryMap.get(dateStr) || 0;
-                const tooltipContent = count > 0
-                  ? `${count} ${count > 1 ? t('entries') : t('entry')} - ${format(day, 'PPP', { locale })}`
-                  : `${t('noEntry')} - ${format(day, 'PPP', { locale })}`;
-
-                return (
-                  <Tooltip key={day.toString()}>
-                    <TooltipTrigger asChild>
-                      <button
-                        onClick={() => onDayClick(day)}
-                        className={cn(
-                          "w-5 h-5 rounded-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background",
-                          getIntensityClass(count),
-                          isSameDay(day, new Date()) && "ring-2 ring-primary ring-offset-2 ring-offset-background",
-                        )}
-                        aria-label={tooltipContent}
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{tooltipContent}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                );
-              })}
+             <div className="absolute -top-6 left-0 right-0 flex" style={{ paddingLeft: '28px' }}>
+                {monthLabels.map(({ name, colStart }, index) => {
+                    const prevColStart = index > 0 ? monthLabels[index-1].colStart : 0;
+                    const width = (colStart - prevColStart) * 24;
+                    return (
+                        <div key={name} className="text-xs text-muted-foreground text-center" style={{ minWidth: `${width}px` }}>
+                            {name}
+                        </div>
+                    )
+                })}
             </div>
-             <div className="absolute -top-5 left-0 right-0 flex justify-between px-1" style={{ gridColumn: '1 / -1' }}>
-                {monthLabels.map(({ name, colStart }) => (
-                    <div key={name} className="text-xs text-muted-foreground" style={{ gridColumnStart: colStart }}>
-                        {name}
-                    </div>
-                ))}
+            <div className="flex gap-2">
+                <div className="grid grid-flow-col grid-rows-7 gap-1">
+                    {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(day => <div key={day} className="w-5 h-5 flex items-center justify-center text-xs text-muted-foreground">{day}</div>)}
+                </div>
+                <div className="grid grid-flow-col grid-rows-7 gap-1">
+                {calendarDays.map((day) => {
+                    const dateStr = format(day, 'yyyy-MM-dd');
+                    const count = entryMap.get(dateStr) || 0;
+                    const tooltipContent = count > 0
+                    ? `${count} ${count > 1 ? t('entries') : t('entry')} - ${format(day, 'PPP', { locale })}`
+                    : `${t('noEntry')} - ${format(day, 'PPP', { locale })}`;
+
+                    return (
+                    <Tooltip key={day.toString()}>
+                        <TooltipTrigger asChild>
+                        <button
+                            onClick={() => onDayClick(day)}
+                            className={cn(
+                            "w-5 h-5 rounded-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background",
+                            getIntensityClass(count),
+                            isSameDay(day, new Date()) && "ring-2 ring-primary ring-offset-2 ring-offset-background",
+                            )}
+                            aria-label={tooltipContent}
+                        />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                        <p>{tooltipContent}</p>
+                        </TooltipContent>
+                    </Tooltip>
+                    );
+                })}
+                </div>
             </div>
           </div>
         </CardContent>
