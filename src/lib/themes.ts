@@ -15,6 +15,7 @@ export const THEMES: Theme[] = [
     unlockBadgeId: null,
     isTreasure: false,
   },
+  /*
   {
     id: 'theme-sunrise',
     nameKey: 'theme.sunrise',
@@ -57,4 +58,5 @@ export const THEMES: Theme[] = [
     unlockBadgeId: 'share-1',
     isTreasure: true,
   }
+  */
 ];
