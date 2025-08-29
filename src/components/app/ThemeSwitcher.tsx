@@ -21,7 +21,7 @@ import { BADGES } from "@/lib/data"
 
 // This function determines which themes are unlocked based on the user's badges.
 const getUnlockedThemes = (unlockedBadgeIds: string[] | undefined) => {
-    const unlocked = new Set<string>(['light', 'dark', 'system']);
+    const unlocked = new Set<string>(['light', 'dark']);
     if (!unlockedBadgeIds) return unlocked;
 
     if (unlockedBadgeIds.includes('entry-1')) unlocked.add('theme-sunrise');
@@ -52,7 +52,6 @@ export function ThemeSwitcher() {
   const themes = [
     { name: 'Clair', value: 'light', unlocked: true, unlockConditionKey: "badge.default.unlock" },
     { name: 'Sombre', value: 'dark', unlocked: true, unlockConditionKey: "badge.default.unlock" },
-    { name: 'Système', value: 'system', unlocked: true, unlockConditionKey: "badge.default.unlock" },
     { name: 'Aurore', value: 'theme-sunrise', unlocked: unlockedThemes.has('theme-sunrise'), unlockConditionKey: "badge.entry-1.name" },
     { name: 'Forêt', value: 'theme-forest', unlocked: unlockedThemes.has('theme-forest'), unlockConditionKey: "badge.streak-3.name" },
     { name: 'Océan', value: 'theme-ocean', unlocked: unlockedThemes.has('theme-ocean'), unlockConditionKey: "badge.streak-7.name" },
