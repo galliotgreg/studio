@@ -6,6 +6,7 @@ import { ThemeSwitcher } from '@/components/app/ThemeSwitcher';
 import { ThemeProvider } from '@/components/app/theme-provider';
 import { LanguageProvider } from '@/components/app/LanguageProvider';
 import type { GratitudeState } from '@/lib/types';
+import * as NextThemes from 'next-themes';
 
 // Mock the useTheme hook from next-themes
 const mockSetTheme = vi.fn();
@@ -70,11 +71,11 @@ describe('ThemeSwitcher', () => {
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
     
     await waitFor(() => {
-        expect(screen.getByText('Clair')).toBeInTheDocument();
+        expect(screen.getByText('theme.light')).toBeInTheDocument();
     });
     
-    const lightThemeItem = screen.getByText('Clair').closest('div[role="menuitem"]');
-    const darkThemeItem = screen.getByText('Sombre').closest('div[role="menuitem"]');
+    const lightThemeItem = screen.getByText('theme.light').closest('div[role="menuitem"]');
+    const darkThemeItem = screen.getByText('theme.dark').closest('div[role="menuitem"]');
     
     expect(lightThemeItem).not.toHaveAttribute('aria-disabled', 'true');
     expect(darkThemeItem).not.toHaveAttribute('aria-disabled', 'true');
@@ -84,9 +85,8 @@ describe('ThemeSwitcher', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Sombre'));
-    });
+    const darkThemeItem = await screen.findByText('theme.dark');
+    fireEvent.click(darkThemeItem);
 
     expect(mockSetTheme).toHaveBeenCalledWith('dark');
   });
@@ -100,7 +100,7 @@ describe('ThemeSwitcher', () => {
 
     await waitFor(() => {
       // Example: 'Aurore' theme requires 'entry-1' badge
-      const sunriseThemeItem = screen.getByText('Aurore').closest('div[role="menuitem"]');
+      const sunriseThemeItem = screen.getByText('theme.sunrise').closest('div[role="menuitem"]');
       expect(sunriseThemeItem).toHaveAttribute('aria-disabled', 'true');
     });
   });
@@ -112,13 +112,11 @@ describe('ThemeSwitcher', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
-    await waitFor(() => {
-      const sunriseThemeItem = screen.getByText('Aurore').closest('div[role="menuitem"]');
-      expect(sunriseThemeItem).not.toHaveAttribute('aria-disabled', 'true');
-    });
+    const sunriseThemeItem = await screen.findByText('theme.sunrise');
+    expect(sunriseThemeItem.closest('div[role="menuitem"]')).not.toHaveAttribute('aria-disabled', 'true');
 
     // Verify it's clickable
-    fireEvent.click(screen.getByText('Aurore'));
+    fireEvent.click(sunriseThemeItem);
     expect(mockSetTheme).toHaveBeenCalledWith('theme-sunrise');
   });
 
@@ -128,10 +126,8 @@ describe('ThemeSwitcher', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
-    await waitFor(() => {
-      const sunriseItem = screen.getByText('Aurore');
-      fireEvent.click(sunriseItem);
-    });
+    const sunriseItem = await screen.findByText('theme.sunrise');
+    fireEvent.click(sunriseItem);
     
     expect(mockSetTheme).not.toHaveBeenCalled();
   });
