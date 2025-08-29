@@ -80,7 +80,7 @@ export default function JournalPage() {
   };
   
   const handleDownloadImage = async () => {
-    if (!imagePreviewRef.current) return;
+    if (!imagePreviewRef.current || !entryToShare) return;
     setIsGeneratingImage(true);
     try {
         const fontEmbedCss = `
@@ -94,18 +94,35 @@ export default function JournalPage() {
             pixelRatio: 2,
             fontEmbedCss: fontEmbedCss
         });
-        const link = document.createElement('a');
-        link.download = `gratitude-day-${entryToShare?.day}.png`;
-        link.href = dataUrl;
-        link.click();
+        
+        const blob = await (await fetch(dataUrl)).blob();
+        const fileName = `gratitude-day-${entryToShare.day}.png`;
+        const file = new File([blob], fileName, { type: "image/png" });
+
+        if (navigator.share && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: t('appTitle'),
+                text: `${t('dailyGratitude').replace('{day}', String(entryToShare.day))}`,
+                files: [file],
+            });
+        } else {
+            // Fallback for desktop or browsers that don't support Web Share API for files
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = dataUrl;
+            link.click();
+        }
         setEntryToShare(null);
-    } catch (err) {
-        console.error('Failed to generate image', err);
-        toast({
-            title: t('exportErrorTitle'),
-            description: t('exportErrorDescription'),
-            variant: "destructive"
-        });
+    } catch (err: any) {
+        // Don't show an error if the user cancelled the share dialog
+        if (err.name !== 'AbortError') {
+            console.error('Failed to generate or share image', err);
+            toast({
+                title: t('exportErrorTitle'),
+                description: t('exportErrorDescription'),
+                variant: "destructive"
+            });
+        }
     } finally {
         setIsGeneratingImage(false);
     }
