@@ -81,5 +81,8 @@
     "shareYourGratitude": "Share your Gratitude",
     "sharePreviewDescription": "This is a preview of the image that will be generated.",
     "downloadImage": "Share / Download",
-    "generatingImage": "Generating..."
+    "generatingImage": "Generating...",
+    "treasureDiscovered": "Discovered Treasures",
+    "treasureUnlockedTitle": "Treasure Unlocked!",
+    "treasureUnlockedDescription": "For sharing your gratitude, you have unlocked the \"{badgeName}\" badge and its associated theme!"
 }

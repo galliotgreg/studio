@@ -3,11 +3,11 @@
 "use client";
 
 import * as React from "react";
-import { Star, Badge, Settings, Trash2 } from "lucide-react";
+import { Star, Badge, Settings, Trash2, Award } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from 'next/link';
 
-import type { GratitudeState, Quote } from "@/lib/types";
+import type { GratitudeState, Quote, Badge as BadgeType } from "@/lib/types";
 import { BADGES } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/app/Header";
@@ -29,6 +29,13 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from "@/components/ui/dialog"
 import { Button, buttonVariants } from "@/components/ui/button";
 import { JournalStatsCard } from "@/components/app/JournalStatsCard";
 
@@ -43,6 +50,7 @@ export default function GratitudeChallengePage() {
   const [currentPrompt, setCurrentPrompt] = React.useState<string>("");
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
   const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
+  const [newlyUnlockedTreasure, setNewlyUnlockedTreasure] = React.useState<BadgeType | null>(null);
   const badgesCardRef = React.useRef<HTMLDivElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -247,16 +255,12 @@ export default function GratitudeChallengePage() {
         });
       }
     } finally {
-        // Unlock share badge if not already unlocked
         if (!state.unlockedBadges.includes('share-1')) {
             const shareBadge = BADGES.find(b => b.id === 'share-1');
             if (shareBadge) {
                 const newUnlockedBadges = [...state.unlockedBadges, 'share-1'];
                 setState({ ...state, unlockedBadges: newUnlockedBadges });
-                toast({
-                    title: t('badgeUnlocked'),
-                    description: t('badgeUnlockedDescription').replace('{badgeName}', t(shareBadge.nameKey)),
-                });
+                setNewlyUnlockedTreasure(shareBadge);
             }
         }
     }
@@ -410,6 +414,21 @@ export default function GratitudeChallengePage() {
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
+        <Dialog open={!!newlyUnlockedTreasure} onOpenChange={() => setNewlyUnlockedTreasure(null)}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{t('treasureUnlockedTitle')}</DialogTitle>
+                     <DialogDescription>
+                        {t('treasureUnlockedDescription').replace('{badgeName}', t(newlyUnlockedTreasure?.nameKey || ''))}
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="flex flex-col items-center justify-center p-4">
+                     {newlyUnlockedTreasure && <newlyUnlockedTreasure.icon className="h-16 w-16 text-primary mb-4" />}
+                     <p className="font-bold text-lg">{t(newlyUnlockedTreasure?.nameKey || '')}</p>
+                     <p className="text-sm text-muted-foreground text-center">{t(newlyUnlockedTreasure?.descriptionKey || '')}</p>
+                </div>
+            </DialogContent>
+        </Dialog>
     </main>
   );
 }
