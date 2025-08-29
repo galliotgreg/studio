@@ -96,5 +96,7 @@
     "theme.starlight": "Starlight",
     "theme.lavender": "Lavender",
     "theme.grimoire": "Old Grimoire",
-    "theme.rose-gold": "Rose Gold"
+    "theme.rose-gold": "Rose Gold",
+    "theme.locked": "Locked Theme",
+    "close": "Close"
 }

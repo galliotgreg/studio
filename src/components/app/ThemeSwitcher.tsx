@@ -18,14 +18,17 @@ import { cn } from "@/lib/utils"
 import { useLanguage } from "./LanguageProvider"
 import type { GratitudeState } from "@/lib/types"
 import { BADGES } from "@/lib/data"
-import { THEMES } from "@/lib/themes"
+import { THEMES, type Theme } from "@/lib/themes"
 import { Switch } from "@/components/ui/switch"
+import { ThemeInfoDialog } from "./ThemeInfoDialog"
+
 
 export function ThemeSwitcher() {
   const { setTheme, theme, resolvedTheme } = useTheme()
   const { t } = useLanguage();
   const [unlockedBadges, setUnlockedBadges] = React.useState<string[]>([]);
   const [currentThemeClass, setCurrentThemeClass] = React.useState('');
+  const [infoDialogTheme, setInfoDialogTheme] = React.useState<Theme | null>(null);
 
   const isDark = resolvedTheme === 'dark';
 
@@ -40,7 +43,7 @@ export function ThemeSwitcher() {
       const themeClass = document.documentElement.className
         .split(' ')
         .find(c => c.startsWith('theme-'));
-      setCurrentThemeClass(themeClass || '');
+      setCurrentThemeClass(themeClass || 'default');
 
     } catch (error) {
       console.error("Failed to load data from local storage", error);
@@ -58,7 +61,7 @@ export function ThemeSwitcher() {
                 const themeClass = (mutation.target as HTMLElement).className
                     .split(' ')
                     .find(c => c.startsWith('theme-'));
-                setCurrentThemeClass(themeClass || '');
+                setCurrentThemeClass(themeClass || 'default');
             }
         });
     });
@@ -72,89 +75,111 @@ export function ThemeSwitcher() {
         observer.disconnect();
     }
   }, [loadData]);
-
-  const getBadgeName = (badgeId: string | null) => {
-    if (!badgeId) return "";
-    const badge = BADGES.find(b => b.id === badgeId);
-    return badge ? t(badge.nameKey) : '';
-  }
   
   const handlePaletteChange = (newPalette: string) => {
     if (newPalette === 'default') {
-      setTheme(resolvedTheme === 'dark' ? 'dark' : 'light');
+      const baseTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      setTheme(baseTheme);
     } else {
       setTheme(newPalette);
     }
   };
   
   const toggleBaseTheme = () => {
-    const currentTheme = theme || 'light';
-    // If we are on a custom theme, switch to its dark/light variant if available
-    // For now, we simplify and just toggle between 'light' and 'dark' as base.
-    setTheme(isDark ? 'light' : 'dark');
+    const isCurrentlyDark = document.documentElement.classList.contains('dark');
+    // We get the custom theme class if it exists
+    const customThemeClass = Array.from(document.documentElement.classList).find(c => c.startsWith('theme-'));
+    
+    if (isCurrentlyDark) {
+      // If we are on a custom theme, stay on it but in light mode
+      if (customThemeClass) {
+        setTheme(customThemeClass);
+      } else {
+        setTheme('light');
+      }
+    } else {
+      // If we are on a custom theme, stay on it but in dark mode
+      if (customThemeClass) {
+        setTheme(customThemeClass);
+      } else {
+        setTheme('dark');
+      }
+    }
   };
   
-  const currentThemeId = currentThemeClass || 'default';
+  const handleThemeClick = (item: Theme) => {
+    const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
+    if (isUnlocked) {
+        handlePaletteChange(item.id);
+    } else {
+        setInfoDialogTheme(item);
+    }
+  };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Palette className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">{t('changeTheme')}</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64">
-        <div className="flex items-center justify-between px-2 py-1.5">
-            <div className="flex items-center gap-2">
-                <Sun className={cn("h-4 w-4", !isDark && "text-primary")} />
-                <span className={cn("text-sm", !isDark && "font-semibold")}>{t('theme.light')}</span>
+    <>
+        <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+            <Palette className="h-[1.2rem] w-[1.2rem]" />
+            <span className="sr-only">{t('changeTheme')}</span>
+            </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-64">
+            <div className="flex items-center justify-between px-2 py-1.5">
+                <div className="flex items-center gap-2">
+                    <Sun className={cn("h-4 w-4", !isDark && "text-primary")} />
+                    <span className={cn("text-sm", !isDark && "font-semibold")}>{t('theme.light')}</span>
+                </div>
+                <Switch
+                    checked={isDark}
+                    onCheckedChange={toggleBaseTheme}
+                    aria-label="Toggle dark mode"
+                />
+                <div className="flex items-center gap-2">
+                    <Moon className={cn("h-4 w-4", isDark && "text-primary")} />
+                    <span className={cn("text-sm", isDark && "font-semibold")}>{t('theme.dark')}</span>
+                </div>
             </div>
-            <Switch
-                checked={isDark}
-                onCheckedChange={toggleBaseTheme}
-                aria-label="Toggle dark mode"
-            />
-             <div className="flex items-center gap-2">
-                <Moon className={cn("h-4 w-4", isDark && "text-primary")} />
-                 <span className={cn("text-sm", isDark && "font-semibold")}>{t('theme.dark')}</span>
-            </div>
-        </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
-        
-        {THEMES.map((item) => {
-          const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
-          const isActive = item.id === 'default' ? currentThemeId === 'default' : currentThemeClass === item.id;
-          
-          if (item.isTreasure && !isUnlocked) {
-            return null; // Don't show locked treasure themes
-          }
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
+            
+            {THEMES.map((item) => {
+              const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
+              const isActive = item.id === currentThemeClass;
+              
+              const badge = item.unlockBadgeId ? BADGES.find(b => b.id === item.unlockBadgeId) : null;
+              const badgeName = badge ? t(badge.nameKey) : '';
+              
+              if (item.isTreasure && !isUnlocked) {
+                return null;
+              }
 
-          return (
-            <DropdownMenuItem
-              key={item.id}
-              disabled={!isUnlocked}
-              onClick={() => isUnlocked && handlePaletteChange(item.id)}
-              className={cn("flex flex-col items-start gap-1 p-2", isActive && "bg-accent")}
-            >
-              <div className="flex items-center w-full">
-                 {item.id === 'default' || isUnlocked ? (
-                    <Unlock className="mr-2 h-4 w-4 text-primary" /> 
-                 ) : (
-                    <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
-                 )}
-                 <span className={cn(!isUnlocked && "text-muted-foreground")}>{t(item.nameKey)}</span>
-              </div>
-              {!isUnlocked && item.unlockBadgeId && (
-                <small className="text-xs text-muted-foreground ml-6">
-                  {t('unlockCondition')} {getBadgeName(item.unlockBadgeId)}
-                </small>
-              )}
-            </DropdownMenuItem>
-          )
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+              return (
+                <DropdownMenuItem
+                    key={item.id}
+                    onClick={() => handleThemeClick(item)}
+                    className={cn("flex flex-col items-start gap-1 p-2 cursor-pointer", isActive && "bg-accent")}
+                >
+                  <div className="flex items-center w-full">
+                    {isUnlocked ? (
+                        <Unlock className="mr-2 h-4 w-4 text-primary" /> 
+                    ) : (
+                        <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
+                    )}
+                    <span className={cn(!isUnlocked && "text-muted-foreground")}>{t(item.nameKey)}</span>
+                  </div>
+                   {!isUnlocked && item.unlockBadgeId && (
+                    <small className="text-xs text-muted-foreground ml-6">
+                      {t('unlockCondition')} {badgeName}
+                    </small>
+                  )}
+                </DropdownMenuItem>
+              )
+            })}
+        </DropdownMenuContent>
+        </DropdownMenu>
+        <ThemeInfoDialog theme={infoDialogTheme} onOpenChange={() => setInfoDialogTheme(null)} />
+    </>
   )
 }
