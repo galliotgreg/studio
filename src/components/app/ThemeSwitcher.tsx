@@ -55,16 +55,33 @@ export function ThemeSwitcher() {
     const badge = BADGES.find(b => b.id === badgeId);
     return badge ? t(badge.nameKey) : '';
   }
-
+  
   const handleThemeChange = (newTheme: string) => {
-    const currentBaseTheme = theme?.startsWith('dark-') ? 'dark' : 'light';
-    const newThemeId = newTheme === 'default' ? currentBaseTheme : newTheme;
-    setTheme(newThemeId);
+    setTheme(newTheme);
   };
   
-  const toggleBaseTheme = (isDark: boolean) => {
-      setTheme(isDark ? 'dark' : 'light');
-  };
+  const toggleBaseTheme = (isDarkNow: boolean) => {
+    const currentTheme = theme || 'light';
+    
+    // If we are on a custom theme, switch to its dark/light variant
+    if (currentTheme.startsWith('theme-')) {
+       // We can just toggle dark class, next-themes handles the rest
+       setTheme(isDarkNow ? 'dark' : 'light');
+       // Re-apply the custom theme class if it was removed by setting 'light' or 'dark'
+       setTimeout(() => {
+            const currentThemeClass = document.documentElement.className.split(' ').find(c => c.startsWith('theme-'));
+            if (!currentThemeClass || currentThemeClass !== currentTheme) {
+                 setTheme(currentTheme);
+            }
+       }, 50);
+
+    } else {
+        // If on default light/dark, just toggle
+        setTheme(isDarkNow ? 'dark' : 'light');
+    }
+};
+
+  const currentThemeId = theme?.replace('dark-', '').replace('light-', '') || 'default';
 
   return (
     <DropdownMenu>
@@ -96,8 +113,8 @@ export function ThemeSwitcher() {
         {THEMES.filter(th => th.id === 'default').map((item) => (
           <DropdownMenuItem
               key={item.id}
-              onClick={() => handleThemeChange(item.id)}
-              className={cn("flex flex-col items-start gap-1 p-2", (theme === 'light' || theme === 'dark' || theme === 'system') && "bg-accent")}
+              onClick={() => handleThemeChange(isDark ? 'dark' : 'light')}
+              className={cn("flex flex-col items-start gap-1 p-2", (theme === 'light' || theme === 'dark') && "bg-accent")}
           >
             <div className="flex items-center w-full">
                <Unlock className="mr-2 h-4 w-4 text-primary" />
