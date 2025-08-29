@@ -86,6 +86,7 @@
     "treasureUnlockedTitle": "Trésor Débloqué !",
     "treasureUnlockedDescription": "Pour avoir partagé votre gratitude, vous avez débloqué le badge \"{badgeName}\" et le thème qui lui est associé !",
     "noEntriesYetCloud": "Le journal est vide.",
+    "changeTheme": "Changer le thème",
     "theme.light": "Clair",
     "theme.dark": "Sombre",
     "theme.sunrise": "Aurore",

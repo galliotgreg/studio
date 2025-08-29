@@ -118,6 +118,7 @@ export default function GratitudeChallengePage() {
     if (state && !isLoading) {
       try {
         localStorage.setItem("gratitudeChallengeData", JSON.stringify(state));
+        window.dispatchEvent(new CustomEvent('storageUpdated'));
       } catch (error) {
         console.error("Failed to save data to local storage", error);
       }

@@ -25,7 +25,7 @@ export function ThemeSwitcher() {
   const { t } = useLanguage();
   const [unlockedBadges, setUnlockedBadges] = React.useState<string[]>([]);
 
-  React.useEffect(() => {
+  const loadBadges = React.useCallback(() => {
     try {
       const savedData = localStorage.getItem("gratitudeChallengeData");
       if (savedData) {
@@ -36,6 +36,20 @@ export function ThemeSwitcher() {
       console.error("Failed to load badge data from local storage", error);
     }
   }, []);
+
+  React.useEffect(() => {
+    loadBadges(); // Initial load
+
+    const handleStorageUpdate = () => {
+      loadBadges();
+    };
+    
+    window.addEventListener('storageUpdated', handleStorageUpdate);
+
+    return () => {
+      window.removeEventListener('storageUpdated', handleStorageUpdate);
+    };
+  }, [loadBadges]);
   
   const themes = [
     { nameKey: 'theme.light', value: 'light', unlockBadgeId: null },
@@ -61,7 +75,7 @@ export function ThemeSwitcher() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
           <Palette className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">Changer le thème</span>
+          <span className="sr-only">{t('changeTheme')}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
