@@ -3,7 +3,7 @@
 
 import * as React from "react"
 import { Lock, Unlock, Palette, Sun, Moon } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useCustomTheme } from "./CustomThemeProvider";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -16,99 +16,28 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "./LanguageProvider"
-import type { GratitudeState } from "@/lib/types"
 import { BADGES } from "@/lib/data"
-import { THEMES, type Theme } from "@/lib/themes"
+import { Theme } from "@/lib/themes"
 import { Switch } from "@/components/ui/switch"
 import { ThemeInfoDialog } from "./ThemeInfoDialog"
 
-
 export function ThemeSwitcher() {
-  const { setTheme, theme, resolvedTheme } = useTheme()
+  const { palette, setPalette, mode, setMode, unlockedThemes, getThemeById } = useCustomTheme();
   const { t } = useLanguage();
-  const [unlockedBadges, setUnlockedBadges] = React.useState<string[]>([]);
-  const [currentThemeClass, setCurrentThemeClass] = React.useState('');
   const [infoDialogTheme, setInfoDialogTheme] = React.useState<Theme | null>(null);
 
-  const isDark = resolvedTheme === 'dark';
+  const isDark = mode === 'dark';
 
-  const loadData = React.useCallback(() => {
-    try {
-      const savedData = localStorage.getItem("gratitudeChallengeData");
-      if (savedData) {
-        const parsedData = JSON.parse(savedData) as GratitudeState;
-        setUnlockedBadges(parsedData.unlockedBadges || []);
-      }
-      
-      const themeClass = document.documentElement.className
-        .split(' ')
-        .find(c => c.startsWith('theme-'));
-      setCurrentThemeClass(themeClass || 'default');
-
-    } catch (error) {
-      console.error("Failed to load data from local storage", error);
-    }
-  }, []);
-
-  React.useEffect(() => {
-    loadData();
-    const handleStorageUpdate = () => loadData();
-    window.addEventListener('storageUpdated', handleStorageUpdate);
-
-    const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                const themeClass = (mutation.target as HTMLElement).className
-                    .split(' ')
-                    .find(c => c.startsWith('theme-'));
-                setCurrentThemeClass(themeClass || 'default');
-            }
-        });
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true
-    });
-    
-    return () => {
-        window.removeEventListener('storageUpdated', handleStorageUpdate);
-        observer.disconnect();
-    }
-  }, [loadData]);
-  
   const handlePaletteChange = (newPalette: string) => {
-    if (newPalette === 'default') {
-      const baseTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-      setTheme(baseTheme);
-    } else {
-      setTheme(newPalette);
-    }
+    setPalette(newPalette);
   };
   
   const toggleBaseTheme = () => {
-    const isCurrentlyDark = document.documentElement.classList.contains('dark');
-    // We get the custom theme class if it exists
-    const customThemeClass = Array.from(document.documentElement.classList).find(c => c.startsWith('theme-'));
-    
-    if (isCurrentlyDark) {
-      // If we are on a custom theme, stay on it but in light mode
-      if (customThemeClass) {
-        setTheme(customThemeClass);
-      } else {
-        setTheme('light');
-      }
-    } else {
-      // If we are on a custom theme, stay on it but in dark mode
-      if (customThemeClass) {
-        setTheme(customThemeClass);
-      } else {
-        setTheme('dark');
-      }
-    }
+    setMode(isDark ? 'light' : 'dark');
   };
   
   const handleThemeClick = (item: Theme) => {
-    const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
+    const isUnlocked = unlockedThemes.some(ut => ut.id === item.id);
     if (isUnlocked) {
         handlePaletteChange(item.id);
     } else {
@@ -144,21 +73,24 @@ export function ThemeSwitcher() {
             <DropdownMenuSeparator />
             <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
             
-            {THEMES.map((item) => {
-              const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
-              const isActive = item.id === currentThemeClass;
+            {getThemeById && unlockedThemes.map((item) => {
+              const themeData = getThemeById(item.id);
+              if (!themeData) return null;
+
+              const isUnlocked = !themeData.unlockBadgeId || unlockedThemes.some(ut => ut.id === themeData.id);
+              const isActive = themeData.id === palette;
               
-              const badge = item.unlockBadgeId ? BADGES.find(b => b.id === item.unlockBadgeId) : null;
+              const badge = themeData.unlockBadgeId ? BADGES.find(b => b.id === themeData.unlockBadgeId) : null;
               const badgeName = badge ? t(badge.nameKey) : '';
               
-              if (item.isTreasure && !isUnlocked) {
+              if (themeData.isTreasure && !isUnlocked) {
                 return null;
               }
 
               return (
                 <DropdownMenuItem
-                    key={item.id}
-                    onClick={() => handleThemeClick(item)}
+                    key={themeData.id}
+                    onClick={() => handleThemeClick(themeData)}
                     className={cn("flex flex-col items-start gap-1 p-2 cursor-pointer", isActive && "bg-accent")}
                 >
                   <div className="flex items-center w-full">
@@ -167,9 +99,9 @@ export function ThemeSwitcher() {
                     ) : (
                         <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
                     )}
-                    <span className={cn(!isUnlocked && "text-muted-foreground")}>{t(item.nameKey)}</span>
+                    <span className={cn(!isUnlocked && "text-muted-foreground")}>{t(themeData.nameKey)}</span>
                   </div>
-                   {!isUnlocked && item.unlockBadgeId && (
+                   {!isUnlocked && themeData.unlockBadgeId && (
                     <small className="text-xs text-muted-foreground ml-6">
                       {t('unlockCondition')} {badgeName}
                     </small>

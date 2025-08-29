@@ -1,3 +1,4 @@
+
 import type { Badge } from "./types";
 import { Star, Award, Zap, Trophy, Crown, BookMarked, Share2 } from "lucide-react";
 

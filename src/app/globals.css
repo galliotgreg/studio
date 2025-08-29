@@ -75,7 +75,7 @@
   }
 
   /* Thème Grimoire (Mode Sombre) */
-  .dark .theme-grimoire {
+  .dark.theme-grimoire {
     --background: 40 10% 10%;
     --foreground: 40 20% 88%;
     --card: 40 12% 15%;

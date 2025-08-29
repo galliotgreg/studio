@@ -2,10 +2,9 @@
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
-import { ThemeProvider } from '@/components/app/theme-provider';
 import { LanguageProvider } from '@/components/app/LanguageProvider';
 import { Footer } from '@/components/app/Footer';
-import { AppIcon } from '@/components/app/AppIcon';
+import { CustomThemeProvider } from '@/components/app/CustomThemeProvider';
 
 export const metadata: Metadata = {
   title: 'Gratitude Challenge',
@@ -26,18 +25,13 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased min-h-screen bg-background flex flex-col">
         <LanguageProvider>
-          <ThemeProvider
-              attribute="class"
-              defaultTheme="theme-grimoire"
-              enableSystem={false}
-              disableTransitionOnChange
-          >
+          <CustomThemeProvider>
             <div className="flex-grow">
               {children}
             </div>
             <Footer />
             <Toaster />
-          </ThemeProvider>
+          </CustomThemeProvider>
         </LanguageProvider>
       </body>
     </html>

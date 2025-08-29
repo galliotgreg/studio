@@ -10,7 +10,6 @@ import {
     AlertDialogFooter,
     AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 import { Badge as BadgeIcon } from "lucide-react";
 import { useLanguage } from "./LanguageProvider";
 import { Theme } from "@/lib/themes";
