@@ -89,14 +89,13 @@
     "changeTheme": "Change theme",
     "theme.light": "Light",
     "theme.dark": "Dark",
-    "theme.default": "Default",
-    "theme.sunrise": "Sunrise",
-    "theme.forest": "Forest",
+    "theme.modern": "Modern",
+    "theme.nature": "Nature",
     "theme.ocean": "Ocean",
     "theme.starlight": "Starlight",
     "theme.lavender": "Lavender",
     "theme.grimoire": "Old Grimoire",
-    "theme.rose-gold": "Rose Gold",
+    "theme.sunset": "Sunset",
     "theme.locked": "Locked Theme",
     "close": "Close"
 }

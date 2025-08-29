@@ -11,13 +11,13 @@ export interface Theme {
 export const THEMES: Theme[] = [
   {
     id: 'default',
-    nameKey: 'theme.default',
+    nameKey: 'theme.modern',
     unlockBadgeId: null,
     isTreasure: false,
   },
   {
-    id: 'theme-forest',
-    nameKey: 'theme.forest',
+    id: 'theme-nature',
+    nameKey: 'theme.nature',
     unlockBadgeId: 'streak-3',
     isTreasure: true,
   },
@@ -46,8 +46,8 @@ export const THEMES: Theme[] = [
     isTreasure: true,
   },
   {
-    id: 'theme-rose-gold',
-    nameKey: 'theme.rose-gold',
+    id: 'theme-sunset',
+    nameKey: 'theme.sunset',
     unlockBadgeId: 'streak-30',
     isTreasure: true,
   },
