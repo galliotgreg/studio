@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
 import { WordCloudCard } from "@/components/app/WordCloudCard";
-import { HeatmapMockup } from "@/components/app/HeatmapMockup";
+import { HeatmapCalendar } from "@/components/app/HeatmapCalendar";
 
 
 export default function JournalPage() {
@@ -86,7 +86,10 @@ export default function JournalPage() {
 
       <div className="grid md:grid-cols-3 gap-8">
         <aside className="md:col-span-1 space-y-8">
-            <HeatmapMockup />
+            <HeatmapCalendar 
+              entries={state.entries} 
+              onDayClick={(date) => setSelectedDate(date)} 
+            />
             <Card className="transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
                 <CardContent className="p-2">
                     <Calendar

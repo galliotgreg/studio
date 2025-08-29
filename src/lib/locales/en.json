@@ -72,5 +72,8 @@
     "exportSuccessDescription": "Your data is being downloaded as gratitude-backup.json.",
     "exportErrorTitle": "Export Failed",
     "exportErrorDescription": "There was a problem exporting your data.",
-    "noDataToExport": "There is no data to export."
+    "noDataToExport": "There is no data to export.",
+    "heatmapTitle": "My Consistency",
+    "heatmapDescription": "A visual map of your gratitude journey.",
+    "noEntry": "No entry"
 }

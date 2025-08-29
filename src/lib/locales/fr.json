@@ -72,5 +72,8 @@
     "exportSuccessDescription": "Vos données sont en cours de téléchargement sous le nom de gratitude-backup.json.",
     "exportErrorTitle": "Échec de l'exportation",
     "exportErrorDescription": "Un problème est survenu lors de l'exportation de vos données.",
-    "noDataToExport": "Il n'y a aucune donnée à exporter."
+    "noDataToExport": "Il n'y a aucune donnée à exporter.",
+    "heatmapTitle": "Ma Régularité",
+    "heatmapDescription": "Une carte visuelle de votre parcours de gratitude.",
+    "noEntry": "Aucune entrée"
 }
