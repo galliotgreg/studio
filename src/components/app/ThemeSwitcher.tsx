@@ -40,7 +40,7 @@ export function ThemeSwitcher() {
       const themeClass = document.documentElement.className
         .split(' ')
         .find(c => c.startsWith('theme-') || c === 'themerosegold');
-      setCurrentThemeClass(themeClass || 'default');
+      setCurrentThemeClass(themeClass || '');
 
     } catch (error) {
       console.error("Failed to load data from local storage", error);
@@ -58,7 +58,7 @@ export function ThemeSwitcher() {
                 const themeClass = (mutation.target as HTMLElement).className
                     .split(' ')
                     .find(c => c.startsWith('theme-') || c === 'themerosegold');
-                setCurrentThemeClass(themeClass || 'default');
+                setCurrentThemeClass(themeClass || '');
             }
         });
     });
@@ -80,14 +80,19 @@ export function ThemeSwitcher() {
   }
   
   const handleThemeChange = (newTheme: string) => {
-    setTheme(newTheme);
+    // Correctly handle the default theme case
+    if (newTheme === 'default') {
+      setTheme(resolvedTheme === 'dark' ? 'dark' : 'light');
+    } else {
+      setTheme(newTheme);
+    }
   };
   
   const toggleBaseTheme = () => {
     setTheme(isDark ? 'light' : 'dark');
   };
   
-  const currentThemeId = currentThemeClass;
+  const currentThemeId = currentThemeClass || 'default';
 
   return (
     <DropdownMenu>
@@ -116,56 +121,35 @@ export function ThemeSwitcher() {
         <DropdownMenuSeparator />
         <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
         
-        {THEMES.filter(th => th.id === 'default').map((item) => (
-          <DropdownMenuItem
-              key={item.id}
-              onClick={() => handleThemeChange(resolvedTheme === 'dark' ? 'dark' : 'light')}
-              className={cn("flex flex-col items-start gap-1 p-2", currentThemeId === 'default' && "bg-accent")}
-          >
-            <div className="flex items-center w-full">
-               <Unlock className="mr-2 h-4 w-4 text-primary" />
-               <span>{t(item.nameKey)}</span>
-            </div>
-          </DropdownMenuItem>
-        ))}
-
-        {THEMES.filter(th => !th.isTreasure && th.id !== 'default').map((item) => {
+        {THEMES.map((item) => {
           const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
+          // Handle 'default' case separately for the checkmark logic
+          const isActive = item.id === 'default' ? currentThemeId === 'default' : currentThemeClass === item.id;
+          
+          if (item.isTreasure && !isUnlocked) {
+            return null; // Don't show locked treasure themes
+          }
+
           return (
             <DropdownMenuItem
               key={item.id}
               disabled={!isUnlocked}
               onClick={() => isUnlocked && handleThemeChange(item.id)}
-              className={cn("flex flex-col items-start gap-1 p-2", currentThemeId === item.id && "bg-accent")}
+              className={cn("flex flex-col items-start gap-1 p-2", isActive && "bg-accent")}
             >
               <div className="flex items-center w-full">
-                 {isUnlocked ? <Unlock className="mr-2 h-4 w-4 text-primary" /> : <Lock className="mr-2 h-4 w-4 text-muted-foreground" />}
+                 {item.id === 'default' || isUnlocked ? (
+                    <Unlock className="mr-2 h-4 w-4 text-primary" /> 
+                 ) : (
+                    <Lock className="mr-2 h-4 w-4 text-muted-foreground" />
+                 )}
                  <span className={cn(!isUnlocked && "text-muted-foreground")}>{t(item.nameKey)}</span>
               </div>
-              {!isUnlocked && (
+              {!isUnlocked && item.unlockBadgeId && (
                 <small className="text-xs text-muted-foreground ml-6">
                   {t('unlockCondition')} {getBadgeName(item.unlockBadgeId)}
                 </small>
               )}
-            </DropdownMenuItem>
-          )
-        })}
-
-        {THEMES.filter(th => th.isTreasure).length > 0 && <DropdownMenuSeparator />}
-        
-        {THEMES.filter(th => th.isTreasure).map((item) => {
-          const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
-          if (!isUnlocked) return null;
-          return (
-            <DropdownMenuItem
-              key={item.id}
-              onClick={() => handleThemeChange(item.id)}
-              className={cn("flex flex-col items-start gap-1 p-2", currentThemeId === item.id && "bg-accent")}
-            >
-               <div className="flex items-center w-full">
-                 <Unlock className="mr-2 h-4 w-4 text-primary" />
-                 <span>{t(item.nameKey)}</span>
-              </div>
             </DropdownMenuItem>
           )
         })}
