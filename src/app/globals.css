@@ -279,27 +279,4 @@
     --input: 255 30% 92%;
     --ring: 250 60% 65%;
   }
-
-  /* Thème Rose Gold (Clair) */
-  .theme-rose-gold {
-    --background: 25 60% 98%;
-    --foreground: 20 40% 25%;
-    --card: 20 50% 95%;
-    --card-foreground: 20 40% 25%;
-    --popover: 20 50% 95%;
-    --popover-foreground: 20 40% 25%;
-    --primary: 0 50% 65%;
-    --primary-foreground: 0 30% 98%;
-    --secondary: 15 40% 92%;
-    --secondary-foreground: 10 50% 35%;
-    --muted: 15 40% 92%;
-    --muted-foreground: 20 20% 50%;
-    --accent: 350 60% 75%;
-    --accent-foreground: 20 40% 25%;
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 15 30% 88%;
-    --input: 15 30% 92%;
-    --ring: 0 50% 70%;
-  }
 }
