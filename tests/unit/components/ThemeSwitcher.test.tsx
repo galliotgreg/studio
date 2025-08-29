@@ -6,19 +6,22 @@ import { ThemeSwitcher } from '@/components/app/ThemeSwitcher';
 import { ThemeProvider } from '@/components/app/theme-provider';
 import { LanguageProvider } from '@/components/app/LanguageProvider';
 import type { GratitudeState } from '@/lib/types';
-import * as NextThemes from 'next-themes';
 
 // Mock the useTheme hook from next-themes
 const mockSetTheme = vi.fn();
 
-// Use vi.mock to replace the module entirely
-vi.mock('next-themes', () => ({
-  useTheme: () => ({
-    setTheme: mockSetTheme,
-    theme: 'light',
-    themes: ['light', 'dark', 'theme-sunrise'],
-  }),
-}));
+// Use vi.mock to replace the module entirely. This will be hoisted.
+vi.mock('next-themes', async () => {
+  const originalModule = await vi.importActual('next-themes');
+  return {
+    ...originalModule,
+    useTheme: () => ({
+      setTheme: mockSetTheme,
+      theme: 'light',
+      themes: ['light', 'dark', 'theme-sunrise'],
+    }),
+  };
+});
 
 
 // Mock localStorage
@@ -126,7 +129,8 @@ describe('ThemeSwitcher', () => {
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
     await waitFor(() => {
-      fireEvent.click(screen.getByText('Aurore'));
+      const sunriseItem = screen.getByText('Aurore');
+      fireEvent.click(sunriseItem);
     });
     
     expect(mockSetTheme).not.toHaveBeenCalled();
