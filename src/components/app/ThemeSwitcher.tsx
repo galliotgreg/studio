@@ -50,7 +50,7 @@ export function ThemeSwitcher() {
         <DropdownMenu>
         <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
-            <Palette className="h-[1.2rem] w-[1.2rem]" />
+            <Palette className="h-[1.2rem] w-[1.2rem] text-foreground" />
             <span className="sr-only">{t('changeTheme')}</span>
             </Button>
         </DropdownMenuTrigger>

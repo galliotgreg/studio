@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Check, Languages } from "lucide-react";
@@ -19,7 +20,7 @@ export function LanguageSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
-          <Languages className="h-[1.2rem] w-[1.2rem]" />
+          <Languages className="h-[1.2rem] w-[1.2rem] text-foreground" />
           <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
