@@ -377,6 +377,44 @@ export default {
                 '--input': '350 30% 25%',
                 '--ring': '345 85% 80%',
             },
+            '.theme-grimoire': {
+                '--background': '45 40% 94%', // Parchment
+                '--foreground': '35 25% 20%', // Dark Ink
+                '--card': '45 50% 98%', // Lighter Parchment
+                '--card-foreground': '35 25% 20%',
+                '--popover': '45 50% 98%',
+                '--popover-foreground': '35 25% 20%',
+                '--primary': '30 30% 40%', // Sepia
+                '--primary-foreground': '45 40% 98%',
+                '--secondary': '40 30% 90%', // Light cream
+                '--secondary-foreground': '30 30% 30%',
+                '--muted': '45 30% 92%',
+                '--muted-foreground': '35 25% 45%',
+                '--accent': '30 40% 85%', // Muted gold
+                '--accent-foreground': '30 40% 20%',
+                '--border': '35 25% 85%',
+                '--input': '35 25% 88%',
+                '--ring': '30 30% 40%',
+            },
+            '.dark.theme-grimoire': {
+                '--background': '35 25% 15%', // Dark leather
+                '--foreground': '45 30% 85%', // Aged text
+                '--card': '35 25% 20%',
+                '--card-foreground': '45 30% 85%',
+                '--popover': '35 25% 12%',
+                '--popover-foreground': '45 30% 85%',
+                '--primary': '35 40% 60%', // Gilded gold
+                '--primary-foreground': '35 20% 10%',
+                '--secondary': '30 20% 25%',
+                '--secondary-foreground': '40 30% 90%',
+                '--muted': '35 20% 22%',
+                '--muted-foreground': '45 30% 65%',
+                '--accent': '35 30% 50%',
+                '--accent-foreground': '45 30% 95%',
+                '--border': '35 20% 30%',
+                '--input': '35 20% 30%',
+                '--ring': '35 40% 60%',
+            },
         })
     }
   ],

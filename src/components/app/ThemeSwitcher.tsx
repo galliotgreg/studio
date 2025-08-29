@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "./LanguageProvider"
-import { GratitudeState } from "@/lib/types"
 
 export function ThemeSwitcher() {
   const { setTheme, theme } = useTheme()
@@ -31,6 +30,7 @@ export function ThemeSwitcher() {
     { name: 'Nuit Étoilée', value: 'theme-starlight', unlocked: true, unlockConditionKey: "badge.entry-10.name" },
     { name: 'Lavande', value: 'theme-lavender', unlocked: true, unlockConditionKey: "badge.streak-21.name" },
     { name: 'Or Rose', value: 'theme-rose-gold', unlocked: true, unlockConditionKey: "badge.streak-30.name" },
+    { name: 'Vieux Grimoire', value: 'theme-grimoire', unlocked: true, unlockConditionKey: "badge.streak-30.name" },
   ]
 
   return (
@@ -55,9 +55,6 @@ export function ThemeSwitcher() {
                {item.unlocked ? <Unlock className="mr-2 h-4 w-4 text-primary" /> : <Lock className="mr-2 h-4 w-4 text-muted-foreground" />}
                <span className={cn(!item.unlocked && "text-muted-foreground")}>{t(item.name)}</span>
             </div>
-            {!item.unlocked && (
-                <small className="text-xs text-muted-foreground pl-6">{t('unlockCondition')} {t(item.unlockConditionKey)}</small>
-            )}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
