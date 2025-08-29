@@ -168,6 +168,7 @@ export default function GratitudeChallengePage() {
     const newUnlockedBadges = [...state.unlockedBadges];
     let hasUnlockedNewBadge = false;
     BADGES.forEach(badge => {
+        if (badge.type === 'share') return; // Share badges are handled separately
         const isUnlocked = badge.type === 'streak' ? newStreak >= badge.milestone : state.entries.length + 1 >= badge.milestone;
         if (isUnlocked && !newUnlockedBadges.includes(badge.id)) {
             newUnlockedBadges.push(badge.id);
@@ -214,6 +215,7 @@ export default function GratitudeChallengePage() {
   };
 
   const handleShare = async () => {
+    if (!state) return;
     const shareData = {
       title: t('appTitle'),
       text: t('appDescription'),
@@ -225,8 +227,12 @@ export default function GratitudeChallengePage() {
       } else {
         throw new Error("Web Share API not supported");
       }
+      toast({
+        title: t('linkCopiedTitle'),
+        description: t('linkCopiedDescription'),
+      });
+
     } catch (err) {
-      // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(window.location.href);
         toast({
@@ -240,6 +246,19 @@ export default function GratitudeChallengePage() {
           variant: "destructive",
         });
       }
+    } finally {
+        // Unlock share badge if not already unlocked
+        if (!state.unlockedBadges.includes('share-1')) {
+            const shareBadge = BADGES.find(b => b.id === 'share-1');
+            if (shareBadge) {
+                const newUnlockedBadges = [...state.unlockedBadges, 'share-1'];
+                setState({ ...state, unlockedBadges: newUnlockedBadges });
+                toast({
+                    title: t('badgeUnlocked'),
+                    description: t('badgeUnlockedDescription').replace('{badgeName}', t(shareBadge.nameKey)),
+                });
+            }
+        }
     }
   };
 

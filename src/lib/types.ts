@@ -18,7 +18,7 @@ export interface Badge {
   descriptionKey: string;
   icon: LucideIcon;
   milestone: number;
-  type: "streak" | "entries";
+  type: "streak" | "entries" | "share";
 }
 
 export interface GratitudeState {

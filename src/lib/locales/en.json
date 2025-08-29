@@ -51,6 +51,8 @@
     "badge.streak-21.description": "Maintained a 21-day streak.",
     "badge.streak-30.name": "Gratitude Master",
     "badge.streak-30.description": "Maintained a 30-day streak.",
+    "badge.share-1.name": "Open Heart",
+    "badge.share-1.description": "Shared gratitude for the first time.",
     "badge.default.unlock": "Available by default",
     "themes": "Themes",
     "unlockCondition": "Unlock with badge:",
@@ -78,6 +80,6 @@
     "noDataToExport": "There is no data to export.",
     "shareYourGratitude": "Share your Gratitude",
     "sharePreviewDescription": "This is a preview of the image that will be generated.",
-    "downloadImage": "Download Image",
+    "downloadImage": "Share / Download",
     "generatingImage": "Generating..."
 }

@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowLeft, BookOpen, Download } from "lucide-react";
+import { ArrowLeft, BookOpen, Download, Share2 } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { toPng } from 'html-to-image';
@@ -203,7 +203,7 @@ export default function JournalPage() {
           </DialogHeader>
           {entryToShare && <ShareImagePreviewCard ref={imagePreviewRef} entry={entryToShare} />}
            <Button onClick={handleDownloadImage} disabled={isGeneratingImage}>
-              <Download className="mr-2 h-4 w-4" />
+              <Share2 className="mr-2 h-4 w-4" />
               {isGeneratingImage ? t('generatingImage') : t('downloadImage')}
             </Button>
         </DialogContent>
