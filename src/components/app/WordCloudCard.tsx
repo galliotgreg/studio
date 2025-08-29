@@ -61,8 +61,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                 .slice(0, 30);
             
             setWordCloudData(initialData);
-            setIsLoading(false);
-
+            // Don't set loading to false here anymore
 
             // --- Step 2: AI-powered keyword extraction in the background ---
             try {
@@ -88,7 +87,8 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                 }
             } catch (error) {
                 console.error("Failed to generate AI word cloud, using local fallback:", error);
-                // We already have the local data, so no need to do anything here.
+            } finally {
+                setIsLoading(false); // Set loading to false only after everything is done
             }
         };
 
@@ -142,7 +142,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                             </motion.span>
                         ))
                     ) : (
-                        <p className="text-muted-foreground text-sm">{t('noEntriesYet')}</p>
+                        <p className="text-muted-foreground text-sm">{t('noEntriesYetCloud')}</p>
                     )}
                 </div>
             </CardContent>
