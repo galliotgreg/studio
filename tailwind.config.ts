@@ -1,8 +1,51 @@
 
 import type {Config} from 'tailwindcss';
 
+const defaultTheme = {
+    '--background': '255 17% 94%',
+    '--foreground': '255 10% 10%',
+    '--card': '0 0% 100%',
+    '--card-foreground': '255 10% 10%',
+    '--popover': '0 0% 100%',
+    '--popover-foreground': '255 10% 10%',
+    '--primary': '255 47% 60%',
+    '--primary-foreground': '255 10% 98%',
+    '--secondary': '215 41% 90%',
+    '--secondary-foreground': '215 20% 25%',
+    '--muted': '255 10% 90%',
+    '--muted-foreground': '255 10% 45%',
+    '--accent': '255 100% 87%',
+    '--accent-foreground': '255 50% 20%',
+    '--border': '255 10% 88%',
+    '--input': '255 10% 88%',
+    '--ring': '255 47% 60%',
+    '--radius': '0.8rem',
+};
+
+const defaultDarkTheme = {
+    '--background': '255 10% 10%',
+    '--foreground': '0 0% 98%',
+    '--card': '255 10% 15%',
+    '--card-foreground': '0 0% 98%',
+    '--popover': '255 10% 10%',
+    '--popover-foreground': '0 0% 98%',
+    '--primary': '255 47% 60%',
+    '--primary-foreground': '0 0% 98%',
+    '--secondary': '215 20% 25%',
+    '--secondary-foreground': '0 0% 98%',
+    '--muted': '255 10% 20%',
+    '--muted-foreground': '0 0% 63.9%',
+    '--accent': '255 47% 60%',
+    '--accent-foreground': '0 0% 98%',
+    '--destructive': '0 62.8% 30.6%',
+    '--destructive-foreground': '0 0% 98%',
+    '--border': '255 10% 25%',
+    '--input': '255 10% 25%',
+    '--ring': '255 47% 70%',
+};
+
 export default {
-  darkMode: ['class', '[data-theme="dark"]'],
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -107,49 +150,8 @@ export default {
     require('tailwindcss-animate'),
     function ({ addBase, config }: { addBase: (arg: any) => void, config: (path: string) => any }) {
         addBase({
-            ':root': {
-                '--background': '255 17% 94%',
-                '--foreground': '255 10% 10%',
-                '--card': '0 0% 100%',
-                '--card-foreground': '255 10% 10%',
-                '--popover': '0 0% 100%',
-                '--popover-foreground': '255 10% 10%',
-                '--primary': '255 47% 60%',
-                '--primary-foreground': '255 10% 98%',
-                '--secondary': '215 41% 90%',
-                '--secondary-foreground': '215 20% 25%',
-                '--muted': '255 10% 90%',
-                '--muted-foreground': '255 10% 45%',
-                '--accent': '255 100% 87%',
-                '--accent-foreground': '255 50% 20%',
-                '--destructive': '0 84.2% 60.2%',
-                '--destructive-foreground': '0 0% 98%',
-                '--border': '255 10% 88%',
-                '--input': '255 10% 88%',
-                '--ring': '255 47% 60%',
-                '--radius': '0.8rem',
-            },
-            '.dark': {
-                '--background': '255 10% 10%',
-                '--foreground': '0 0% 98%',
-                '--card': '255 10% 15%',
-                '--card-foreground': '0 0% 98%',
-                '--popover': '255 10% 10%',
-                '--popover-foreground': '0 0% 98%',
-                '--primary': '255 47% 60%',
-                '--primary-foreground': '0 0% 98%',
-                '--secondary': '215 20% 25%',
-                '--secondary-foreground': '0 0% 98%',
-                '--muted': '255 10% 20%',
-                '--muted-foreground': '0 0% 63.9%',
-                '--accent': '255 47% 60%',
-                '--accent-foreground': '0 0% 98%',
-                '--destructive': '0 62.8% 30.6%',
-                '--destructive-foreground': '0 0% 98%',
-                '--border': '255 10% 25%',
-                '--input': '255 10% 25%',
-                '--ring': '255 47% 70%',
-            },
+            ':root': defaultTheme,
+            '.dark': defaultDarkTheme,
             '.theme-sunrise': {
                 '--background': '20 80% 95%',
                 '--foreground': '20 40% 10%',
@@ -340,7 +342,7 @@ export default {
                 '--input': '260 35% 28%',
                 '--ring': '255 80% 80%',
             },
-            '.themerosegold': {
+            '.theme-rose-gold': {
                 '--background': '350 70% 97%',
                 '--foreground': '350 50% 25%',
                 '--card': '350 50% 100%',
@@ -359,7 +361,7 @@ export default {
                 '--input': '350 60% 93%',
                 '--ring': '345 90% 70%',
             },
-            '.dark.themerosegold': {
+            '.dark.theme-rose-gold': {
                 '--background': '350 40% 10%',
                 '--foreground': '350 30% 96%',
                 '--card': '350 35% 15%',

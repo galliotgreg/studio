@@ -18,8 +18,8 @@ import { cn } from "@/lib/utils"
 import { useLanguage } from "./LanguageProvider"
 import type { GratitudeState } from "@/lib/types"
 import { BADGES } from "@/lib/data"
+import { THEMES } from "@/lib/themes"
 import { Switch } from "@/components/ui/switch"
-
 
 export function ThemeSwitcher() {
   const { setTheme, theme, resolvedTheme } = useTheme()
@@ -42,28 +42,14 @@ export function ThemeSwitcher() {
 
   React.useEffect(() => {
     loadBadges();
-
-    const handleStorageUpdate = () => {
-      loadBadges();
-    };
-    
+    const handleStorageUpdate = () => loadBadges();
     window.addEventListener('storageUpdated', handleStorageUpdate);
-
-    return () => {
-      window.removeEventListener('storageUpdated', handleStorageUpdate);
-    };
+    return () => window.removeEventListener('storageUpdated', handleStorageUpdate);
   }, [loadBadges]);
-  
-  const themes = [
-    { nameKey: 'theme.sunrise', value: 'theme-sunrise', unlockBadgeId: 'entry-1' },
-    { nameKey: 'theme.forest', value: 'theme-forest', unlockBadgeId: 'streak-3' },
-    { nameKey: 'theme.ocean', value: 'theme-ocean', unlockBadgeId: 'streak-7' },
-    { nameKey: 'theme.starlight', value: 'theme-starlight', unlockBadgeId: 'entry-10' },
-    { nameKey: 'theme.lavender', value: 'theme-lavender', unlockBadgeId: 'streak-21' },
-    { nameKey: 'theme.grimoire', value: 'theme-grimoire', unlockBadgeId: 'share-1' },
-    { nameKey: 'theme.rose-gold', value: 'themerosegold', unlockBadgeId: 'streak-30' },
-  ]
 
+  const progressionThemes = THEMES.filter(th => !th.isTreasure && th.id !== 'default');
+  const treasureThemes = THEMES.filter(th => th.isTreasure);
+  
   const getBadgeName = (badgeId: string | null) => {
     if (!badgeId) return "";
     const badge = BADGES.find(b => b.id === badgeId);
@@ -71,38 +57,14 @@ export function ThemeSwitcher() {
   }
 
   const handleThemeChange = (newTheme: string) => {
-    if (isDark && newTheme !== 'light' && newTheme !== 'dark') {
-      setTheme(`dark-${newTheme}`);
-    } else {
-      setTheme(newTheme);
-    }
-  };
-
-  const toggleBaseTheme = (checked: boolean) => {
-    const currentTheme = theme || 'light';
-    const isCustomTheme = themes.some(t => `dark-${t.value}` === currentTheme || t.value === currentTheme);
-
-    if (checked) { // switching to dark
-      if (isCustomTheme) {
-        const baseTheme = currentTheme.replace('dark-', '');
-        setTheme(`dark-${baseTheme}`);
-      } else {
-        setTheme('dark');
-      }
-    } else { // switching to light
-      if (isCustomTheme) {
-        setTheme(currentTheme.replace('dark-', ''));
-      } else {
-        setTheme('light');
-      }
-    }
+    const currentBaseTheme = theme?.startsWith('dark-') ? 'dark' : 'light';
+    const newThemeId = newTheme === 'default' ? currentBaseTheme : newTheme;
+    setTheme(newThemeId);
   };
   
-  const isCurrentTheme = (value: string) => {
-    if (theme === value) return true;
-    if (theme === `dark-${value}`) return true;
-    return false;
-  }
+  const toggleBaseTheme = (isDark: boolean) => {
+      setTheme(isDark ? 'dark' : 'light');
+  };
 
   return (
     <DropdownMenu>
@@ -113,7 +75,6 @@ export function ThemeSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
-        <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
         <div className="flex items-center justify-between px-2 py-1.5">
             <div className="flex items-center gap-2">
                 <Sun className={cn("h-4 w-4", !isDark && "text-primary")} />
@@ -130,36 +91,61 @@ export function ThemeSwitcher() {
             </div>
         </div>
         <DropdownMenuSeparator />
-         <DropdownMenuItem
-              onClick={() => handleThemeChange(isDark ? 'dark' : 'light')}
-              className={cn("flex flex-col items-start gap-1 p-2", (theme === 'light' || theme === 'dark' || theme === 'system') && "bg-accent")}
-            >
-              <div className="flex items-center w-full">
-                 <Unlock className="mr-2 h-4 w-4 text-primary" />
-                 <span>{t('theme.default')}</span>
-              </div>
-        </DropdownMenuItem>
-        {themes.map((item) => {
-          const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
-          
-          return (
+        <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
+        
+        {THEMES.filter(th => th.id === 'default').map((item) => (
           <DropdownMenuItem
-            key={item.value}
-            disabled={!isUnlocked}
-            onClick={() => isUnlocked && handleThemeChange(item.value)}
-            className={cn("flex flex-col items-start gap-1 p-2", isCurrentTheme(item.value) && "bg-accent")}
+              key={item.id}
+              onClick={() => handleThemeChange(item.id)}
+              className={cn("flex flex-col items-start gap-1 p-2", (theme === 'light' || theme === 'dark' || theme === 'system') && "bg-accent")}
           >
             <div className="flex items-center w-full">
-               {isUnlocked ? <Unlock className="mr-2 h-4 w-4 text-primary" /> : <Lock className="mr-2 h-4 w-4 text-muted-foreground" />}
-               <span className={cn(!isUnlocked && "text-muted-foreground")}>{t(item.nameKey)}</span>
+               <Unlock className="mr-2 h-4 w-4 text-primary" />
+               <span>{t(item.nameKey)}</span>
             </div>
-            {!isUnlocked && (
-              <small className="text-xs text-muted-foreground ml-6">
-                {t('unlockCondition')} {getBadgeName(item.unlockBadgeId)}
-              </small>
-            )}
           </DropdownMenuItem>
-        )})}
+        ))}
+
+        {progressionThemes.map((item) => {
+          const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
+          return (
+            <DropdownMenuItem
+              key={item.id}
+              disabled={!isUnlocked}
+              onClick={() => isUnlocked && handleThemeChange(item.id)}
+              className={cn("flex flex-col items-start gap-1 p-2", theme === item.id && "bg-accent")}
+            >
+              <div className="flex items-center w-full">
+                 {isUnlocked ? <Unlock className="mr-2 h-4 w-4 text-primary" /> : <Lock className="mr-2 h-4 w-4 text-muted-foreground" />}
+                 <span className={cn(!isUnlocked && "text-muted-foreground")}>{t(item.nameKey)}</span>
+              </div>
+              {!isUnlocked && (
+                <small className="text-xs text-muted-foreground ml-6">
+                  {t('unlockCondition')} {getBadgeName(item.unlockBadgeId)}
+                </small>
+              )}
+            </DropdownMenuItem>
+          )
+        })}
+
+        {treasureThemes.length > 0 && <DropdownMenuSeparator />}
+        
+        {treasureThemes.map((item) => {
+          const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
+          if (!isUnlocked) return null;
+          return (
+            <DropdownMenuItem
+              key={item.id}
+              onClick={() => handleThemeChange(item.id)}
+              className={cn("flex flex-col items-start gap-1 p-2", theme === item.id && "bg-accent")}
+            >
+               <div className="flex items-center w-full">
+                 <Unlock className="mr-2 h-4 w-4 text-primary" />
+                 <span>{t(item.nameKey)}</span>
+              </div>
+            </DropdownMenuItem>
+          )
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   )
