@@ -55,7 +55,6 @@ export function ThemeSwitcher() {
   }, [loadBadges]);
   
   const themes = [
-    { nameKey: 'theme.default', value: isDark ? 'dark' : 'light', unlockBadgeId: null },
     { nameKey: 'theme.sunrise', value: 'theme-sunrise', unlockBadgeId: 'entry-1' },
     { nameKey: 'theme.forest', value: 'theme-forest', unlockBadgeId: 'streak-3' },
     { nameKey: 'theme.ocean', value: 'theme-ocean', unlockBadgeId: 'streak-7' },
@@ -72,9 +71,38 @@ export function ThemeSwitcher() {
   }
 
   const handleThemeChange = (newTheme: string) => {
-    setTheme(newTheme);
+    if (isDark && newTheme !== 'light' && newTheme !== 'dark') {
+      setTheme(`dark-${newTheme}`);
+    } else {
+      setTheme(newTheme);
+    }
   };
 
+  const toggleBaseTheme = (checked: boolean) => {
+    const currentTheme = theme || 'light';
+    const isCustomTheme = themes.some(t => `dark-${t.value}` === currentTheme || t.value === currentTheme);
+
+    if (checked) { // switching to dark
+      if (isCustomTheme) {
+        const baseTheme = currentTheme.replace('dark-', '');
+        setTheme(`dark-${baseTheme}`);
+      } else {
+        setTheme('dark');
+      }
+    } else { // switching to light
+      if (isCustomTheme) {
+        setTheme(currentTheme.replace('dark-', ''));
+      } else {
+        setTheme('light');
+      }
+    }
+  };
+  
+  const isCurrentTheme = (value: string) => {
+    if (theme === value) return true;
+    if (theme === `dark-${value}`) return true;
+    return false;
+  }
 
   return (
     <DropdownMenu>
@@ -93,7 +121,7 @@ export function ThemeSwitcher() {
             </div>
             <Switch
                 checked={isDark}
-                onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+                onCheckedChange={toggleBaseTheme}
                 aria-label="Toggle dark mode"
             />
              <div className="flex items-center gap-2">
@@ -102,18 +130,24 @@ export function ThemeSwitcher() {
             </div>
         </div>
         <DropdownMenuSeparator />
+         <DropdownMenuItem
+              onClick={() => handleThemeChange(isDark ? 'dark' : 'light')}
+              className={cn("flex flex-col items-start gap-1 p-2", (theme === 'light' || theme === 'dark' || theme === 'system') && "bg-accent")}
+            >
+              <div className="flex items-center w-full">
+                 <Unlock className="mr-2 h-4 w-4 text-primary" />
+                 <span>{t('theme.default')}</span>
+              </div>
+        </DropdownMenuItem>
         {themes.map((item) => {
           const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
-          const isCurrentTheme = item.value === 'light' || item.value === 'dark' 
-            ? theme === 'light' || theme === 'dark' || theme === 'system'
-            : theme === item.value;
-
+          
           return (
           <DropdownMenuItem
             key={item.value}
             disabled={!isUnlocked}
             onClick={() => isUnlocked && handleThemeChange(item.value)}
-            className={cn("flex flex-col items-start gap-1 p-2", isCurrentTheme && "bg-accent")}
+            className={cn("flex flex-col items-start gap-1 p-2", isCurrentTheme(item.value) && "bg-accent")}
           >
             <div className="flex items-center w-full">
                {isUnlocked ? <Unlock className="mr-2 h-4 w-4 text-primary" /> : <Lock className="mr-2 h-4 w-4 text-muted-foreground" />}
