@@ -28,8 +28,8 @@ export default function RootLayout({
         <LanguageProvider>
           <ThemeProvider
               attribute="class"
-              defaultTheme="system"
-              enableSystem
+              defaultTheme="theme-grimoire"
+              enableSystem={false}
               disableTransitionOnChange
           >
             <div className="flex-grow">
