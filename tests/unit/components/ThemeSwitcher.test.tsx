@@ -98,11 +98,8 @@ describe('ThemeSwitcher', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
-    await waitFor(() => {
-      // Example: 'Aurore' theme requires 'entry-1' badge
-      const sunriseThemeItem = screen.getByText('Aurore').closest('div[role="menuitem"]');
-      expect(sunriseThemeItem).toHaveAttribute('aria-disabled', 'true');
-    });
+    const sunriseThemeItem = await screen.findByText('Aurore');
+    expect(sunriseThemeItem.closest('div[role="menuitem"]')).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('should show themes as unlocked if required badge is present', async () => {
@@ -126,7 +123,10 @@ describe('ThemeSwitcher', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
 
-    const sunriseItem = await screen.findByText('Aurore');
+    // Wait for the menu to appear before trying to find the item
+    await screen.findByRole('menu');
+
+    const sunriseItem = screen.getByText('Aurore');
     fireEvent.click(sunriseItem);
     
     expect(mockSetTheme).not.toHaveBeenCalled();
