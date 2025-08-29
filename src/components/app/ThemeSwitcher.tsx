@@ -55,7 +55,7 @@ export function ThemeSwitcher() {
   }, [loadBadges]);
   
   const themes = [
-    { nameKey: 'theme.default', value: 'system', unlockBadgeId: null },
+    { nameKey: 'theme.default', value: isDark ? 'dark' : 'light', unlockBadgeId: null },
     { nameKey: 'theme.sunrise', value: 'theme-sunrise', unlockBadgeId: 'entry-1' },
     { nameKey: 'theme.forest', value: 'theme-forest', unlockBadgeId: 'streak-3' },
     { nameKey: 'theme.ocean', value: 'theme-ocean', unlockBadgeId: 'streak-7' },
@@ -70,6 +70,10 @@ export function ThemeSwitcher() {
     const badge = BADGES.find(b => b.id === badgeId);
     return badge ? t(badge.nameKey) : '';
   }
+
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+  };
 
 
   return (
@@ -100,12 +104,16 @@ export function ThemeSwitcher() {
         <DropdownMenuSeparator />
         {themes.map((item) => {
           const isUnlocked = !item.unlockBadgeId || unlockedBadges.includes(item.unlockBadgeId);
+          const isCurrentTheme = item.value === 'light' || item.value === 'dark' 
+            ? theme === 'light' || theme === 'dark' || theme === 'system'
+            : theme === item.value;
+
           return (
           <DropdownMenuItem
             key={item.value}
             disabled={!isUnlocked}
-            onClick={() => isUnlocked && setTheme(item.value)}
-            className={cn("flex flex-col items-start gap-1 p-2", theme === item.value && "bg-accent")}
+            onClick={() => isUnlocked && handleThemeChange(item.value)}
+            className={cn("flex flex-col items-start gap-1 p-2", isCurrentTheme && "bg-accent")}
           >
             <div className="flex items-center w-full">
                {isUnlocked ? <Unlock className="mr-2 h-4 w-4 text-primary" /> : <Lock className="mr-2 h-4 w-4 text-muted-foreground" />}
