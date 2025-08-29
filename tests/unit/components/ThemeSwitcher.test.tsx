@@ -13,7 +13,7 @@ const mockSetTheme = vi.fn();
 
 // Use vi.mock to replace the module entirely. This will be hoisted.
 vi.mock('next-themes', async () => {
-  const originalModule = await vi.importActual('next-themes');
+  const originalModule = await vi.importActual<typeof NextThemes>('next-themes');
   return {
     ...originalModule,
     useTheme: () => ({
@@ -70,12 +70,14 @@ describe('ThemeSwitcher', () => {
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
     
-    await waitFor(() => {
-        expect(screen.getByText('Clair')).toBeInTheDocument();
-    });
+    // Wait for the menu to appear, then check the items
+    const menu = await screen.findByRole('menu');
     
     const lightThemeItem = screen.getByText('Clair').closest('div[role="menuitem"]');
     const darkThemeItem = screen.getByText('Sombre').closest('div[role="menuitem"]');
+    
+    expect(lightThemeItem).toBeInTheDocument();
+    expect(darkThemeItem).toBeInTheDocument();
     
     expect(lightThemeItem).not.toHaveAttribute('aria-disabled', 'true');
     expect(darkThemeItem).not.toHaveAttribute('aria-disabled', 'true');
@@ -122,11 +124,11 @@ describe('ThemeSwitcher', () => {
 
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /changer le thème/i }));
-
-    // Wait for the menu to appear before trying to find the item
+    
+    // Wait for the menu, then get the item
     await screen.findByRole('menu');
-
     const sunriseItem = screen.getByText('Aurore');
+    
     fireEvent.click(sunriseItem);
     
     expect(mockSetTheme).not.toHaveBeenCalled();
