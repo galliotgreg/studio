@@ -47,12 +47,7 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
     const root = window.document.documentElement;
     
     // Clear all previous theme classes
-    root.classList.remove('light', 'dark');
-    THEMES.forEach(theme => {
-        if(theme.id !== 'default') {
-           root.classList.remove(theme.id)
-        }
-    });
+    root.classList.remove('light', 'dark', ...THEMES.map(t => t.id).filter(id => id !== 'default'));
 
     // Add the current mode class
     root.classList.add(mode);
