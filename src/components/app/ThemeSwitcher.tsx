@@ -32,14 +32,13 @@ export function ThemeSwitcher() {
   };
 
   const handlePaletteChange = (palette: string) => {
+    // next-themes handles combining the dark/light mode with the palette
     setTheme(palette);
   };
-
-  // The current theme can be 'light', 'dark', 'grimoire', or 'grimoire-dark' (if we set it up like that)
-  // Or it could be just the palette name if we rely on the dark class.
-  // `next-themes` combines them if we let it.
-  // The simplest way is to set the theme to 'grimoire' and let the dark class handle the mode.
-  const currentPalette = theme === 'grimoire' || theme === 'grimoire-dark' ? 'grimoire' : 'default';
+  
+  // resolvedTheme will be 'dark' or 'light'
+  // theme will be the base theme name like 'default' or 'grimoire'
+  const currentPalette = theme === 'light' || theme === 'dark' ? 'default' : theme;
 
   return (
     <DropdownMenu>

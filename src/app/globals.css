@@ -4,62 +4,62 @@
 @tailwind utilities;
 
 @layer base {
-  /* Default theme (Modern Light) */
-  :root {
-    --background: 220 13% 97%;   /* gray-50 */
-    --foreground: 220 13% 9%;   /* gray-900 */
-    --card: 0 0% 100%;           /* white */
-    --card-foreground: 220 13% 9%; /* gray-900 */
-    --popover: 0 0% 100%;        /* white */
-    --popover-foreground: 220 13% 9%; /* gray-900 */
-    --primary: 265 80% 80%;      /* Soft Lavender */
+  /* Default (Modern Light) */
+  :root, [data-theme="default"] {
+    --background: 220 13% 97%;
+    --foreground: 220 13% 9%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 9%;
+    --primary: 265 80% 80%;
     --primary-foreground: 220 13% 9%;
-    --secondary: 220 14% 96%;   /* gray-100 */
-    --secondary-foreground: 220 13% 9%; /* gray-900 */
-    --muted: 220 14% 96%;       /* gray-100 */
-    --muted-foreground: 220 9% 46%;  /* gray-500 */
-    --accent: 212 78% 90%;       /* Pale Blue */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 13% 9%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 212 78% 90%;
     --accent-foreground: 220 13% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 220 13% 91%;      /* gray-200 */
+    --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 265 80% 80%;
     --radius: 0.5rem;
   }
  
-  /* Default theme (Modern Dark) */
-  .dark {
-    --background: 220 13% 9%;   /* gray-900 */
-    --foreground: 215 14% 89%;  /* gray-100 */
-    --card: 220 13% 18%;        /* gray-800 */
-    --card-foreground: 215 14% 89%; /* gray-100 */
-    --popover: 220 13% 18%;       /* gray-800 */
+  /* Modern Dark */
+  .dark, .dark[data-theme="default"] {
+    --background: 220 13% 9%;
+    --foreground: 215 14% 89%;
+    --card: 220 13% 18%;
+    --card-foreground: 215 14% 89%;
+    --popover: 220 13% 18%;
     --popover-foreground: 215 14% 89%;
-    --primary: 265 80% 80%;      /* Soft Lavender */
+    --primary: 265 80% 80%;
     --primary-foreground: 215 14% 89%;
-    --secondary: 220 13% 18%;   /* gray-800 */
+    --secondary: 220 13% 18%;
     --secondary-foreground: 215 14% 89%;
     --muted: 220 13% 18%;
-    --muted-foreground: 217 10% 64%; /* gray-400 */
-    --accent: 212 78% 70%;       /* Pale Blue */
+    --muted-foreground: 217 10% 64%;
+    --accent: 212 78% 70%;
     --accent-foreground: 215 14% 89%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 220 14% 25%;      /* gray-700 */
+    --border: 220 14% 25%;
     --input: 220 14% 25%;
     --ring: 265 80% 80%;
   }
 
   /* Grimoire Light */
-  html[class="grimoire"] {
-    --background: 48 33% 94%;   /* beige-100 */
-    --foreground: 46 50% 15%;   /* sepia-900 */
-    --card: 48 45% 98%;         /* beige-50 */
+  [data-theme="grimoire"] {
+    --background: 48 33% 94%;
+    --foreground: 46 50% 15%;
+    --card: 48 45% 98%;
     --card-foreground: 46 50% 15%;
     --popover: 48 45% 98%;
     --popover-foreground: 46 50% 15%;
-    --primary: 35 78% 40%;      /* brown-700 */
+    --primary: 35 78% 40%;
     --primary-foreground: 48 100% 97%;
     --secondary: 48 33% 92%;
     --secondary-foreground: 46 50% 15%;
@@ -69,20 +69,20 @@
     --accent-foreground: 46 50% 15%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 48 33% 80%;       /* beige-400 */
+    --border: 48 33% 80%;
     --input: 48 33% 80%;
     --ring: 35 78% 40%;
   }
 
   /* Grimoire Dark */
-  html[class="dark grimoire"] {
-    --background: 46 50% 10%;   /* sepia-950 */
-    --foreground: 48 33% 85%;   /* beige-200 */
-    --card: 46 50% 15%;         /* sepia-900 */
+  .dark[data-theme="grimoire"] {
+    --background: 46 50% 10%;
+    --foreground: 48 33% 85%;
+    --card: 46 50% 15%;
     --card-foreground: 48 33% 85%;
     --popover: 46 50% 15%;
     --popover-foreground: 48 33% 85%;
-    --primary: 39 71% 70%;      /* gold-400 */
+    --primary: 39 71% 70%;
     --primary-foreground: 46 90% 5%;
     --secondary: 46 50% 15%;
     --secondary-foreground: 48 33% 85%;
@@ -92,7 +92,7 @@
     --accent-foreground: 48 33% 85%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 46 50% 25%;       /* sepia-800 */
+    --border: 46 50% 25%;
     --input: 46 50% 25%;
     --ring: 39 71% 70%;
   }
