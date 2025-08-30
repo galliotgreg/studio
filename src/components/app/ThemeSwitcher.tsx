@@ -2,9 +2,9 @@
 "use client"
 
 import * as React from "react"
-import { useTheme } from "next-themes"
 import { Palette, Sun, Moon, Check } from "lucide-react"
 
+import { useTheme } from "@/components/app/theme-provider";
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -20,18 +20,25 @@ import { useLanguage } from "./LanguageProvider"
 import { THEMES } from "@/lib/themes";
 
 export function ThemeSwitcher() {
-  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { mode, setMode, theme, setTheme } = useTheme()
   const { t } = useLanguage();
+  
+  // The effective mode takes into account the system preference if mode is 'system'
+  const [effectiveMode, setEffectiveMode] = React.useState(mode);
 
-  const handleModeChange = (checked: boolean) => {
-    setTheme(checked ? 'dark' : 'light');
-  };
+  React.useEffect(() => {
+    if (mode === 'system') {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      setEffectiveMode(systemTheme);
 
-  const handlePaletteChange = (paletteId: string) => {
-    // next-themes handles combining the dark/light mode with the palette
-    // by setting the data-theme attribute, while keeping .dark/.light class
-    setTheme(paletteId);
-  };
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const handleChange = () => setEffectiveMode(mediaQuery.matches ? "dark" : "light");
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    } else {
+      setEffectiveMode(mode);
+    }
+  }, [mode]);
 
   return (
     <DropdownMenu>
@@ -44,17 +51,17 @@ export function ThemeSwitcher() {
       <DropdownMenuContent align="end" className="w-56">
         <div className="flex items-center justify-between px-2 py-1.5">
           <div className="flex items-center gap-2">
-            <Sun className={cn("h-4 w-4", resolvedTheme === 'light' && "text-primary")} />
-            <span className={cn("text-sm", resolvedTheme === 'light' && "font-semibold")}>{t('theme.light')}</span>
+            <Sun className={cn("h-4 w-4", effectiveMode === 'light' && "text-primary")} />
+            <span className={cn("text-sm", effectiveMode === 'light' && "font-semibold")}>{t('theme.light')}</span>
           </div>
           <Switch
-            checked={resolvedTheme === 'dark'}
-            onCheckedChange={handleModeChange}
+            checked={effectiveMode === 'dark'}
+            onCheckedChange={(checked) => setMode(checked ? 'dark' : 'light')}
             aria-label="Toggle dark mode"
           />
           <div className="flex items-center gap-2">
-            <Moon className={cn("h-4 w-4", resolvedTheme === 'dark' && "text-primary")} />
-            <span className={cn("text-sm", resolvedTheme === 'dark' && "font-semibold")}>{t('theme.dark')}</span>
+            <Moon className={cn("h-4 w-4", effectiveMode === 'dark' && "text-primary")} />
+            <span className={cn("text-sm", effectiveMode === 'dark' && "font-semibold")}>{t('theme.dark')}</span>
           </div>
         </div>
         <DropdownMenuSeparator />
@@ -65,7 +72,7 @@ export function ThemeSwitcher() {
           return (
             <DropdownMenuItem
               key={themeOption.id}
-              onClick={() => handlePaletteChange(themeOption.id)}
+              onClick={() => setTheme(themeOption.id as 'default' | 'grimoire')}
             >
               <div className="flex items-center w-full">
                 <span className="flex-grow">{t(themeOption.nameKey)}</span>

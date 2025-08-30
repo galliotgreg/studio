@@ -5,7 +5,7 @@
 
 @layer base {
   /* Default (Modern) Light Theme */
-  :root {
+  :root, [data-theme="default"] {
     --background: 220 13% 97%;
     --foreground: 220 13% 9%;
     --card: 0 0% 100%;
@@ -29,7 +29,7 @@
   }
  
   /* Default (Modern) Dark Theme */
-  .dark {
+  .dark, .dark[data-theme="default"] {
     --background: 220 13% 9%;
     --foreground: 215 14% 89%;
     --card: 220 13% 18%;
@@ -52,7 +52,7 @@
   }
 
   /* Grimoire Light Theme */
-  html[data-theme="grimoire"] {
+  [data-theme="grimoire"] {
     --background: 48 33% 94%;
     --foreground: 46 50% 15%;
     --card: 48 45% 98%;
@@ -75,7 +75,7 @@
   }
 
   /* Grimoire Dark Theme */
-  html.dark[data-theme="grimoire"] {
+  .dark[data-theme="grimoire"] {
     --background: 46 50% 10%;
     --foreground: 48 33% 85%;
     --card: 46 50% 15%;
