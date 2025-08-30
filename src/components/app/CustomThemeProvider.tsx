@@ -18,23 +18,41 @@ interface CustomThemeContextType {
 const CustomThemeContext = React.createContext<CustomThemeContextType | undefined>(undefined);
 
 export function CustomThemeProvider({ children }: { children: React.ReactNode }) {
-  const [palette, setPalette] = React.useState<Palette>('default');
-  const [mode, setMode] = React.useState<ThemeMode>('light');
-  const [unlockedThemes, setUnlockedThemes] = React.useState<Theme[]>([THEMES[0]]);
+  const [palette, setPaletteState] = React.useState<Palette>('default');
+  const [mode, setModeState] = React.useState<ThemeMode>('light');
+  
+  const setPalette = React.useCallback((newPalette: Palette) => {
+    try {
+      localStorage.setItem("gratitudePalette", newPalette);
+    } catch (error) {
+        console.error("Failed to save palette to local storage", error);
+    }
+    setPaletteState(newPalette);
+  }, []);
 
-  const loadData = React.useCallback(() => {
+  const setMode = React.useCallback((newMode: ThemeMode) => {
+    try {
+        localStorage.setItem("gratitudeThemeMode", newMode);
+    } catch (error) {
+        console.error("Failed to save mode to local storage", error);
+    }
+    setModeState(newMode);
+  }, []);
+
+
+  React.useEffect(() => {
     try {
         const savedPalette = localStorage.getItem("gratitudePalette");
         if (savedPalette && THEMES.find(t => t.id === savedPalette)) {
-            setPalette(savedPalette);
+            setPaletteState(savedPalette);
         }
 
         const savedMode = localStorage.getItem("gratitudeThemeMode") as ThemeMode;
         if (savedMode) {
-            setMode(savedMode);
+            setModeState(savedMode);
         } else {
             const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            setMode(systemPrefersDark ? 'dark' : 'light');
+            setModeState(systemPrefersDark ? 'dark' : 'light');
         }
     } catch (error) {
       console.error("Failed to load theme data from local storage", error);
@@ -42,28 +60,14 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
   }, []);
 
   React.useEffect(() => {
-    loadData();
-    const handleStorageUpdate = () => loadData();
-
-    window.addEventListener('storageUpdated', handleStorageUpdate);
-    
-    // Initial load
-    handleStorageUpdate();
-
-    return () => {
-      window.removeEventListener('storageUpdated', handleStorageUpdate);
-    };
-  }, [loadData]);
-
-
-  React.useEffect(() => {
-    localStorage.setItem("gratitudePalette", palette);
-    localStorage.setItem("gratitudeThemeMode", mode);
-
     const root = window.document.documentElement;
     
     // Remove all possible theme classes before adding the new one
-    THEMES.forEach(theme => root.classList.remove(theme.id));
+    THEMES.forEach(theme => {
+        if(theme.id !== 'default') {
+           root.classList.remove(theme.id)
+        }
+    });
     root.classList.remove('light', 'dark');
 
     root.classList.add(mode);
