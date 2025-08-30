@@ -74,7 +74,7 @@
   }
 
   /* Thème Nature (Sombre) */
-  .dark.theme-nature {
+  .dark .theme-nature {
     --background: 138 90% 7%;  /* green-950 */
     --foreground: 120 80% 86%;  /* green-100 */
     --card: 137 84% 9%;         /* green-900 */
@@ -120,7 +120,7 @@
   }
 
   /* Thème Océan (Sombre) */
-  .dark.theme-ocean {
+  .dark .theme-ocean {
     --background: 220 13% 9%;   /* slate-900 */
     --foreground: 180 80% 85%;  /* cyan-100 */
     --card: 220 13% 18%;        /* slate-800 */
@@ -166,7 +166,7 @@
   }
 
   /* Thème Sunset (Sombre) */
-  .dark.theme-sunset {
+  .dark .theme-sunset {
     --background: 24 95% 6%;    /* orange-950 */
     --foreground: 30 100% 86%;  /* orange-100 */
     --card: 24 94% 8%;          /* orange-900 */
@@ -212,7 +212,7 @@
   }
 
   /* Thème Grimoire (Mode Sombre) */
-  .dark.theme-grimoire {
+  .dark .theme-grimoire {
     --background: 40 10% 10%;
     --foreground: 40 20% 88%;
     --card: 40 12% 15%;
@@ -235,7 +235,7 @@
   }
 
   /* Thème Starlight (Sombre uniquement) */
-  .dark.theme-starlight {
+  .dark .theme-starlight {
     --background: 240 10% 10%;
     --foreground: 240 15% 85%;
     --card: 240 8% 14%;
@@ -278,5 +278,28 @@
     --border: 255 30% 88%;
     --input: 255 30% 92%;
     --ring: 250 60% 65%;
+  }
+
+  /* Thème Lavande (Mode Sombre) */
+  .dark .theme-lavender {
+    --background: 250 20% 12%;
+    --foreground: 250 30% 88%;
+    --card: 250 20% 18%;
+    --card-foreground: 250 30% 88%;
+    --popover: 250 20% 12%;
+    --popover-foreground: 250 30% 88%;
+    --primary: 250 70% 75%;
+    --primary-foreground: 250 40% 10%;
+    --secondary: 250 20% 22%;
+    --secondary-foreground: 250 30% 88%;
+    --muted: 250 20% 22%;
+    --muted-foreground: 250 15% 60%;
+    --accent: 250 60% 55%;
+    --accent-foreground: 250 20% 95%;
+    --destructive: 350 60% 50%;
+    --destructive-foreground: 350 0% 100%;
+    --border: 250 20% 25%;
+    --input: 250 20% 22%;
+    --ring: 250 70% 70%;
   }
 }

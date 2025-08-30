@@ -17,6 +17,12 @@ export const THEMES: Theme[] = [
     isTreasure: false,
   },
   {
+    id: 'theme-lavender',
+    nameKey: 'theme.lavender',
+    unlockBadgeId: 'entry-1',
+    isTreasure: false,
+  },
+  {
     id: 'theme-nature',
     nameKey: 'theme.nature',
     unlockBadgeId: 'streak-3',
@@ -29,21 +35,15 @@ export const THEMES: Theme[] = [
     isTreasure: false,
   },
   {
-    id: 'theme-sunset',
-    nameKey: 'theme.sunset',
-    unlockBadgeId: 'streak-30',
-    isTreasure: false,
-  },
-    {
     id: 'theme-starlight',
     nameKey: 'theme.starlight',
-    unlockBadgeId: 'streak-21',
+    unlockBadgeId: 'entry-10',
     isTreasure: false,
   },
   {
-    id: 'theme-lavender',
-    nameKey: 'theme.lavender',
-    unlockBadgeId: 'entry-10',
+    id: 'theme-sunset',
+    nameKey: 'theme.sunset',
+    unlockBadgeId: 'streak-30',
     isTreasure: false,
   },
   {
