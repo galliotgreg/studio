@@ -90,8 +90,5 @@ export default {
   },
   plugins: [
     require('tailwindcss-animate'),
-    function ({ addVariant }: { addVariant: (name: string, definition: string) => void }) {
-      addVariant('theme-grimoire', '[data-theme="grimoire"] &');
-    },
   ],
 } satisfies Config;
