@@ -22,7 +22,6 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
   const [mode, setMode] = React.useState<ThemeMode>('light');
   
   React.useEffect(() => {
-    // Load saved settings from localStorage on initial client render
     const savedPalette = localStorage.getItem("gratitudePalette") || 'default';
     const savedMode = localStorage.getItem("gratitudeThemeMode") as ThemeMode;
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -34,22 +33,23 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
     setMode(savedMode || (systemPrefersDark ? 'dark' : 'light'));
   }, []);
 
-  // Effect to apply theme classes to the <html> element whenever they change.
   React.useEffect(() => {
     const root = window.document.documentElement;
     
-    // Clear all theme classes before applying new ones
-    root.classList.remove('light', 'dark', ...THEMES.map(t => t.id));
+    // Clear all theme classes
+    THEMES.forEach(t => {
+      if (t.id !== 'default') {
+        root.classList.remove(t.id);
+      }
+    });
 
-    // Add current mode class
+    root.classList.remove('light', 'dark');
     root.classList.add(mode);
 
-    // Add current palette class
     if (palette !== 'default') {
       root.classList.add(palette);
     }
     
-    // Save changes to localStorage
     localStorage.setItem("gratitudePalette", palette);
     localStorage.setItem("gratitudeThemeMode", mode);
 
