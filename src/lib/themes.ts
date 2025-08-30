@@ -1,6 +1,4 @@
 
-import type { LucideIcon } from "lucide-react";
-
 export interface Theme {
   id: string; 
   nameKey: string;
@@ -12,7 +10,7 @@ export const THEMES: Theme[] = [
       nameKey: 'theme.modern',
     },
      {
-      id: 'theme-grimoire',
+      id: 'grimoire',
       nameKey: 'theme.grimoire',
     },
 ];
