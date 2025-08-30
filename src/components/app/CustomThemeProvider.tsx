@@ -23,36 +23,23 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
   
   React.useEffect(() => {
     const savedPalette = localStorage.getItem("gratitudePalette") || 'default';
-    const savedMode = localStorage.getItem("gratitudeThemeMode") as ThemeMode;
+    const savedMode = localStorage.getItem("gratitudeThemeMode") as ThemeMode | null;
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (THEMES.find(t => t.id === savedPalette)) {
-        setPalette(savedPalette);
-    }
-    
+    setPalette(savedPalette);
     setMode(savedMode || (systemPrefersDark ? 'dark' : 'light'));
   }, []);
 
   React.useEffect(() => {
     const root = window.document.documentElement;
     
-    // Clear all theme classes
-    THEMES.forEach(t => {
-      if (t.id !== 'default') {
-        root.classList.remove(t.id);
-      }
-    });
-
     root.classList.remove('light', 'dark');
     root.classList.add(mode);
-
-    if (palette !== 'default') {
-      root.classList.add(palette);
-    }
+    
+    root.setAttribute('data-theme', palette);
     
     localStorage.setItem("gratitudePalette", palette);
     localStorage.setItem("gratitudeThemeMode", mode);
-
   }, [palette, mode]);
 
   const value = {
