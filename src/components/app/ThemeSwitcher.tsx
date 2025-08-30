@@ -22,16 +22,6 @@ export function ThemeSwitcher() {
   const { palette, setPalette, mode, setMode, themes } = useCustomTheme();
   const { t } = useLanguage();
 
-  const isDark = mode === 'dark';
-
-  const handlePaletteChange = (newPalette: string) => {
-    setPalette(newPalette);
-  };
-  
-  const toggleMode = () => {
-    setMode(isDark ? 'light' : 'dark');
-  };
-
   return (
     <DropdownMenu>
     <DropdownMenuTrigger asChild>
@@ -43,17 +33,17 @@ export function ThemeSwitcher() {
     <DropdownMenuContent align="end" className="w-56">
         <div className="flex items-center justify-between px-2 py-1.5">
             <div className="flex items-center gap-2">
-                <Sun className={cn("h-4 w-4", !isDark && "text-primary")} />
-                <span className={cn("text-sm", !isDark && "font-semibold")}>{t('theme.light')}</span>
+                <Sun className={cn("h-4 w-4", mode === 'light' && "text-primary")} />
+                <span className={cn("text-sm", mode === 'light' && "font-semibold")}>{t('theme.light')}</span>
             </div>
             <Switch
-                checked={isDark}
-                onCheckedChange={toggleMode}
+                checked={mode === 'dark'}
+                onCheckedChange={(checked) => setMode(checked ? 'dark' : 'light')}
                 aria-label="Toggle dark mode"
             />
             <div className="flex items-center gap-2">
-                <Moon className={cn("h-4 w-4", isDark && "text-primary")} />
-                <span className={cn("text-sm", isDark && "font-semibold")}>{t('theme.dark')}</span>
+                <Moon className={cn("h-4 w-4", mode === 'dark' && "text-primary")} />
+                <span className={cn("text-sm", mode === 'dark' && "font-semibold")}>{t('theme.dark')}</span>
             </div>
         </div>
         <DropdownMenuSeparator />
@@ -64,7 +54,7 @@ export function ThemeSwitcher() {
           return (
             <DropdownMenuItem
                 key={theme.id}
-                onClick={() => handlePaletteChange(theme.id)}
+                onClick={() => setPalette(theme.id)}
             >
               <div className="flex items-center w-full">
                 <span className="flex-grow">{t(theme.nameKey)}</span>

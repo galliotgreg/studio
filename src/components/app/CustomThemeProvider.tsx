@@ -18,32 +18,15 @@ interface CustomThemeContextType {
 const CustomThemeContext = React.createContext<CustomThemeContextType | undefined>(undefined);
 
 export function CustomThemeProvider({ children }: { children: React.ReactNode }) {
+  // The state for palette and mode is managed here exclusively.
   const [palette, setPaletteState] = React.useState<Palette>('default');
   const [mode, setModeState] = React.useState<ThemeMode>('light');
   
-  const setPalette = React.useCallback((newPalette: Palette) => {
-    try {
-      localStorage.setItem("gratitudePalette", newPalette);
-    } catch (error) {
-        console.error("Failed to save palette to local storage", error);
-    }
-    setPaletteState(newPalette);
-  }, []);
-
-  const setMode = React.useCallback((newMode: ThemeMode) => {
-    try {
-        localStorage.setItem("gratitudeThemeMode", newMode);
-    } catch (error) {
-        console.error("Failed to save mode to local storage", error);
-    }
-    setModeState(newMode);
-  }, []);
-
-
+  // Effect to load the initial theme from localStorage or system preference.
   React.useEffect(() => {
     try {
-        const savedPalette = localStorage.getItem("gratitudePalette");
-        if (savedPalette && THEMES.find(t => t.id === savedPalette)) {
+        const savedPalette = localStorage.getItem("gratitudePalette") || 'default';
+        if (THEMES.find(t => t.id === savedPalette)) {
             setPaletteState(savedPalette);
         }
 
@@ -59,22 +42,45 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
     }
   }, []);
 
+  // Effect to apply the theme classes to the <html> element.
   React.useEffect(() => {
     const root = window.document.documentElement;
     
-    // Remove all possible theme classes before adding the new one
+    // Clear all previous theme classes
+    root.classList.remove('light', 'dark');
     THEMES.forEach(theme => {
         if(theme.id !== 'default') {
            root.classList.remove(theme.id)
         }
     });
-    root.classList.remove('light', 'dark');
 
+    // Add the current mode class
     root.classList.add(mode);
+
+    // Add the current palette class if it's not the default
     if (palette !== 'default') {
       root.classList.add(palette);
     }
   }, [palette, mode]);
+
+  // Functions to update state and localStorage
+  const setPalette = (newPalette: Palette) => {
+    try {
+      localStorage.setItem("gratitudePalette", newPalette);
+    } catch (error) {
+        console.error("Failed to save palette to local storage", error);
+    }
+    setPaletteState(newPalette);
+  };
+
+  const setMode = (newMode: ThemeMode) => {
+    try {
+        localStorage.setItem("gratitudeThemeMode", newMode);
+    } catch (error) {
+        console.error("Failed to save mode to local storage", error);
+    }
+    setModeState(newMode);
+  };
 
   const value = {
     palette,
