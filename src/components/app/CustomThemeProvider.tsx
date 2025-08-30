@@ -20,6 +20,7 @@ const CustomThemeContext = React.createContext<CustomThemeContextType | undefine
 export function CustomThemeProvider({ children }: { children: React.ReactNode }) {
   const [palette, setPalette] = React.useState<Palette>('default');
   const [mode, setMode] = React.useState<ThemeMode>('light');
+  const [unlockedThemes, setUnlockedThemes] = React.useState<Theme[]>([THEMES[0]]);
 
   const loadData = React.useCallback(() => {
     try {
@@ -42,6 +43,16 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
 
   React.useEffect(() => {
     loadData();
+    const handleStorageUpdate = () => loadData();
+
+    window.addEventListener('storageUpdated', handleStorageUpdate);
+    
+    // Initial load
+    handleStorageUpdate();
+
+    return () => {
+      window.removeEventListener('storageUpdated', handleStorageUpdate);
+    };
   }, [loadData]);
 
 
@@ -51,6 +62,7 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
 
     const root = window.document.documentElement;
     
+    // Remove all possible theme classes before adding the new one
     THEMES.forEach(theme => root.classList.remove(theme.id));
     root.classList.remove('light', 'dark');
 
