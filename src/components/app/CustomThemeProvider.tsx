@@ -3,7 +3,6 @@
 
 import * as React from "react";
 import { THEMES, Theme } from "@/lib/themes";
-import type { GratitudeState } from "@/lib/types";
 
 type ThemeMode = 'light' | 'dark';
 type Palette = string;
@@ -13,7 +12,7 @@ interface CustomThemeContextType {
   setPalette: (palette: Palette) => void;
   mode: ThemeMode;
   setMode: (mode: ThemeMode) => void;
-  unlockedThemes: Theme[];
+  themes: Theme[];
   getThemeById: (id: string) => Theme | undefined;
 }
 
@@ -22,7 +21,6 @@ const CustomThemeContext = React.createContext<CustomThemeContextType | undefine
 export function CustomThemeProvider({ children }: { children: React.ReactNode }) {
   const [palette, setPalette] = React.useState<Palette>('theme-grimoire');
   const [mode, setMode] = React.useState<ThemeMode>('light');
-  const [unlockedBadges, setUnlockedBadges] = React.useState<string[]>([]);
 
   const loadData = React.useCallback(() => {
     try {
@@ -35,15 +33,8 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
         if (savedMode) {
             setMode(savedMode);
         } else {
-            // Fallback to system preference
             const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             setMode(systemPrefersDark ? 'dark' : 'light');
-        }
-
-        const savedData = localStorage.getItem("gratitudeChallengeData");
-        if (savedData) {
-            const parsedData = JSON.parse(savedData) as GratitudeState;
-            setUnlockedBadges(parsedData.unlockedBadges || []);
         }
     } catch (error) {
       console.error("Failed to load theme data from local storage", error);
@@ -63,21 +54,14 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
 
     const root = window.document.documentElement;
     
-    // Remove all theme classes first
     THEMES.forEach(theme => root.classList.remove(theme.id));
     root.classList.remove('light', 'dark');
 
-    // Add the current classes
     root.classList.add(mode);
     if (palette !== 'default') {
       root.classList.add(palette);
     }
   }, [palette, mode]);
-  
-  const unlockedThemes = React.useMemo(() => 
-    THEMES.filter(theme => !theme.unlockBadgeId || unlockedBadges.includes(theme.unlockBadgeId)),
-    [unlockedBadges]
-  );
   
   const getThemeById = (id: string) => THEMES.find(t => t.id === id);
 
@@ -87,7 +71,7 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
     setPalette,
     mode,
     setMode,
-    unlockedThemes,
+    themes: THEMES,
     getThemeById,
   };
 

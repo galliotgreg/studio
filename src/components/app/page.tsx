@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { Star, Badge, Settings, Trash2 } from "lucide-react";
+import { Star, Badge, Settings, Trash2, Award } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from 'next/link';
 
@@ -242,7 +242,7 @@ export default function GratitudeChallengePage() {
   if (isLoading || !state) {
     return (
       <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onExport={() => {}} onImport={() => {}} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <Skeleton className="h-96 lg:col-span-2 md:row-span-2" />
             <div className="flex flex-col gap-6">
@@ -261,7 +261,7 @@ export default function GratitudeChallengePage() {
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onExport={() => {}} onImport={() => {}} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 

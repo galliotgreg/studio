@@ -20,7 +20,6 @@ import {
 import { useLanguage } from "@/components/app/LanguageProvider";
 import { Badge as BadgeType } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { Separator } from "../ui/separator";
 
 interface BadgesCardProps {
   allBadges: BadgeType[];
@@ -91,10 +90,6 @@ export const BadgesCard = React.forwardRef<HTMLDivElement, BadgesCardProps>(
   ({ allBadges, unlockedBadgeIds }, ref) => {
     const { t } = useLanguage();
 
-    const progressionBadges = allBadges.filter(b => b.category === 'progression');
-    const treasureBadges = allBadges.filter(b => b.category === 'treasure');
-    const unlockedTreasures = treasureBadges.filter(b => unlockedBadgeIds.includes(b.id));
-
     return (
       <Card ref={ref} className="h-full transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
         <CardHeader>
@@ -108,27 +103,10 @@ export const BadgesCard = React.forwardRef<HTMLDivElement, BadgesCardProps>(
         </CardHeader>
         <CardContent>
           <div className="flex flex-row flex-wrap gap-4">
-            {progressionBadges.map((badge) => (
+            {allBadges.map((badge) => (
                 <BadgeDisplay key={badge.id} badge={badge} unlockedBadgeIds={unlockedBadgeIds} />
             ))}
           </div>
-
-          {unlockedTreasures.length > 0 && (
-             <>
-                <Separator className="my-6" />
-                <div className="space-y-4">
-                    <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Gift className="text-primary" />
-                        {t('treasureDiscovered')}
-                    </h3>
-                    <div className="flex flex-row flex-wrap gap-4">
-                        {unlockedTreasures.map((badge) => (
-                             <BadgeDisplay key={badge.id} badge={badge} unlockedBadgeIds={unlockedBadgeIds} />
-                        ))}
-                    </div>
-                </div>
-             </>
-          )}
         </CardContent>
       </Card>
     );

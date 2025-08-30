@@ -1,3 +1,4 @@
+
 import type { LucideIcon } from "lucide-react";
 
 export interface GratitudeEntry {
@@ -19,7 +20,6 @@ export interface Badge {
   icon: LucideIcon;
   milestone: number;
   type: "streak" | "entries" | "share";
-  category: "progression" | "treasure";
 }
 
 export interface GratitudeState {
