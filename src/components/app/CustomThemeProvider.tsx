@@ -13,13 +13,12 @@ interface CustomThemeContextType {
   mode: ThemeMode;
   setMode: (mode: ThemeMode) => void;
   themes: Theme[];
-  getThemeById: (id: string) => Theme | undefined;
 }
 
 const CustomThemeContext = React.createContext<CustomThemeContextType | undefined>(undefined);
 
 export function CustomThemeProvider({ children }: { children: React.ReactNode }) {
-  const [palette, setPalette] = React.useState<Palette>('theme-grimoire');
+  const [palette, setPalette] = React.useState<Palette>('default');
   const [mode, setMode] = React.useState<ThemeMode>('light');
 
   const loadData = React.useCallback(() => {
@@ -43,8 +42,6 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
 
   React.useEffect(() => {
     loadData();
-    window.addEventListener('storageUpdated', loadData);
-    return () => window.removeEventListener('storageUpdated', loadData);
   }, [loadData]);
 
 
@@ -62,9 +59,6 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
       root.classList.add(palette);
     }
   }, [palette, mode]);
-  
-  const getThemeById = (id: string) => THEMES.find(t => t.id === id);
-
 
   const value = {
     palette,
@@ -72,7 +66,6 @@ export function CustomThemeProvider({ children }: { children: React.ReactNode })
     mode,
     setMode,
     themes: THEMES,
-    getThemeById,
   };
 
   return (

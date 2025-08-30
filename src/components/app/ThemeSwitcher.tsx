@@ -16,11 +16,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "./LanguageProvider"
-import { THEMES } from "@/lib/themes"
 import { Switch } from "@/components/ui/switch"
 
 export function ThemeSwitcher() {
-  const { palette, setPalette, mode, setMode } = useCustomTheme();
+  const { palette, setPalette, mode, setMode, themes } = useCustomTheme();
   const { t } = useLanguage();
 
   const isDark = mode === 'dark';
@@ -60,7 +59,7 @@ export function ThemeSwitcher() {
         <DropdownMenuSeparator />
         <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
         
-        {THEMES.map((themeData) => {
+        {themes.map((themeData) => {
           const isActive = themeData.id === palette;
           
           return (

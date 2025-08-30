@@ -6,7 +6,7 @@
 @layer base {
   /* Thème Moderne (Mode Clair) - Par défaut */
   :root {
-    --background: 220 13% 95%; /* gray-50 */
+    --background: 220 13% 97%;   /* gray-50 */
     --foreground: 220 13% 9%;   /* gray-900 */
     --card: 0 0% 100%;           /* white */
     --card-foreground: 220 13% 9%; /* gray-900 */
@@ -52,20 +52,20 @@
 
   /* Thème Nature (Clair) */
   .theme-nature {
-    --background: 120 60% 96%; /* green-50 */
-    --foreground: 124 34% 19%;  /* green-900 */
+    --background: 120 60% 98%; /* green-50 */
+    --foreground: 124 34% 10%;  /* green-900 */
     --card: 0 0% 100%;
-    --card-foreground: 124 34% 19%;
+    --card-foreground: 124 34% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 124 34% 19%;
+    --popover-foreground: 124 34% 10%;
     --primary: 136 65% 35%;     /* green-600 */
     --primary-foreground: 120 20% 98%;
     --secondary: 120 60% 96%;
-    --secondary-foreground: 124 34% 19%;
+    --secondary-foreground: 124 34% 10%;
     --muted: 120 60% 96%;
     --muted-foreground: 137 25% 42%; /* green-700 */
     --accent: 120 40% 88%;      /* green-200 */
-    --accent-foreground: 124 34% 19%;
+    --accent-foreground: 124 34% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 120 40% 88%;      /* green-200 */
@@ -75,7 +75,7 @@
 
   /* Thème Nature (Sombre) */
   .dark .theme-nature {
-    --background: 138 90% 7%;  /* green-950 */
+    --background: 138 90% 4%;  /* green-950 */
     --foreground: 120 80% 86%;  /* green-100 */
     --card: 137 84% 9%;         /* green-900 */
     --card-foreground: 120 80% 86%;
@@ -98,20 +98,20 @@
 
   /* Thème Océan (Clair) */
   .theme-ocean {
-    --background: 180 50% 96%; /* cyan-50 */
-    --foreground: 196 100% 17%; /* cyan-900 */
+    --background: 180 50% 98%; /* cyan-50 */
+    --foreground: 196 100% 9%; /* cyan-900 */
     --card: 0 0% 100%;
-    --card-foreground: 196 100% 17%;
+    --card-foreground: 196 100% 9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 196 100% 17%;
+    --popover-foreground: 196 100% 9%;
     --primary: 183 81% 33%;     /* cyan-600 */
     --primary-foreground: 180 20% 98%;
     --secondary: 180 50% 96%;
-    --secondary-foreground: 196 100% 17%;
+    --secondary-foreground: 196 100% 9%;
     --muted: 180 50% 96%;
     --muted-foreground: 189 65% 36%; /* cyan-700 */
     --accent: 180 56% 88%;      /* cyan-200 */
-    --accent-foreground: 196 100% 17%;
+    --accent-foreground: 196 100% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 180 56% 88%;      /* cyan-200 */
@@ -144,20 +144,20 @@
 
    /* Thème Sunset (Clair) */
    .theme-sunset {
-    --background: 30 100% 97%; /* orange-50 */
-    --foreground: 25 80% 19%;   /* orange-900 */
+    --background: 30 100% 98%; /* orange-50 */
+    --foreground: 25 80% 10%;   /* orange-900 */
     --card: 0 0% 100%;
-    --card-foreground: 25 80% 19%;
+    --card-foreground: 25 80% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 25 80% 19%;
+    --popover-foreground: 25 80% 10%;
     --primary: 20 89% 48%;      /* orange-600 */
     --primary-foreground: 20 20% 98%;
     --secondary: 30 100% 97%;
-    --secondary-foreground: 25 80% 19%;
+    --secondary-foreground: 25 80% 10%;
     --muted: 30 100% 97%;
     --muted-foreground: 22 55% 42%;  /* orange-700 */
     --accent: 24 100% 89%;     /* orange-200 */
-    --accent-foreground: 25 80% 19%;
+    --accent-foreground: 25 80% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 24 100% 89%;     /* orange-200 */
@@ -167,7 +167,7 @@
 
   /* Thème Sunset (Sombre) */
   .dark .theme-sunset {
-    --background: 24 95% 6%;    /* orange-950 */
+    --background: 24 95% 4%;    /* orange-950 */
     --foreground: 30 100% 86%;  /* orange-100 */
     --card: 24 94% 8%;          /* orange-900 */
     --card-foreground: 30 100% 86%;
@@ -186,120 +186,5 @@
     --border: 22 74% 22%;       /* orange-700 */
     --input: 22 74% 22%;
     --ring: 336 100% 67%;
-  }
-
-  /* Thème Grimoire (Mode Clair) */
-  .theme-grimoire {
-    --background: 35 63% 94%;
-    --foreground: 30 50% 15%;
-    --card: 40 50% 88%;
-    --card-foreground: 30 50% 15%;
-    --popover: 40 50% 88%;
-    --popover-foreground: 30 50% 15%;
-    --primary: 25 80% 40%;
-    --primary-foreground: 35 70% 95%;
-    --secondary: 35 40% 85%;
-    --secondary-foreground: 25 80% 30%;
-    --muted: 35 40% 90%;
-    --muted-foreground: 30 30% 35%;
-    --accent: 25 80% 60%;
-    --accent-foreground: 30 50% 15%;
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 35 40% 80%;
-    --input: 35 40% 85%;
-    --ring: 25 80% 50%;
-  }
-
-  /* Thème Grimoire (Mode Sombre) */
-  .dark .theme-grimoire {
-    --background: 40 10% 10%;
-    --foreground: 40 20% 88%;
-    --card: 40 12% 15%;
-    --card-foreground: 40 20% 88%;
-    --popover: 40 10% 10%;
-    --popover-foreground: 40 20% 88%;
-    --primary: 35 60% 65%;
-    --primary-foreground: 30 30% 10%;
-    --secondary: 40 15% 20%;
-    --secondary-foreground: 40 20% 88%;
-    --muted: 40 15% 20%;
-    --muted-foreground: 40 15% 60%;
-    --accent: 35 60% 55%;
-    --accent-foreground: 40 10% 10%;
-    --destructive: 0 50% 45%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 40 15% 25%;
-    --input: 40 15% 20%;
-    --ring: 35 60% 55%;
-  }
-
-  /* Thème Starlight (Sombre uniquement) */
-  .dark .theme-starlight {
-    --background: 240 10% 10%;
-    --foreground: 240 15% 85%;
-    --card: 240 8% 14%;
-    --card-foreground: 240 15% 85%;
-    --popover: 240 8% 14%;
-    --popover-foreground: 240 15% 85%;
-    --primary: 250 70% 75%;
-    --primary-foreground: 250 40% 10%;
-    --secondary: 240 10% 18%;
-    --secondary-foreground: 240 15% 85%;
-    --muted: 240 10% 18%;
-    --muted-foreground: 240 10% 55%;
-    --accent: 260 80% 80%;
-    --accent-foreground: 260 40% 15%;
-    --destructive: 350 60% 50%;
-    --destructive-foreground: 350 0% 100%;
-    --border: 240 8% 22%;
-    --input: 240 8% 18%;
-    --ring: 250 70% 70%;
-  }
-
-  /* Thème Lavande (Clair) */
-  .theme-lavender {
-    --background: 255 50% 97%;
-    --foreground: 250 40% 25%;
-    --card: 255 45% 94%;
-    --card-foreground: 250 40% 25%;
-    --popover: 255 45% 94%;
-    --popover-foreground: 250 40% 25%;
-    --primary: 250 60% 60%;
-    --primary-foreground: 250 30% 98%;
-    --secondary: 255 40% 92%;
-    --secondary-foreground: 250 50% 35%;
-    --muted: 255 40% 92%;
-    --muted-foreground: 250 20% 50%;
-    --accent: 250 70% 70%;
-    --accent-foreground: 250 40% 25%;
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 255 30% 88%;
-    --input: 255 30% 92%;
-    --ring: 250 60% 65%;
-  }
-
-  /* Thème Lavande (Mode Sombre) */
-  .dark .theme-lavender {
-    --background: 250 20% 12%;
-    --foreground: 250 30% 88%;
-    --card: 250 20% 18%;
-    --card-foreground: 250 30% 88%;
-    --popover: 250 20% 12%;
-    --popover-foreground: 250 30% 88%;
-    --primary: 250 70% 75%;
-    --primary-foreground: 250 40% 10%;
-    --secondary: 250 20% 22%;
-    --secondary-foreground: 250 30% 88%;
-    --muted: 250 20% 22%;
-    --muted-foreground: 250 15% 60%;
-    --accent: 250 60% 55%;
-    --accent-foreground: 250 20% 95%;
-    --destructive: 350 60% 50%;
-    --destructive-foreground: 350 0% 100%;
-    --border: 250 20% 25%;
-    --input: 250 20% 22%;
-    --ring: 250 70% 70%;
   }
 }
