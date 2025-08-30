@@ -1,6 +1,5 @@
 
-import type { Badge } from "./types";
-import { Star, Award, Zap, Trophy, Crown, BookMarked, Share2 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 export interface Theme {
   id: string; 
@@ -11,6 +10,10 @@ export const THEMES: Theme[] = [
     {
       id: 'default',
       nameKey: 'theme.modern',
+    },
+    {
+      id: 'theme-lavande',
+      nameKey: 'theme.lavande',
     },
     {
       id: 'theme-nature',
@@ -24,5 +27,8 @@ export const THEMES: Theme[] = [
       id: 'theme-sunset',
       nameKey: 'theme.sunset',
     },
+     {
+      id: 'theme-grimoire',
+      nameKey: 'theme.grimoire',
+    },
 ];
-
