@@ -28,6 +28,7 @@ export default function RootLayout({
           attribute="data-theme"
           defaultTheme="default"
           enableSystem={false}
+          disableTransitionOnChange
         >
           <LanguageProvider>
               <div className="flex-grow">

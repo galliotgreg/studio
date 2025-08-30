@@ -17,11 +17,7 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "./LanguageProvider"
-
-const THEMES = [
-  { id: 'default', nameKey: 'theme.modern' },
-  { id: 'grimoire', nameKey: 'theme.grimoire' },
-];
+import { THEMES } from "@/lib/themes";
 
 export function ThemeSwitcher() {
   const { theme, setTheme, resolvedTheme } = useTheme()
@@ -31,14 +27,11 @@ export function ThemeSwitcher() {
     setTheme(checked ? 'dark' : 'light');
   };
 
-  const handlePaletteChange = (palette: string) => {
+  const handlePaletteChange = (paletteId: string) => {
     // next-themes handles combining the dark/light mode with the palette
-    setTheme(palette);
+    // by setting the data-theme attribute, while keeping .dark/.light class
+    setTheme(paletteId);
   };
-  
-  // resolvedTheme will be 'dark' or 'light'
-  // theme will be the base theme name like 'default' or 'grimoire'
-  const currentPalette = theme === 'light' || theme === 'dark' ? 'default' : theme;
 
   return (
     <DropdownMenu>
@@ -68,7 +61,7 @@ export function ThemeSwitcher() {
         <DropdownMenuLabel>{t('themes')}</DropdownMenuLabel>
         
         {THEMES.map((themeOption) => {
-          const isActive = themeOption.id === currentPalette;
+          const isActive = theme === themeOption.id;
           return (
             <DropdownMenuItem
               key={themeOption.id}

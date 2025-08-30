@@ -29,7 +29,7 @@
   }
  
   /* Modern Dark */
-  .dark, .dark[data-theme="default"] {
+  .dark[data-theme="default"], .dark {
     --background: 220 13% 9%;
     --foreground: 215 14% 89%;
     --card: 220 13% 18%;
