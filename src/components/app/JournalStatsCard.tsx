@@ -41,14 +41,16 @@ export function JournalStatsCard({ entries }: JournalStatsCardProps) {
               </p>
             )}
         </CardContent>
-        <CardFooter className="pt-0 justify-center">
-            <Button asChild variant="outline" size="sm" className="w-full" disabled={!hasEntries}>
-                <Link href={hasEntries ? "/journal" : "#"} className={!hasEntries ? "pointer-events-none" : ""}>
-                    {t('viewJournal')}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-            </Button>
-        </CardFooter>
+        {hasEntries && (
+            <CardFooter className="pt-0 justify-center">
+                <Button asChild variant="outline" size="sm" className="w-full">
+                    <Link href="/journal">
+                        {t('viewJournal')}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                </Button>
+            </CardFooter>
+        )}
     </Card>
   );
 }
