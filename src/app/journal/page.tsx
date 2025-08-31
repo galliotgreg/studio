@@ -7,7 +7,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { toPng } from 'html-to-image';
 
-import type { GratitudeState, GratitudeEntry } from "@/lib/types";
+import type { GratitudeState, GratitudeEntry, Badge } from "@/lib/types";
+import { BADGES } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { JournalEntryCard } from "@/components/app/JournalEntryCard";
 import { useLanguage } from "@/components/app/LanguageProvider";
@@ -41,6 +42,18 @@ export default function JournalPage() {
     }
     setIsLoading(false);
   }, []);
+
+  React.useEffect(() => {
+    if (state && !isLoading) {
+      try {
+        localStorage.setItem("gratitudeChallengeData", JSON.stringify(state));
+        // Optional: Dispatch event to notify other components if needed
+        window.dispatchEvent(new CustomEvent('storageUpdated'));
+      } catch (error) {
+        console.error("Failed to save data to local storage", error);
+      }
+    }
+  }, [state, isLoading]);
 
   const entryDates = React.useMemo(() => {
     if (!state) return [];
@@ -78,6 +91,25 @@ export default function JournalPage() {
   const handleShare = (entry: GratitudeEntry) => {
     setEntryToShare(entry);
   };
+
+  const unlockShareBadge = () => {
+    setState(prevState => {
+        if (!prevState || prevState.unlockedBadges.includes('share-1')) {
+            return prevState;
+        }
+
+        const shareBadge = BADGES.find(b => b.id === 'share-1');
+        if (shareBadge) {
+            const newUnlockedBadges = [...prevState.unlockedBadges, shareBadge.id];
+            toast({
+                title: t('badgeUnlocked'),
+                description: t('badgeUnlockedDescription').replace('{badgeName}', t(shareBadge.nameKey)),
+            });
+            return { ...prevState, unlockedBadges: newUnlockedBadges };
+        }
+        return prevState;
+    });
+  }
   
   const handleDownloadImage = async () => {
     if (!imagePreviewRef.current || !entryToShare) return;
@@ -105,12 +137,14 @@ export default function JournalPage() {
                 text: `${t('dailyGratitude').replace('{day}', String(entryToShare.day))}`,
                 files: [file],
             });
+            unlockShareBadge(); // Unlock badge on successful share
         } else {
             // Fallback for desktop or browsers that don't support Web Share API for files
             const link = document.createElement('a');
             link.download = fileName;
             link.href = dataUrl;
             link.click();
+            unlockShareBadge(); // Unlock badge on successful download
         }
         setEntryToShare(null);
     } catch (err: any) {
