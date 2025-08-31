@@ -47,7 +47,8 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             
             // --- Step 1: Immediate local processing for quick feedback ---
             const localWordFrequencies: { [key: string]: number } = {};
-            const allWords = allText.toLowerCase().match(/\b(\w{3,})\b/g) || [];
+            // Use Unicode-aware regex to correctly handle accented characters
+            const allWords = allText.toLowerCase().match(/\b(\p{L}{3,})\b/gu) || [];
 
             allWords.forEach(word => {
                 if (!commonWords.has(word)) {
@@ -70,7 +71,8 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                     const aiKeywordSet = new Set(result.keywords.map(k => k.toLowerCase()));
                     
                     const refinedFrequencies: { [key: string]: number } = {};
-                     allText.toLowerCase().match(/\b(\w+)\b/g)?.forEach(word => {
+                     // Use Unicode-aware regex here as well
+                     allText.toLowerCase().match(/\b(\p{L}+)\b/gu)?.forEach(word => {
                         if (aiKeywordSet.has(word)) {
                             refinedFrequencies[word] = (refinedFrequencies[word] || 0) + 1;
                         }
