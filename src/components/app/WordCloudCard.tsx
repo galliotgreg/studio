@@ -14,7 +14,6 @@ import {
 import { useLanguage } from "./LanguageProvider";
 import type { GratitudeEntry } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { extractKeywords } from "@/ai/flows/extract-keywords-flow";
 import { Skeleton } from "../ui/skeleton";
 
 interface WordCloudCardProps {
@@ -35,7 +34,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
     const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
-        const generateWordCloud = async () => {
+        const generateWordCloud = () => {
             if (entries.length === 0) {
                 setIsLoading(false);
                 setWordCloudData([]);
@@ -45,9 +44,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             setIsLoading(true);
             const allText = entries.map(e => e.text).join(" ");
             
-            // --- Step 1: Immediate local processing for quick feedback ---
             const localWordFrequencies: { [key: string]: number } = {};
-            // Use Unicode-aware regex to correctly handle accented characters
             const allWords = allText.toLowerCase().match(/\b(\p{L}{3,})\b/gu) || [];
 
             allWords.forEach(word => {
@@ -56,42 +53,13 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                 }
             });
             
-            const initialData = Object.entries(localWordFrequencies)
+            const data = Object.entries(localWordFrequencies)
                 .map(([text, value]) => ({ text, value }))
                 .sort((a, b) => b.value - a.value)
                 .slice(0, 30);
             
-            setWordCloudData(initialData);
-            // Don't set loading to false here anymore
-
-            // --- Step 2: AI-powered keyword extraction in the background ---
-            try {
-                const result = await extractKeywords({ text: allText });
-                if (result.keywords.length > 0) {
-                    const aiKeywordSet = new Set(result.keywords.map(k => k.toLowerCase()));
-                    
-                    const refinedFrequencies: { [key: string]: number } = {};
-                     // Use Unicode-aware regex here as well
-                     allText.toLowerCase().match(/\b(\p{L}+)\b/gu)?.forEach(word => {
-                        if (aiKeywordSet.has(word)) {
-                            refinedFrequencies[word] = (refinedFrequencies[word] || 0) + 1;
-                        }
-                    });
-
-                    const refinedData = Object.entries(refinedFrequencies)
-                        .map(([text, value]) => ({ text, value }))
-                        .sort((a, b) => b.value - a.value)
-                        .slice(0, 30);
-                    
-                    if (refinedData.length > 0) {
-                        setWordCloudData(refinedData);
-                    }
-                }
-            } catch (error) {
-                console.error("Failed to generate AI word cloud, using local fallback:", error);
-            } finally {
-                setIsLoading(false); // Set loading to false only after everything is done
-            }
+            setWordCloudData(data);
+            setIsLoading(false);
         };
 
         generateWordCloud();
