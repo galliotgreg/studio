@@ -2,10 +2,11 @@
 "use client";
 
 import * as React from "react";
-import { Star, Award, Trash2 } from "lucide-react";
-import { motion } from "framer-motion";
+import { Star, Badge, Settings, Trash2, Award } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import Link from 'next/link';
 
-import type { GratitudeState, Quote, Badge as BadgeType } from "@/lib/types";
+import type { GratitudeState, Quote } from "@/lib/types";
 import { BADGES } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/app/Header";
@@ -42,7 +43,6 @@ export default function GratitudeChallengePage() {
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
   const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
   const badgesCardRef = React.useRef<HTMLDivElement>(null);
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
 
   const getQuotes = React.useCallback(() => {
@@ -107,7 +107,6 @@ export default function GratitudeChallengePage() {
     if (state && !isLoading) {
       try {
         localStorage.setItem("gratitudeChallengeData", JSON.stringify(state));
-        window.dispatchEvent(new CustomEvent('storageUpdated'));
       } catch (error) {
         console.error("Failed to save data to local storage", error);
       }
@@ -158,14 +157,11 @@ export default function GratitudeChallengePage() {
     const newStreak = lastEntryDate === yesterday.toDateString() ? state.streak + 1 : 1;
     
     // Only increment day if the challenge is not complete
-    const isCompleted = state.currentDay >= CHALLENGE_DURATION && lastEntryDate !== todayStr
-    const newCurrentDay = !isCompleted ? state.currentDay + 1 : state.currentDay;
-
+    const newCurrentDay = state.currentDay < CHALLENGE_DURATION ? state.currentDay + 1 : state.currentDay;
 
     const newUnlockedBadges = [...state.unlockedBadges];
     let hasUnlockedNewBadge = false;
     BADGES.forEach(badge => {
-        if (badge.type === 'share') return;
         const isUnlocked = badge.type === 'streak' ? newStreak >= badge.milestone : state.entries.length + 1 >= badge.milestone;
         if (isUnlocked && !newUnlockedBadges.includes(badge.id)) {
             newUnlockedBadges.push(badge.id);
@@ -211,7 +207,6 @@ export default function GratitudeChallengePage() {
   };
 
   const handleShare = async () => {
-    if (!state) return;
     const shareData = {
       title: t('appTitle'),
       text: t('appDescription'),
@@ -223,12 +218,8 @@ export default function GratitudeChallengePage() {
       } else {
         throw new Error("Web Share API not supported");
       }
-      toast({
-        title: t('linkCopiedTitle'),
-        description: t('linkCopiedDescription'),
-      });
-
     } catch (err) {
+      // Fallback: copy to clipboard
       try {
         await navigator.clipboard.writeText(window.location.href);
         toast({
@@ -245,74 +236,10 @@ export default function GratitudeChallengePage() {
     }
   };
 
-  const handleExportData = () => {
-    try {
-        const data = localStorage.getItem("gratitudeChallengeData");
-        if (!data) {
-            toast({ title: t('exportErrorTitle'), description: t('noDataToExport'), variant: 'destructive' });
-            return;
-        }
-        const blob = new Blob([data], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "gratitude-backup.json";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        toast({ title: t('exportSuccessTitle'), description: t('exportSuccessDescription') });
-    } catch (error) {
-        console.error("Export failed", error);
-        toast({ title: t('exportErrorTitle'), description: t('exportErrorDescription'), variant: "destructive" });
-    }
-  };
-
-  const handleImportClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleImportData = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        try {
-            const text = e.target?.result;
-            if (typeof text !== 'string') {
-                throw new Error("File is not readable");
-            }
-            const importedState = JSON.parse(text) as GratitudeState;
-
-            // Basic validation
-            if (
-                !importedState ||
-                typeof importedState.currentDay !== 'number' ||
-                !Array.isArray(importedState.entries)
-            ) {
-                throw new Error("Invalid file format");
-            }
-
-            localStorage.setItem("gratitudeChallengeData", text);
-            toast({ title: t('importSuccessTitle'), description: t('importSuccessDescription') });
-            setTimeout(() => window.location.reload(), 1000);
-        } catch (error) {
-            console.error("Import failed", error);
-            toast({ title: t('importErrorTitle'), description: t('importErrorDescription'), variant: "destructive" });
-        } finally {
-            // Reset file input
-            if(event.target) event.target.value = '';
-        }
-    };
-    reader.readAsText(file);
-  };
-
-
   if (isLoading || !state) {
     return (
       <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onExport={handleExportData} onImport={handleImportClick} />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onExport={() => {}} onImport={() => {}} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <Skeleton className="h-96 lg:col-span-2 md:row-span-2" />
             <div className="flex flex-col gap-6">
@@ -327,25 +254,15 @@ export default function GratitudeChallengePage() {
   }
 
   const isTodayEntrySubmitted = state.lastEntryDate ? new Date(state.lastEntryDate).toDateString() === new Date().toDateString() : false;
-  const gratitudeCardDay = isTodayEntrySubmitted && state.currentDay > 1 ? state.currentDay - 1 : state.currentDay;
-  const completedDays = state.entries.length;
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
-        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onExport={handleExportData} onImport={handleImportClick} />
-        <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImportData}
-            accept="application/json"
-            className="hidden"
-            data-testid="file-input"
-        />
+        <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onExport={() => {}} onImport={() => {}} />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 
                     prompt={currentPrompt}
-                    day={gratitudeCardDay}
+                    day={state.currentDay}
                     isSubmittedToday={isTodayEntrySubmitted}
                     onEntrySubmit={handleAddEntry}
                 />
@@ -355,13 +272,13 @@ export default function GratitudeChallengePage() {
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                     <StatsCard icon={Star} title={t('currentStreak')} value={t('days').replace('{count}', String(state.streak))} />
                 </motion.div>
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
                     <JournalStatsCard entries={state.entries} />
                 </motion.div>
             </div>
             
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-2">
-                <ProgressCard completedDays={completedDays} totalDays={CHALLENGE_DURATION} />
+                <ProgressCard currentDay={state.currentDay} totalDays={CHALLENGE_DURATION} isCompleted={isTodayEntrySubmitted}/>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
@@ -392,3 +309,5 @@ export default function GratitudeChallengePage() {
     </main>
   );
 }
+
+    

@@ -16,7 +16,6 @@ const setupInitialState = async (page) => {
     ],
     currentDay: 3,
     streak: 2,
-    points: 25,
     unlockedBadges: ['entry-1'],
     lastEntryDate: yesterday.toISOString(),
   };

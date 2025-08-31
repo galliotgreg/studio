@@ -13,7 +13,6 @@ const mockState: GratitudeState = {
   entries: [{ day: 1, date: '2024-01-01T10:00:00.000Z', text: 'Test entry', prompt: 'Test prompt' }],
   currentDay: 2,
   streak: 1,
-  points: 10,
   unlockedBadges: ['entry-1'],
   lastEntryDate: '2024-01-01T10:00:00.000Z',
 };
@@ -98,7 +97,7 @@ describe('GratitudeChallengePage - Import/Export', () => {
   });
 
   it('should import data from a valid JSON file', async () => {
-    const importedState: GratitudeState = { ...mockState, points: 100 };
+    const importedState: GratitudeState = { ...mockState, streak: 100 };
     const file = new File([JSON.stringify(importedState)], 'gratitude-backup.json', { type: 'application/json' });
     const fileInput = screen.getByTestId('file-input');
 

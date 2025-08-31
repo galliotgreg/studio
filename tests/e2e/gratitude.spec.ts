@@ -16,8 +16,6 @@ test.describe('Gratitude Challenge App', () => {
       await expect(page.getByText('Jour 1 : Gratitude Quotidienne')).toBeVisible();
       await expect(page.getByText('Série actuelle')).toBeVisible();
       await expect(page.getByText('0 Jours')).toBeVisible();
-      await expect(page.getByText('Total des points')).toBeVisible();
-      await expect(page.getByText('0').nth(1)).toBeVisible(); // The second '0' for points
     });
 
     test('should allow submitting a gratitude entry', async ({ page }) => {
@@ -31,7 +29,6 @@ test.describe('Gratitude Challenge App', () => {
 
       // Check that stats are updated
       await expect(page.getByText('1 Jours')).toBeVisible();
-      await expect(page.getByText('10')).toBeVisible(); // 10 points for first entry
 
       // The page should now show Day 2 prompt area is locked
       await expect(page.getByText('Jour 1 : Gratitude Quotidienne')).toBeVisible();
@@ -40,7 +37,6 @@ test.describe('Gratitude Challenge App', () => {
        await page.reload();
        await expect(page.getByText('Merci pour votre contribution !')).toBeVisible();
        await expect(page.getByText('1 Jours')).toBeVisible();
-       await expect(page.getByText('10')).toBeVisible();
     });
 
     test('should not allow submitting another entry on the same day', async ({ page }) => {
@@ -66,6 +62,5 @@ test.describe('Gratitude Challenge App', () => {
 
       // Check that stats are NOT updated
       await expect(page.getByText('0 Jours')).toBeVisible();
-      await expect(page.getByText('0').nth(1)).toBeVisible();
     });
 });

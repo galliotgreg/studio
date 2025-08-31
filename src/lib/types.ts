@@ -26,7 +26,6 @@ export interface GratitudeState {
   entries: GratitudeEntry[];
   currentDay: number;
   streak: number;
-  points: number;
   unlockedBadges: string[];
   lastEntryDate: string | null;
 }
