@@ -52,7 +52,7 @@
     "badge.streak-30.name": "Gratitude Master",
     "badge.streak-30.description": "Maintained a 30-day streak.",
     "badge.share-1.name": "Open Heart",
-    "badge.share-1.description": "Shared gratitude for the first time.",
+    "badge.share-1.description": "Shared a journal entry via a locally generated image.",
     "themes": "Themes",
     "viewJournal": "View Journal",
     "share": "Share",
@@ -85,9 +85,8 @@
     "theme.light": "Light",
     "theme.dark": "Dark",
     "theme.modern": "Modern",
-    "theme.nature": "Nature",
-    "theme.ocean": "Ocean",
-    "theme.sunset": "Sunset",
     "theme.grimoire": "Grimoire",
-    "close": "Close"
+    "close": "Close",
+    "theme.locked": "Theme Locked",
+    "theme.unlockCondition": "To unlock this theme, you must first earn the following badge:"
 }

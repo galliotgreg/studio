@@ -52,7 +52,7 @@
     "badge.streak-30.name": "Maître de la Gratitude",
     "badge.streak-30.description": "A maintenu une série de 30 jours.",
     "badge.share-1.name": "Coeur Ouvert",
-    "badge.share-1.description": "A partagé sa gratitude pour la première fois.",
+    "badge.share-1.description": "A partagé une entrée de journal via une image générée localement.",
     "themes": "Thèmes",
     "viewJournal": "Voir le journal",
     "share": "Partager",
@@ -85,9 +85,8 @@
     "theme.light": "Clair",
     "theme.dark": "Sombre",
     "theme.modern": "Moderne",
-    "theme.nature": "Nature",
-    "theme.ocean": "Océan",
-    "theme.sunset": "Crépuscule",
     "theme.grimoire": "Grimoire",
-    "close": "Fermer"
+    "close": "Fermer",
+    "theme.locked": "Thème verrouillé",
+    "theme.unlockCondition": "Pour débloquer ce thème, vous devez d'abord obtenir le badge suivant :"
 }
