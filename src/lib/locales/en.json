@@ -9,7 +9,6 @@
     "submittedDescription": "You've completed your gratitude for today. See you tomorrow!",
     "currentStreak": "Current Streak",
     "days": "{count} Days",
-    "totalPoints": "Total Points",
     "challengeProgress": "Challenge Progress",
     "progressDescription": "You have completed {day} days of your {totalDays}-day journey.",
     "myBadges": "My Badges",
@@ -36,7 +35,7 @@
     "settings": "Settings",
     "resetChallenge": "Reset Challenge",
     "resetWarningTitle": "Are you sure?",
-    "resetWarningDescription": "This will permanently delete all your journal entries, points, and badges. This action cannot be undone.",
+    "resetWarningDescription": "This will permanently delete all your journal entries and badges. This action cannot be undone.",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "badge.entry-1.name": "First Step",
@@ -88,5 +87,10 @@
     "theme.grimoire": "Grimoire",
     "close": "Close",
     "theme.locked": "Theme Locked",
-    "theme.unlockCondition": "To unlock this theme, you must first earn the following badge:"
+    "theme.unlockCondition": "To unlock this theme, you must first earn the following badge:",
+    "editPrompt": "Edit your prompt for the day:",
+    "editEntry": "Edit",
+    "saveChanges": "Save Changes",
+    "entryUpdatedTitle": "Entry Updated",
+    "entryUpdatedDescription": "Your gratitude entry has been successfully updated."
 }

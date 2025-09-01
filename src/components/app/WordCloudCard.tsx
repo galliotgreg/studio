@@ -10,74 +10,115 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
 import { useLanguage } from "./LanguageProvider";
 import type { GratitudeEntry } from "@/lib/types";
-import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
+import { cn } from "@/lib/utils";
 
-interface WordCloudCardProps {
-    entries: GratitudeEntry[];
-}
+// Stop words to filter out common words from the cloud
+const STOP_WORDS_FR = new Set(['le', 'la', 'les', 'de', 'des', 'du', 'et', 'à', 'un', 'une', 'pour', 'dans', 'par', 'je', 'tu', 'il', 'elle', 'nous', 'vous', 'ils', 'elles', 'sont', 'est', 'ai', 'as', 'a', 'avons', 'avez', 'ont', 'suis', 'es', 'sommes', 'etes', 'mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses', 'notre', 'votre', 'leur', 'leurs', 'ce', 'cet', 'cette', 'ces', 'que', 'qui', 'quoi', 'plus', 'avec', 'comme', 'pas', 'sur', 'se', 'au', 'aux', 'ne', 'en']);
+const STOP_WORDS_EN = new Set(['the', 'a', 'an', 'and', 'i', 'you', 'he', 'she', 'it', 'we', 'they', 'are', 'is', 'am', 'was', 'were', 'for', 'in', 'on', 'of', 'to', 'by', 'with', 'my', 'your', 'his', 'her', 'its', 'our', 'their', 'that', 'this', 'these', 'those', 'not', 'but', 'at']);
+
+
+const normalizeWord = (word: string): string => {
+    return word
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+};
 
 interface WordFrequency {
     text: string;
     value: number;
 }
 
-const commonWords = new Set(["le", "la", "les", "un", "une", "des", "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "suis", "es", "est", "sommes", "etes", "sont", "pour", "de", "du", "et", "à", "en", "que", "qui", "dans", "avec", "ce", "cet", "cette", "ces", "mon", "ma", "mes", "the", "a", "an", "i", "you", "he", "she", "it", "we", "they", "am", "is", "are", "for", "of", "and", "in", "with", "that", "this", "my"]);
+// Color palette for the word cloud
+const colorPalette = [
+    "text-primary",
+    "text-foreground",
+    "text-foreground/80",
+    "text-muted-foreground",
+    "text-foreground/60"
+];
+
+
+interface WordCloudCardProps {
+    entries: GratitudeEntry[];
+}
 
 
 export function WordCloudCard({ entries }: WordCloudCardProps) {
-    const { t } = useLanguage();
-    const [wordCloudData, setWordCloudData] = React.useState<WordFrequency[]>([]);
+    const { t, language } = useLanguage();
+    const [wordData, setWordData] = React.useState<WordFrequency[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
-        const generateWordCloud = () => {
-            if (entries.length === 0) {
-                setIsLoading(false);
-                setWordCloudData([]);
-                return;
-            }
+        setIsLoading(true);
 
-            setIsLoading(true);
-            const allText = entries.map(e => e.text).join(" ");
-            
-            const localWordFrequencies: { [key: string]: number } = {};
-            const allWords = allText.toLowerCase().match(/\b(\p{L}{3,})\b/gu) || [];
-
-            allWords.forEach(word => {
-                if (!commonWords.has(word)) {
-                    localWordFrequencies[word] = (localWordFrequencies[word] || 0) + 1;
-                }
-            });
-            
-            const data = Object.entries(localWordFrequencies)
-                .map(([text, value]) => ({ text, value }))
-                .sort((a, b) => b.value - a.value)
-                .slice(0, 30);
-            
-            setWordCloudData(data);
+        if (entries.length === 0) {
+            setWordData([]);
             setIsLoading(false);
-        };
+            return;
+        }
 
-        generateWordCloud();
-    }, [entries]);
+        const allText = entries.map(e => e.text).join(" ");
+        const allWords = allText.match(/\p{L}{3,}/gu) || [];
+        
+        const wordFrequencies = new Map<string, { original: string, count: number }>();
+        
+        allWords.forEach(word => {
+            const normalizedWord = normalizeWord(word);
+            const existing = wordFrequencies.get(normalizedWord);
+        
+            if (existing) {
+                existing.count++;
+            } else {
+                wordFrequencies.set(normalizedWord, { original: word, count: 1 });
+            }
+        });
+
+        const stopWords = language === 'fr' ? STOP_WORDS_FR : STOP_WORDS_EN;
+        
+        const filteredData = Array.from(wordFrequencies.values())
+            .filter(item => !stopWords.has(normalizeWord(item.original)));
+
+        const sortedData = filteredData
+            .map(item => ({ text: item.original, value: item.count }))
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 30);
+
+
+        setWordData(sortedData);
+        setIsLoading(false);
+    }, [entries, language]);
 
     if (entries.length === 0) {
         return null;
     }
 
-    const maxFrequency = Math.max(...wordCloudData.map(d => d.value), 1);
+    const getWordStyle = (value: number, min: number, max: number, count: number): React.CSSProperties => {
+        if (max === min) return { fontSize: '1.5rem', fontWeight: 600 };
+    
+        // Adjust size range based on the number of words.
+        // More words = smaller max size to fit everything.
+        // Fewer words = larger min and max size to fill space.
+        const baseSize = count < 10 ? 1.8 : (count < 20 ? 1.4 : 1.0);
+        const sizeRange = count < 10 ? 3.5 : (count < 20 ? 2.5 : 2.0);
+        
+        const weightRange = 500; // From 400 to 900
+        const normalizedValue = (value - min) / (max - min);
 
-    const colors = [
-        "text-primary",
-        "text-secondary-foreground",
-        "text-accent-foreground",
-        "text-destructive",
-        "text-foreground",
-    ];
+        const fontSize = baseSize + normalizedValue * sizeRange;
+        const fontWeight = 400 + normalizedValue * weightRange;
+        
+        return { fontSize: `${fontSize}rem`, fontWeight };
+    };
+
+    const minFreq = wordData.length > 0 ? Math.min(...wordData.map(d => d.value)) : 1;
+    const maxFreq = wordData.length > 0 ? Math.max(...wordData.map(d => d.value)) : 1;
+
 
     return (
         <Card className="transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
@@ -86,27 +127,28 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                     <Cloud className="text-primary" />
                     <span>{t("wordCloudTitle")}</span>
                 </CardTitle>
+                 <CardDescription>
+                    {t('wordCloudDescription')}
+                </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="flex flex-wrap gap-x-2 gap-y-1 justify-center items-center min-h-[100px]">
+                <div className="flex flex-wrap gap-x-3 gap-y-1 justify-center items-center min-h-[150px]">
                     {isLoading ? (
-                       <div data-testid="loader" className="w-full space-y-2">
-                           <Skeleton className="h-4 w-3/4" />
-                           <Skeleton className="h-4 w-1/2" />
-                           <Skeleton className="h-4 w-5/6" />
+                       <div data-testid="loader" className="w-full space-y-2 p-4">
+                           <Skeleton className="h-6 w-3/4" />
+                           <Skeleton className="h-5 w-1/2" />
+                           <Skeleton className="h-5 w-5/6" />
+                           <Skeleton className="h-4 w-2/3" />
                        </div>
-                    ) : wordCloudData.length > 0 ? (
-                        wordCloudData.map((word, index) => (
-                            <motion.span
-                                key={word.text}
+                    ) : wordData.length > 0 ? (
+                        wordData.map((word, index) => (
+                           <motion.span
+                                key={`${word.text}-${index}`}
                                 initial={{ opacity: 0, scale: 0.5 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: index * 0.05 }}
-                                className={cn(colors[index % colors.length], "transition-all duration-300 hover:scale-110")}
-                                style={{ 
-                                    fontSize: `${0.75 + (word.value / maxFrequency) * 1.25}rem`,
-                                    fontWeight: 400 + Math.round((word.value / maxFrequency) * 300),
-                                 }}
+                                style={getWordStyle(word.value, minFreq, maxFreq, wordData.length)}
+                                className={cn("leading-none", colorPalette[index % colorPalette.length])}
                             >
                                 {word.text}
                             </motion.span>

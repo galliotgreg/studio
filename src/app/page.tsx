@@ -5,7 +5,7 @@ import * as React from "react";
 import { Star, Award, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
 
-import type { GratitudeState, Quote, Badge as BadgeType } from "@/lib/types";
+import type { GratitudeState, Quote, GratitudeEntry } from "@/lib/types";
 import { BADGES } from "@/lib/data";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/app/Header";
@@ -128,7 +128,7 @@ export default function GratitudeChallengePage() {
   }, [state, getQuotes, getPrompts, language]);
 
 
-  const handleAddEntry = (text: string) => {
+  const handleAddEntry = (text: string, prompt: string) => {
     if (!text.trim() || !state) return;
     
     const today = new Date();
@@ -145,11 +145,11 @@ export default function GratitudeChallengePage() {
       return;
     }
 
-    const newEntry = {
+    const newEntry: GratitudeEntry = {
       day: state.currentDay,
       date: today.toISOString(),
       text,
-      prompt: currentPrompt,
+      prompt: prompt,
     };
 
     const yesterday = new Date();
@@ -157,7 +157,6 @@ export default function GratitudeChallengePage() {
 
     const newStreak = lastEntryDate === yesterday.toDateString() ? state.streak + 1 : 1;
     
-    // Only increment day if the challenge is not complete
     const isCompleted = state.currentDay >= CHALLENGE_DURATION && lastEntryDate !== todayStr
     const newCurrentDay = !isCompleted ? state.currentDay + 1 : state.currentDay;
 
@@ -196,6 +195,23 @@ export default function GratitudeChallengePage() {
         title: t('gratitudeSaved'),
         description: t('gratitudeSavedDescription'),
     });
+  };
+
+  const handleUpdateEntry = (updatedText: string, updatedPrompt: string) => {
+    if (!state) return;
+
+    const updatedEntries = [...state.entries];
+    const lastEntry = updatedEntries[updatedEntries.length - 1];
+
+    if (lastEntry) {
+      lastEntry.text = updatedText;
+      lastEntry.prompt = updatedPrompt;
+      setState({ ...state, entries: updatedEntries });
+      toast({
+        title: t('entryUpdatedTitle'),
+        description: t('entryUpdatedDescription'),
+      });
+    }
   };
 
   const handleNewQuote = () => {
@@ -285,7 +301,6 @@ export default function GratitudeChallengePage() {
             }
             const importedState = JSON.parse(text) as GratitudeState;
 
-            // Basic validation
             if (
                 !importedState ||
                 typeof importedState.currentDay !== 'number' ||
@@ -301,7 +316,6 @@ export default function GratitudeChallengePage() {
             console.error("Import failed", error);
             toast({ title: t('importErrorTitle'), description: t('importErrorDescription'), variant: "destructive" });
         } finally {
-            // Reset file input
             if(event.target) event.target.value = '';
         }
     };
@@ -327,8 +341,7 @@ export default function GratitudeChallengePage() {
   }
 
   const isTodayEntrySubmitted = state.lastEntryDate ? new Date(state.lastEntryDate).toDateString() === new Date().toDateString() : false;
-  const gratitudeCardDay = isTodayEntrySubmitted && state.currentDay > 1 ? state.currentDay - 1 : state.currentDay;
-  const completedDays = state.entries.length;
+  const lastEntry = isTodayEntrySubmitted ? state.entries[state.entries.length - 1] : null;
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
@@ -345,9 +358,11 @@ export default function GratitudeChallengePage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 
                     prompt={currentPrompt}
-                    day={gratitudeCardDay}
+                    day={lastEntry ? lastEntry.day : state.currentDay}
                     isSubmittedToday={isTodayEntrySubmitted}
-                    onEntrySubmit={handleAddEntry}
+                    onAddEntry={handleAddEntry}
+                    onUpdateEntry={handleUpdateEntry}
+                    submittedEntry={lastEntry}
                 />
             </motion.div>
             
@@ -361,7 +376,7 @@ export default function GratitudeChallengePage() {
             </div>
             
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-2">
-                <ProgressCard completedDays={completedDays} totalDays={CHALLENGE_DURATION} />
+                <ProgressCard completedDays={state.entries.length} totalDays={CHALLENGE_DURATION} />
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
