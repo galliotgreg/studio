@@ -52,7 +52,8 @@ export function GratitudeCard({
   
   React.useEffect(() => {
       setEditablePrompt(prompt);
-      setIsEditingPrompt(false);
+      // Do not reset editing mode when the prompt prop changes,
+      // as it could change when an entry is submitted.
   }, [prompt]);
 
 
@@ -64,8 +65,9 @@ export function GratitudeCard({
   });
 
   React.useEffect(() => {
+    // Only reset the form if the day changes, which means a new prompt is presented.
     form.reset({ entry: "" });
-  }, [editablePrompt, form]);
+  }, [day, form]);
 
   function onSubmit(data: z.infer<typeof GratitudeFormSchema>) {
     onEntrySubmit(data.entry, editablePrompt);
