@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle, Sparkles } from "lucide-react";
+import { CheckCircle, Sparkles, Pencil } from "lucide-react";
 
 import {
   Card,
@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useLanguage } from "@/components/app/LanguageProvider";
+import { cn } from "@/lib/utils";
 
 const GratitudeFormSchema = z.object({
   entry: z.string().min(10, {
@@ -36,7 +37,7 @@ interface GratitudeCardProps {
   prompt: string;
   day: number;
   isSubmittedToday: boolean;
-  onEntrySubmit: (text: string) => void;
+  onEntrySubmit: (text: string, prompt: string) => void;
 }
 
 export function GratitudeCard({
@@ -46,6 +47,15 @@ export function GratitudeCard({
   onEntrySubmit,
 }: GratitudeCardProps) {
   const { t } = useLanguage();
+  const [editablePrompt, setEditablePrompt] = React.useState(prompt);
+  const [isEditingPrompt, setIsEditingPrompt] = React.useState(false);
+  
+  React.useEffect(() => {
+      setEditablePrompt(prompt);
+      setIsEditingPrompt(false);
+  }, [prompt]);
+
+
   const form = useForm<z.infer<typeof GratitudeFormSchema>>({
     resolver: zodResolver(GratitudeFormSchema),
     defaultValues: {
@@ -55,10 +65,10 @@ export function GratitudeCard({
 
   React.useEffect(() => {
     form.reset({ entry: "" });
-  }, [prompt, form]);
+  }, [editablePrompt, form]);
 
   function onSubmit(data: z.infer<typeof GratitudeFormSchema>) {
-    onEntrySubmit(data.entry);
+    onEntrySubmit(data.entry, editablePrompt);
     form.reset();
   }
   
@@ -72,8 +82,25 @@ export function GratitudeCard({
     <Card className="h-full flex flex-col transform transition-transform duration-300 hover:scale-[1.01] hover:shadow-xl">
         <CardHeader>
           <CardTitle className="text-primary">{t('dailyGratitude').replace('{day}', String(day))}</CardTitle>
-          <CardDescription className="text-lg font-serif italic pt-2">
-            {!isSubmittedToday ? `"${prompt}"` : t('submittedDescription')}
+          <CardDescription className="text-lg font-serif italic pt-2 flex items-center gap-2">
+            {isSubmittedToday ? (
+                <span>&ldquo;{prompt}&rdquo;</span>
+            ) : isEditingPrompt ? (
+                <Textarea
+                    value={editablePrompt}
+                    onChange={(e) => setEditablePrompt(e.target.value)}
+                    onBlur={() => setIsEditingPrompt(false)}
+                    className="flex-grow"
+                    autoFocus
+                />
+            ) : (
+                <>
+                    <span className="flex-grow">&ldquo;{editablePrompt}&rdquo;</span>
+                    <Button variant="ghost" size="icon" onClick={() => setIsEditingPrompt(true)} className="flex-shrink-0">
+                        <Pencil className="w-4 h-4" />
+                    </Button>
+                </>
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex-grow">

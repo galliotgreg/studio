@@ -128,7 +128,7 @@ export default function GratitudeChallengePage() {
   }, [state, getQuotes, getPrompts, language]);
 
 
-  const handleAddEntry = (text: string) => {
+  const handleAddEntry = (text: string, prompt: string) => {
     if (!text.trim() || !state) return;
     
     const today = new Date();
@@ -149,7 +149,7 @@ export default function GratitudeChallengePage() {
       day: state.currentDay,
       date: today.toISOString(),
       text,
-      prompt: currentPrompt,
+      prompt: prompt,
     };
 
     const yesterday = new Date();
