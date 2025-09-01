@@ -21,9 +21,9 @@ interface WordFrequency {
     value: number;
 }
 
-const commonWords = new Set(["le", "la", "les", "un", "une", "des", "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "suis", "es", "est", "sommes", "etes", "sont", "pour", "de", "du", "et", "a", "en", "que", "qui", "dans", "avec", "ce", "cet", "cette", "ces", "mon", "ma", "mes", "ete", "the", "a", "an", "i", "you", "he", "she", "it", "we", "they", "am", "is", "are", "for", "of", "and", "in", "with", "that", "this", "my"]);
+const commonWordsFr = new Set(["le", "la", "les", "un", "une", "des", "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "suis", "es", "est", "sommes", "etes", "sont", "pour", "de", "du", "et", "à", "a", "en", "que", "qui", "dans", "avec", "ce", "cet", "cette", "ces", "mon", "ma", "mes", "ton", "ta", "tes", "son", "sa", "ses", "notre", "votre", "leur", "nos", "vos", "leurs", "été", "avais", "avait", "avons", "avez", "ont", "etais", "etait", "etions", "etiez", "etaient"]);
+const commonWordsEn = new Set(["the", "a", "an", "i", "you", "he", "she", "it", "we", "they", "am", "is", "are", "was", "were", "be", "been", "for", "of", "and", "in", "with", "that", "this", "these", "those", "my", "your", "his", "her", "its", "our", "their"]);
 
-// Helper function to remove accents and convert to lowercase for key generation
 const normalizeText = (text: string): string => {
     return text
         .toLowerCase()
@@ -31,13 +31,12 @@ const normalizeText = (text: string): string => {
         .replace(/[\u0300-\u036f]/g, "");
 };
 
-
 interface WordCloudCardProps {
     entries: GratitudeEntry[];
 }
 
 export function WordCloudCard({ entries }: WordCloudCardProps) {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const [wordCloudData, setWordCloudData] = React.useState<WordFrequency[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
 
@@ -51,14 +50,13 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
 
             setIsLoading(true);
             const allText = entries.map(e => e.text).join(" ");
+            const commonWords = language === 'fr' ? commonWordsFr : commonWordsEn;
             
             const wordFrequencies = new Map<string, { original: string, count: number }>();
-            
             const allWords = allText.match(/\b(\p{L}{3,})\b/gu) || [];
 
             allWords.forEach(word => {
                 const normalizedWord = normalizeText(word);
-                
                 if (!commonWords.has(normalizedWord)) {
                     if (wordFrequencies.has(normalizedWord)) {
                         wordFrequencies.get(normalizedWord)!.count++;
@@ -78,7 +76,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
         };
 
         generateWordCloud();
-    }, [entries]);
+    }, [entries, language]);
 
     if (entries.length === 0) {
         return null;
