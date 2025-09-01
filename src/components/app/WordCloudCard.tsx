@@ -19,7 +19,12 @@ interface WordCloudCardProps {
     entries: GratitudeEntry[];
 }
 
-// Étape 2: Création de la fonction de normalisation
+// Stop words for both languages
+const STOP_WORDS_FR = new Set(['le', 'la', 'les', 'de', 'des', 'du', 'et', 'à', 'un', 'une', 'pour', 'dans', 'par', 'je', 'tu', 'il', 'elle', 'nous', 'vous', 'ils', 'elles', 'sont', 'est', 'ai', 'as', 'a', 'avons', 'avez', 'ont', 'suis', 'es', 'sommes', 'etes', 'mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses', 'notre', 'votre', 'leur', 'leurs', 'ce', 'cet', 'cette', 'ces', 'que', 'qui', 'quoi', 'plus', 'avec', 'comme', 'pas', 'sur', 'se', 'au', 'aux', 'ne', 'en']);
+const STOP_WORDS_EN = new Set(['the', 'a', 'an', 'and', 'i', 'you', 'he', 'she', 'it', 'we', 'they', 'are', 'is', 'am', 'was', 'were', 'for', 'in', 'on', 'of', 'to', 'by', 'with', 'my', 'your', 'his', 'her', 'its', 'our', 'their', 'that', 'this', 'these', 'those', 'not', 'but', 'at']);
+
+
+// Simple normalization function (lowercase, remove accents)
 const normalizeWord = (word: string) => {
     return word
         .toLowerCase()
@@ -28,26 +33,25 @@ const normalizeWord = (word: string) => {
 };
 
 interface WordFrequency {
-    original: string;
-    count: number;
+    text: string;
+    value: number;
 }
 
 export function WordCloudCard({ entries }: WordCloudCardProps) {
-    const { t } = useLanguage();
-    // L'état stockera maintenant le résultat de l'étape 2
-    const [wordFrequencies, setWordFrequencies] = React.useState<WordFrequency[]>([]);
+    const { t, language } = useLanguage();
+    const [wordData, setWordData] = React.useState<WordFrequency[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
         setIsLoading(true);
 
         if (entries.length === 0) {
-            setWordFrequencies([]);
+            setWordData([]);
             setIsLoading(false);
             return;
         }
 
-        // Étape 1 : Agréger et extraire les mots (inchangé)
+        // Étape 1 : Agréger et extraire les mots
         const allText = entries.map(e => e.text).join(" ");
         const allWords = allText.match(/\p{L}{3,}/gu) || [];
 
@@ -60,20 +64,27 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             const existingEntry = wordMap.get(normalizedKey);
 
             if (existingEntry) {
-                // Si le mot existe déjà, on incrémente son compteur
                 existingEntry.count++;
             } else {
-                // Sinon, on l'ajoute en gardant sa forme originale
                 wordMap.set(normalizedKey, { original: word, count: 1 });
             }
         });
         
-        // On transforme la Map en tableau pour la stocker dans l'état
-        const frequencies = Array.from(wordMap.values());
-        setWordFrequencies(frequencies);
+        // Étape 3 : Filtrage et Finalisation
+        const stopWords = language === 'fr' ? STOP_WORDS_FR : STOP_WORDS_EN;
+        const filteredAndSortedData = Array.from(wordMap.entries())
+            .filter(([normalizedKey, _]) => !stopWords.has(normalizedKey))
+            .map(([_, data]) => ({
+                text: data.original,
+                value: data.count,
+            }))
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 30);
 
+
+        setWordData(filteredAndSortedData);
         setIsLoading(false);
-    }, [entries]);
+    }, [entries, language]);
 
     if (entries.length === 0) {
         return null;
@@ -86,8 +97,8 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                     <Cloud className="text-primary" />
                     <span>{t("wordCloudTitle")}</span>
                 </CardTitle>
-                <CardDescription>
-                    Vérification - Étape 2 : Comptage des mots
+                 <CardDescription>
+                    Vérification - Étape 3 : Filtrage et Tri
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -98,10 +109,10 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                            <Skeleton className="h-4 w-1/2" />
                            <Skeleton className="h-4 w-5/6" />
                        </div>
-                    ) : wordFrequencies.length > 0 ? (
-                        // Affichage temporaire pour vérification
-                        <p className="text-sm text-muted-foreground text-left">
-                           {JSON.stringify(wordFrequencies, null, 2)}
+                    ) : wordData.length > 0 ? (
+                         // Affichage temporaire pour vérification
+                        <p className="text-sm text-muted-foreground text-left w-full">
+                           {JSON.stringify(wordData, null, 2)}
                         </p>
                     ) : (
                         <p className="text-muted-foreground text-sm">{t('noEntriesYetCloud')}</p>
