@@ -63,11 +63,9 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             return;
         }
 
-        // Étape 1: Agréger et extraire les mots
         const allText = entries.map(e => e.text).join(" ");
         const allWords = allText.match(/\p{L}{3,}/gu) || [];
-
-        // Étape 2: Normalisation et comptage intelligent
+        
         const wordFrequencies = new Map<string, { original: string, count: number }>();
         
         allWords.forEach(word => {
@@ -81,13 +79,13 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             }
         });
 
-        // Étape 3: Filtrage et finalisation
         const stopWords = language === 'fr' ? STOP_WORDS_FR : STOP_WORDS_EN;
+        
         const filteredData = Array.from(wordFrequencies.values())
-            .filter(item => !stopWords.has(normalizeWord(item.text)))
-            .map(item => ({ text: item.original, value: item.count }));
+            .filter(item => !stopWords.has(normalizeWord(item.original)));
 
         const sortedData = filteredData
+            .map(item => ({ text: item.original, value: item.count }))
             .sort((a, b) => b.value - a.value)
             .slice(0, 30);
 
