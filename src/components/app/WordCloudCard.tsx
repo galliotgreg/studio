@@ -23,14 +23,17 @@ interface WordFrequency {
 
 const commonWords = new Set(["le", "la", "les", "un", "une", "des", "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "suis", "es", "est", "sommes", "etes", "sont", "pour", "de", "du", "et", "a", "en", "que", "qui", "dans", "avec", "ce", "cet", "cette", "ces", "mon", "ma", "mes", "ete", "the", "a", "an", "i", "you", "he", "she", "it", "we", "they", "am", "is", "are", "for", "of", "and", "in", "with", "that", "this", "my"]);
 
-// Helper function to remove accents and convert to singular (basic version)
-const normalizeText = (text: string) => {
-    let normalized = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    // A very basic attempt to handle plural 's'. A more robust solution would use a library.
-    if (normalized.endsWith('s')) {
-        normalized = normalized.slice(0, -1);
-    }
-    return normalized;
+// Helper function to remove accents and convert to lowercase for key generation
+const normalizeText = (text: string): string => {
+    return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+};
+
+
+interface WordCloudCardProps {
+    entries: GratitudeEntry[];
 }
 
 export function WordCloudCard({ entries }: WordCloudCardProps) {
@@ -49,22 +52,27 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             setIsLoading(true);
             const allText = entries.map(e => e.text).join(" ");
             
-            const wordFrequencies: { [key: string]: { original: string, count: number } } = {};
-            // Use a regex that supports Unicode letters
-            const allWords = allText.toLowerCase().match(/\b(\p{L}{3,})\b/gu) || [];
+            // Use a Map for robust frequency counting, storing the original form.
+            const wordFrequencies = new Map<string, { original: string, count: number }>();
+            
+            // Regex to match words with Unicode letters, at least 3 chars long
+            const allWords = allText.match(/\b(\p{L}{3,})\b/gu) || [];
 
             allWords.forEach(word => {
                 const normalizedWord = normalizeText(word);
-                if (!commonWords.has(normalizedWord) && !commonWords.has(normalizeText(word.replace(/s$/, '')))) {
-                    if (wordFrequencies[normalizedWord]) {
-                        wordFrequencies[normalizedWord].count++;
+                
+                if (!commonWords.has(normalizedWord)) {
+                    if (wordFrequencies.has(normalizedWord)) {
+                        // Increment count if the normalized form already exists
+                        wordFrequencies.get(normalizedWord)!.count++;
                     } else {
-                        wordFrequencies[normalizedWord] = { original: word, count: 1 };
+                        // Otherwise, add the new word, storing its original form
+                        wordFrequencies.set(normalizedWord, { original: word, count: 1 });
                     }
                 }
             });
             
-            const data = Object.values(wordFrequencies)
+            const data = Array.from(wordFrequencies.values())
                 .map(item => ({ text: item.original, value: item.count }))
                 .sort((a, b) => b.value - a.value)
                 .slice(0, 30);
@@ -109,7 +117,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                     ) : wordCloudData.length > 0 ? (
                         wordCloudData.map((word, index) => (
                             <motion.span
-                                key={word.text}
+                                key={word.text + index}
                                 initial={{ opacity: 0, scale: 0.5 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: index * 0.05 }}
