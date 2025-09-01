@@ -25,8 +25,12 @@ interface WordFrequency {
     value: number;
 }
 
-const commonWords = new Set(["le", "la", "les", "un", "une", "des", "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "suis", "es", "est", "sommes", "etes", "sont", "pour", "de", "du", "et", "à", "en", "que", "qui", "dans", "avec", "ce", "cet", "cette", "ces", "mon", "ma", "mes", "the", "a", "an", "i", "you", "he", "she", "it", "we", "they", "am", "is", "are", "for", "of", "and", "in", "with", "that", "this", "my"]);
+const commonWords = new Set(["le", "la", "les", "un", "une", "des", "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "suis", "es", "est", "sommes", "etes", "sont", "pour", "de", "du", "et", "a", "en", "que", "qui", "dans", "avec", "ce", "cet", "cette", "ces", "mon", "ma", "mes", "ete", "the", "a", "an", "i", "you", "he", "she", "it", "we", "they", "am", "is", "are", "for", "of", "and", "in", "with", "that", "this", "my"]);
 
+// Helper function to remove accents
+const normalizeText = (text: string) => {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 
 export function WordCloudCard({ entries }: WordCloudCardProps) {
     const { t } = useLanguage();
@@ -45,10 +49,14 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             const allText = entries.map(e => e.text).join(" ");
             
             const localWordFrequencies: { [key: string]: number } = {};
+            // Use a regex that supports Unicode letters
             const allWords = allText.toLowerCase().match(/\b(\p{L}{3,})\b/gu) || [];
 
             allWords.forEach(word => {
-                if (!commonWords.has(word)) {
+                // Normalize both the word and the common words list for comparison
+                const normalizedWord = normalizeText(word);
+                if (!commonWords.has(normalizedWord)) {
+                    // Store the frequency with the original word form
                     localWordFrequencies[word] = (localWordFrequencies[word] || 0) + 1;
                 }
             });
