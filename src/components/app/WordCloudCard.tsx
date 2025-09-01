@@ -16,10 +16,6 @@ import type { GratitudeEntry } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 
-interface WordCloudCardProps {
-    entries: GratitudeEntry[];
-}
-
 interface WordFrequency {
     text: string;
     value: number;
@@ -27,9 +23,14 @@ interface WordFrequency {
 
 const commonWords = new Set(["le", "la", "les", "un", "une", "des", "je", "tu", "il", "elle", "on", "nous", "vous", "ils", "elles", "suis", "es", "est", "sommes", "etes", "sont", "pour", "de", "du", "et", "a", "en", "que", "qui", "dans", "avec", "ce", "cet", "cette", "ces", "mon", "ma", "mes", "ete", "the", "a", "an", "i", "you", "he", "she", "it", "we", "they", "am", "is", "are", "for", "of", "and", "in", "with", "that", "this", "my"]);
 
-// Helper function to remove accents
+// Helper function to remove accents and convert to singular (basic version)
 const normalizeText = (text: string) => {
-    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let normalized = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    // A very basic attempt to handle plural 's'. A more robust solution would use a library.
+    if (normalized.endsWith('s')) {
+        normalized = normalized.slice(0, -1);
+    }
+    return normalized;
 }
 
 export function WordCloudCard({ entries }: WordCloudCardProps) {
@@ -48,21 +49,23 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             setIsLoading(true);
             const allText = entries.map(e => e.text).join(" ");
             
-            const localWordFrequencies: { [key: string]: number } = {};
+            const wordFrequencies: { [key: string]: { original: string, count: number } } = {};
             // Use a regex that supports Unicode letters
             const allWords = allText.toLowerCase().match(/\b(\p{L}{3,})\b/gu) || [];
 
             allWords.forEach(word => {
-                // Normalize both the word and the common words list for comparison
                 const normalizedWord = normalizeText(word);
-                if (!commonWords.has(normalizedWord)) {
-                    // Store the frequency with the original word form
-                    localWordFrequencies[word] = (localWordFrequencies[word] || 0) + 1;
+                if (!commonWords.has(normalizedWord) && !commonWords.has(normalizeText(word.replace(/s$/, '')))) {
+                    if (wordFrequencies[normalizedWord]) {
+                        wordFrequencies[normalizedWord].count++;
+                    } else {
+                        wordFrequencies[normalizedWord] = { original: word, count: 1 };
+                    }
                 }
             });
             
-            const data = Object.entries(localWordFrequencies)
-                .map(([text, value]) => ({ text, value }))
+            const data = Object.values(wordFrequencies)
+                .map(item => ({ text: item.original, value: item.count }))
                 .sort((a, b) => b.value - a.value)
                 .slice(0, 30);
             
