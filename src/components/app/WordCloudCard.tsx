@@ -52,10 +52,8 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             setIsLoading(true);
             const allText = entries.map(e => e.text).join(" ");
             
-            // Use a Map for robust frequency counting, storing the original form.
             const wordFrequencies = new Map<string, { original: string, count: number }>();
             
-            // Regex to match words with Unicode letters, at least 3 chars long
             const allWords = allText.match(/\b(\p{L}{3,})\b/gu) || [];
 
             allWords.forEach(word => {
@@ -63,10 +61,8 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                 
                 if (!commonWords.has(normalizedWord)) {
                     if (wordFrequencies.has(normalizedWord)) {
-                        // Increment count if the normalized form already exists
                         wordFrequencies.get(normalizedWord)!.count++;
                     } else {
-                        // Otherwise, add the new word, storing its original form
                         wordFrequencies.set(normalizedWord, { original: word, count: 1 });
                     }
                 }
