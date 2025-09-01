@@ -9,7 +9,6 @@
     "submittedDescription": "Vous avez terminé votre gratitude pour aujourd'hui. À demain !",
     "currentStreak": "Série actuelle",
     "days": "{count} Jours",
-    "totalPoints": "Total des points",
     "challengeProgress": "Progression du défi",
     "progressDescription": "Vous avez terminé {day} jours sur votre parcours de {totalDays} jours.",
     "myBadges": "Mes Badges",
@@ -36,7 +35,7 @@
     "settings": "Paramètres",
     "resetChallenge": "Réinitialiser le défi",
     "resetWarningTitle": "Êtes-vous sûr(e) ?",
-    "resetWarningDescription": "Cela supprimera définitivement toutes vos entrées de journal, points et badges. Cette action est irréversible.",
+    "resetWarningDescription": "Cela supprimera définitivement toutes vos entrées de journal et badges. Cette action est irréversible.",
     "cancel": "Annuler",
     "confirm": "Confirmer",
     "badge.entry-1.name": "Premier Pas",
@@ -88,5 +87,10 @@
     "theme.grimoire": "Grimoire",
     "close": "Fermer",
     "theme.locked": "Thème verrouillé",
-    "theme.unlockCondition": "Pour débloquer ce thème, vous devez d'abord obtenir le badge suivant :"
+    "theme.unlockCondition": "Pour débloquer ce thème, vous devez d'abord obtenir le badge suivant :",
+    "editPrompt": "Modifiez votre question du jour :",
+    "editEntry": "Modifier",
+    "saveChanges": "Enregistrer",
+    "entryUpdatedTitle": "Entrée mise à jour",
+    "entryUpdatedDescription": "Votre entrée de gratitude a été mise à jour avec succès."
 }
