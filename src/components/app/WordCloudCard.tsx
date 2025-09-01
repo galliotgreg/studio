@@ -44,6 +44,11 @@ const colorPalette = [
 ];
 
 
+interface WordCloudCardProps {
+    entries: GratitudeEntry[];
+}
+
+
 export function WordCloudCard({ entries }: WordCloudCardProps) {
     const { t, language } = useLanguage();
     const [wordData, setWordData] = React.useState<WordFrequency[]>([]);
@@ -58,33 +63,36 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
             return;
         }
 
-        // Step 1: Aggregate and extract words
+        // Étape 1: Agréger et extraire les mots
         const allText = entries.map(e => e.text).join(" ");
         const allWords = allText.match(/\p{L}{3,}/gu) || [];
 
-        // Step 2: Intelligent normalization and counting
+        // Étape 2: Normalisation et comptage intelligent
         const wordFrequencies = new Map<string, { original: string, count: number }>();
+        
         allWords.forEach(word => {
             const normalizedWord = normalizeWord(word);
             const existing = wordFrequencies.get(normalizedWord);
-
+        
             if (existing) {
                 existing.count++;
             } else {
                 wordFrequencies.set(normalizedWord, { original: word, count: 1 });
             }
         });
-        
-        // Step 3: Filtering and Finalization
+
+        // Étape 3: Filtrage et finalisation
         const stopWords = language === 'fr' ? STOP_WORDS_FR : STOP_WORDS_EN;
-        const data = Array.from(wordFrequencies.values())
-            .map(item => ({ text: item.original, value: item.count }))
+        const filteredData = Array.from(wordFrequencies.values())
             .filter(item => !stopWords.has(normalizeWord(item.text)))
+            .map(item => ({ text: item.original, value: item.count }));
+
+        const sortedData = filteredData
             .sort((a, b) => b.value - a.value)
             .slice(0, 30);
 
 
-        setWordData(data);
+        setWordData(sortedData);
         setIsLoading(false);
     }, [entries, language]);
 
@@ -92,14 +100,19 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
         return null;
     }
 
-    const getWordStyle = (value: number, min: number, max: number): React.CSSProperties => {
-        if (max === min) return { fontSize: '1rem', fontWeight: 400 };
+    const getWordStyle = (value: number, min: number, max: number, count: number): React.CSSProperties => {
+        if (max === min) return { fontSize: '1.5rem', fontWeight: 600 };
+    
+        // Adjust size range based on the number of words.
+        // More words = smaller max size to fit everything.
+        // Fewer words = larger min and max size to fill space.
+        const baseSize = count < 10 ? 1.8 : (count < 20 ? 1.4 : 1.0);
+        const sizeRange = count < 10 ? 3.5 : (count < 20 ? 2.5 : 2.0);
         
-        const sizeRange = 2.5; // From 1rem to 3.5rem
         const weightRange = 500; // From 400 to 900
         const normalizedValue = (value - min) / (max - min);
 
-        const fontSize = 1 + normalizedValue * sizeRange;
+        const fontSize = baseSize + normalizedValue * sizeRange;
         const fontWeight = 400 + normalizedValue * weightRange;
         
         return { fontSize: `${fontSize}rem`, fontWeight };
@@ -136,7 +149,7 @@ export function WordCloudCard({ entries }: WordCloudCardProps) {
                                 initial={{ opacity: 0, scale: 0.5 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: index * 0.05 }}
-                                style={getWordStyle(word.value, minFreq, maxFreq)}
+                                style={getWordStyle(word.value, minFreq, maxFreq, wordData.length)}
                                 className={cn("leading-none", colorPalette[index % colorPalette.length])}
                             >
                                 {word.text}
