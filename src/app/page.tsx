@@ -358,7 +358,7 @@ export default function GratitudeChallengePage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
                 <GratitudeCard 
                     prompt={currentPrompt}
-                    day={state.currentDay}
+                    day={lastEntry ? lastEntry.day : state.currentDay}
                     isSubmittedToday={isTodayEntrySubmitted}
                     onAddEntry={handleAddEntry}
                     onUpdateEntry={handleUpdateEntry}
@@ -407,4 +407,3 @@ export default function GratitudeChallengePage() {
     </main>
   );
 }
-

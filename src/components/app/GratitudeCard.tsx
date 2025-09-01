@@ -106,7 +106,6 @@ export function GratitudeCard({
             className="flex flex-col h-full bg-secondary/50 rounded-lg p-8"
           >
             <div className="flex-grow">
-                <p className="text-muted-foreground mb-4 italic">&ldquo;{activePrompt}&rdquo;</p>
                 <p className="text-lg whitespace-pre-wrap">{submittedEntry?.text}</p>
             </div>
             <div className="flex justify-end mt-4">
