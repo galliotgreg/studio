@@ -2,7 +2,7 @@
 "use client";
 
 import * as React from "react";
-import { Star, Badge, Settings, Trash2, Award } from "lucide-react";
+import { Star, Award, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from 'next/link';
 
@@ -254,6 +254,7 @@ export default function GratitudeChallengePage() {
   }
 
   const isTodayEntrySubmitted = state.lastEntryDate ? new Date(state.lastEntryDate).toDateString() === new Date().toDateString() : false;
+  const streakText = `${state.streak} ${state.streak === 1 ? t('daySingular') : t('daysPlural')}`;
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
@@ -270,7 +271,7 @@ export default function GratitudeChallengePage() {
             
             <div className="flex flex-col gap-6">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                    <StatsCard icon={Star} title={t('currentStreak')} value={t('days').replace('{count}', String(state.streak))} />
+                    <StatsCard icon={Star} title={t('currentStreak')} value={streakText} />
                 </motion.div>
                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
                     <JournalStatsCard entries={state.entries} />

@@ -200,18 +200,22 @@ export default function GratitudeChallengePage() {
   const handleUpdateEntry = (updatedText: string, updatedPrompt: string) => {
     if (!state) return;
 
-    const updatedEntries = [...state.entries];
-    const lastEntry = updatedEntries[updatedEntries.length - 1];
+    setState(prevState => {
+        if (!prevState) return null;
+        const updatedEntries = [...prevState.entries];
+        const lastEntry = updatedEntries[updatedEntries.length - 1];
 
-    if (lastEntry) {
-      lastEntry.text = updatedText;
-      lastEntry.prompt = updatedPrompt;
-      setState({ ...state, entries: updatedEntries });
-      toast({
-        title: t('entryUpdatedTitle'),
-        description: t('entryUpdatedDescription'),
-      });
-    }
+        if (lastEntry) {
+            lastEntry.text = updatedText;
+            lastEntry.prompt = updatedPrompt;
+            toast({
+              title: t('entryUpdatedTitle'),
+              description: t('entryUpdatedDescription'),
+            });
+            return { ...prevState, entries: updatedEntries };
+        }
+        return prevState;
+    });
   };
 
   const handleNewQuote = () => {
@@ -342,7 +346,7 @@ export default function GratitudeChallengePage() {
 
   const isTodayEntrySubmitted = state.lastEntryDate ? new Date(state.lastEntryDate).toDateString() === new Date().toDateString() : false;
   const lastEntry = isTodayEntrySubmitted ? state.entries[state.entries.length - 1] : null;
-  const streakText = `${state.streak} ${t(state.streak === 1 ? 'daySingular' : 'daysPlural')}`;
+  const streakText = `${state.streak} ${state.streak === 1 ? t('daySingular') : t('daysPlural')}`;
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
@@ -408,5 +412,3 @@ export default function GratitudeChallengePage() {
     </main>
   );
 }
-
-
