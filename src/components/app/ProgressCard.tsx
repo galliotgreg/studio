@@ -22,6 +22,11 @@ export function ProgressCard({ completedDays, totalDays }: ProgressCardProps) {
   const { t } = useLanguage();
   const progressPercentage = (completedDays / totalDays) * 100;
   
+  const descriptionKey = completedDays === 1 ? 'progressDescriptionSingular' : 'progressDescriptionPlural';
+  const description = t(descriptionKey)
+    .replace('{day}', String(completedDays))
+    .replace('{totalDays}', String(totalDays));
+
   return (
     <Card className="transform transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl">
       <CardHeader>
@@ -30,7 +35,7 @@ export function ProgressCard({ completedDays, totalDays }: ProgressCardProps) {
             <span>{t('challengeProgress')}</span>
         </CardTitle>
         <CardDescription>
-          {t('progressDescription').replace('{day}', String(completedDays)).replace('{totalDays}', String(totalDays))}
+          {description}
         </CardDescription>
       </CardHeader>
       <CardContent>
