@@ -368,7 +368,7 @@ export default function GratitudeChallengePage() {
             
             <div className="flex flex-col gap-6">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                    <StatsCard icon={Star} title={t('currentStreak')} value={t('days').replace('{count}', String(state.streak))} />
+                    <StatsCard icon={Star} title={t('currentStreak')} value={`${state.streak} ${state.streak === 1 ? t('day') : t('days')}`} />
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
                     <JournalStatsCard entries={state.entries} />
