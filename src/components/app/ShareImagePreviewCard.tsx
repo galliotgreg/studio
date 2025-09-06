@@ -7,30 +7,35 @@ import { useLanguage } from "./LanguageProvider";
 import { GratitudeEntry } from "@/lib/types";
 import { format } from "date-fns";
 import { fr, enUS } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 interface ShareImagePreviewCardProps {
   entry: GratitudeEntry;
+  className?: string;
 }
 
 export const ShareImagePreviewCard = React.forwardRef<HTMLDivElement, ShareImagePreviewCardProps>(
-  ({ entry }, ref) => {
+  ({ entry, className }, ref) => {
     const { t, language } = useLanguage();
     const date = new Date(entry.date);
 
     return (
         <div 
             ref={ref}
-            className="aspect-[9/16] w-full bg-gradient-to-br from-primary/10 via-background to-background border rounded-lg p-6 flex flex-col shadow-2xl"
+            className={cn(
+                "aspect-[9/16] w-full max-w-full max-h-full bg-gradient-to-br from-primary/10 via-background to-background border rounded-lg p-6 flex flex-col shadow-2xl overflow-hidden",
+                className
+            )}
         >
             <div className="flex-grow flex flex-col justify-center items-center text-center">
                 <p className="text-sm text-muted-foreground italic mb-4">
                     &ldquo;{entry.prompt}&rdquo;
                 </p>
-                <p className="text-2xl font-serif font-medium text-foreground">
+                <p className="text-2xl font-serif font-medium text-foreground whitespace-pre-wrap break-words">
                     {entry.text}
                 </p>
             </div>
-            <div className="flex-shrink-0 text-center text-muted-foreground text-sm space-y-2">
+            <div className="flex-shrink-0 text-center text-muted-foreground text-sm space-y-2 mt-4">
                 <p>{format(date, 'PPP', { locale: language === 'fr' ? fr : enUS })}</p>
                 <div className="flex items-center justify-center gap-2">
                     <AppIcon className="w-5 h-5"/>

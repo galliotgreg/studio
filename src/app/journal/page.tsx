@@ -228,14 +228,18 @@ export default function JournalPage() {
         </main>
       </div>
        <Dialog open={!!entryToShare} onOpenChange={(open) => !open && setEntryToShare(null)}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-md w-[90vw] sm:w-full h-auto max-h-[85vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>{t('shareYourGratitude')}</DialogTitle>
             <DialogDescription>
               {t('sharePreviewDescription')}
             </DialogDescription>
           </DialogHeader>
-          {entryToShare && <ShareImagePreviewCard ref={imagePreviewRef} entry={entryToShare} />}
+          {entryToShare && (
+              <div className="flex-grow flex items-center justify-center overflow-hidden">
+                <ShareImagePreviewCard ref={imagePreviewRef} entry={entryToShare} />
+              </div>
+          )}
            <Button onClick={handleDownloadImage} disabled={isGeneratingImage}>
               <Share2 className="mr-2 h-4 w-4" />
               {isGeneratingImage ? t('generatingImage') : t('downloadImage')}
@@ -245,3 +249,4 @@ export default function JournalPage() {
     </div>
   );
 }
+
