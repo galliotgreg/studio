@@ -1,8 +1,9 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// We must define the mock function before it is used in the vi.mock call.
-const mockPromptFn = vi.fn();
+// vi.mock est hoisté au-dessus des déclarations : on passe par vi.hoisted
+// pour que mockPromptFn existe quand la factory du mock s'exécute.
+const { mockPromptFn } = vi.hoisted(() => ({ mockPromptFn: vi.fn() }));
 
 // We mock the AI dependency to prevent actual API calls during tests.
 vi.mock('@/ai/genkit', () => ({
