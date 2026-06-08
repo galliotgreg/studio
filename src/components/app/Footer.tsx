@@ -33,7 +33,7 @@ export function Footer() {
           {t('footerText')}
         </p>
         <a
-          href="https://www.greg-ggt.com/#/portal/signup"
+          href="https://www.greg-ggt.com/#/portal/signup?ref=defi"
           target="_blank"
           rel="noopener noreferrer"
           className="text-sm text-primary hover:underline mb-4 md:mb-0 md:mx-4"
