@@ -94,5 +94,21 @@
     "editEntry": "Modifier",
     "saveChanges": "Enregistrer",
     "entryUpdatedTitle": "Entrée mise à jour",
-    "entryUpdatedDescription": "Votre entrée de gratitude a été mise à jour avec succès."
+    "entryUpdatedDescription": "Votre entrée de gratitude a été mise à jour avec succès.",
+    "newsletterTitle": "Garde l'élan",
+    "newsletterDescription": "Reçois un petit rappel quotidien et mes outils pour cultiver la gratitude, directement par e-mail.",
+    "newsletterCompletionTitle": "Bravo, 30 jours tenus !",
+    "newsletterCompletionDescription": "Tu as fait le plus dur. Continue avec la newsletter : mes outils bien-être et les nouveautés de l'app à venir.",
+    "newsletterEmailPlaceholder": "ton@email.com",
+    "newsletterCta": "Je m'abonne",
+    "newsletterSubmitting": "Un instant…",
+    "newsletterConsent": "Double opt-in : tu recevras un e-mail pour confirmer. Désinscription en un clic, à tout moment.",
+    "newsletterCheckInbox": "Presque ! Vérifie ta boîte mail et clique sur le lien de confirmation.",
+    "newsletterSuccessTitle": "Vérifie tes e-mails",
+    "newsletterSuccessDescription": "On vient de t'envoyer un lien de confirmation.",
+    "newsletterErrorTitle": "Oups",
+    "newsletterErrorDescription": "L'inscription n'a pas abouti. Réessaie dans un instant.",
+    "newsletterInvalidEmail": "Cette adresse e-mail semble invalide.",
+    "newsletterDismiss": "Fermer",
+    "footerNewsletter": "Newsletter"
 }

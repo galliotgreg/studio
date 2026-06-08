@@ -94,5 +94,21 @@
     "editEntry": "Edit",
     "saveChanges": "Save Changes",
     "entryUpdatedTitle": "Entry Updated",
-    "entryUpdatedDescription": "Your gratitude entry has been successfully updated."
+    "entryUpdatedDescription": "Your gratitude entry has been successfully updated.",
+    "newsletterTitle": "Keep the momentum",
+    "newsletterDescription": "Get a gentle daily nudge and my tools for cultivating gratitude, straight to your inbox.",
+    "newsletterCompletionTitle": "Nicely done — 30 days!",
+    "newsletterCompletionDescription": "You did the hard part. Keep going with the newsletter: my well-being tools and news about the upcoming app.",
+    "newsletterEmailPlaceholder": "you@email.com",
+    "newsletterCta": "Subscribe",
+    "newsletterSubmitting": "One moment…",
+    "newsletterConsent": "Double opt-in: you'll get an email to confirm. Unsubscribe in one click, anytime.",
+    "newsletterCheckInbox": "Almost there! Check your inbox and click the confirmation link.",
+    "newsletterSuccessTitle": "Check your email",
+    "newsletterSuccessDescription": "We just sent you a confirmation link.",
+    "newsletterErrorTitle": "Oops",
+    "newsletterErrorDescription": "Sign-up didn't go through. Please try again in a moment.",
+    "newsletterInvalidEmail": "That email address looks invalid.",
+    "newsletterDismiss": "Close",
+    "footerNewsletter": "Newsletter"
 }

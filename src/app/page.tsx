@@ -29,8 +29,10 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button, buttonVariants } from "@/components/ui/button";
 import { JournalStatsCard } from "@/components/app/JournalStatsCard";
+import { NewsletterSignupCard } from "@/components/app/NewsletterSignupCard";
 
 const CHALLENGE_DURATION = 30;
+const NEWSLETTER_KEY = "gratitudeNewsletter";
 
 export default function GratitudeChallengePage() {
   const { toast } = useToast();
@@ -43,6 +45,14 @@ export default function GratitudeChallengePage() {
   const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
   const badgesCardRef = React.useRef<HTMLDivElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [newsletter, setNewsletter] = React.useState<{ subscribed: boolean; dismissed: boolean }>({
+    subscribed: false,
+    dismissed: false,
+  });
+  // Décision d'affichage figée au montage : si déjà abonné·e ou fermé lors d'une
+  // session précédente, on n'affiche plus la carte. Sinon, après abonnement dans
+  // CETTE session, la carte reste montée pour afficher sa confirmation.
+  const [hideNewsletter, setHideNewsletter] = React.useState(false);
 
 
   const getQuotes = React.useCallback(() => {
@@ -127,6 +137,37 @@ export default function GratitudeChallengePage() {
     }
   }, [state, getQuotes, getPrompts, language]);
 
+
+  React.useEffect(() => {
+    try {
+      const saved = localStorage.getItem(NEWSLETTER_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setNewsletter(parsed);
+        setHideNewsletter(Boolean(parsed.subscribed) || Boolean(parsed.dismissed));
+      }
+    } catch (error) {
+      console.error("Failed to load newsletter state", error);
+    }
+  }, []);
+
+  const persistNewsletter = (next: { subscribed: boolean; dismissed: boolean }) => {
+    setNewsletter(next);
+    try {
+      localStorage.setItem(NEWSLETTER_KEY, JSON.stringify(next));
+    } catch (error) {
+      console.error("Failed to save newsletter state", error);
+    }
+  };
+
+  const handleNewsletterSubscribed = () =>
+    // On persiste l'abonnement (gate au prochain montage) mais on NE cache PAS
+    // la carte maintenant : elle doit montrer son état de confirmation.
+    persistNewsletter({ ...newsletter, subscribed: true });
+  const handleNewsletterDismiss = () => {
+    persistNewsletter({ ...newsletter, dismissed: true });
+    setHideNewsletter(true);
+  };
 
   const handleAddEntry = (text: string, prompt: string) => {
     if (!text.trim() || !state) return;
@@ -343,6 +384,7 @@ export default function GratitudeChallengePage() {
   const isTodayEntrySubmitted = state.lastEntryDate ? new Date(state.lastEntryDate).toDateString() === new Date().toDateString() : false;
   const lastEntry = isTodayEntrySubmitted ? state.entries[state.entries.length - 1] : null;
   const streakText = `${state.streak} ${t(state.streak === 1 ? 'daySingular' : 'daysPlural')}`;
+  const isChallengeComplete = state.entries.length >= CHALLENGE_DURATION;
 
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
@@ -383,6 +425,22 @@ export default function GratitudeChallengePage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="lg:col-span-3">
                 <BadgesCard ref={badgesCardRef} allBadges={BADGES} unlockedBadgeIds={state.unlockedBadges} />
             </motion.div>
+
+            {isChallengeComplete && !hideNewsletter && (
+                <div className="lg:col-span-3">
+                    <NewsletterSignupCard variant="completion" onSubscribed={handleNewsletterSubscribed} />
+                </div>
+            )}
+
+            {!isChallengeComplete && state.entries.length >= 1 && !hideNewsletter && (
+                <div className="lg:col-span-3">
+                    <NewsletterSignupCard
+                        variant="inline"
+                        onSubscribed={handleNewsletterSubscribed}
+                        onDismiss={handleNewsletterDismiss}
+                    />
+                </div>
+            )}
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="lg:col-span-3">
                 {currentQuote && <QuoteCard quote={currentQuote.text} author={currentQuote.author} onNewQuote={handleNewQuote}/>}
