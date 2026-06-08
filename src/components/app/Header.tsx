@@ -56,7 +56,7 @@ export function Header({ onReset, onShare, onExport, onImport }: HeaderProps) {
             <ThemeSwitcher />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline" size="icon" aria-label={t('settings')}>
                         <Settings className="h-[1.2rem] w-[1.2rem] text-foreground" />
                     </Button>
                 </DropdownMenuTrigger>
