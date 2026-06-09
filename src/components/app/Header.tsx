@@ -1,7 +1,8 @@
 
 "use client";
 
-import { Settings, Share2, Upload, Download, Trash2, Palette, Sun, Moon, Star } from "lucide-react";
+import Link from "next/link";
+import { Settings, Share2, Upload, Download, Trash2, Palette, Sun, Moon, Star, BookOpen } from "lucide-react";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLanguage } from "./LanguageProvider";
@@ -48,6 +49,12 @@ export function Header({ onReset, onShare, onExport, onImport }: HeaderProps) {
         </div>
 
         <div className="flex items-center justify-center md:justify-end gap-2 w-full md:w-1/3">
+            <Button asChild variant="outline" size="icon">
+                <Link href="/journal" aria-label={t('myJournal')}>
+                    <BookOpen className="h-[1.2rem] w-[1.2rem] text-foreground" />
+                    <span className="sr-only">{t('myJournal')}</span>
+                </Link>
+            </Button>
             <Button variant="outline" size="icon" onClick={onShare}>
                 <Share2 className="h-[1.2rem] w-[1.2rem] text-foreground" />
                 <span className="sr-only">{t('share')}</span>
