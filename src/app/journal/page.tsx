@@ -93,21 +93,20 @@ export default function JournalPage() {
   };
 
   const unlockShareBadge = () => {
-    setState(prevState => {
-        if (!prevState || prevState.unlockedBadges.includes('share-1')) {
-            return prevState;
-        }
+    // Garde + effets (toast) HORS de l'updater setState : un updater doit être
+    // pur (rejoué en StrictMode/concurrent → double toast et warning React).
+    if (!state || state.unlockedBadges.includes('share-1')) return;
+    const shareBadge = BADGES.find(b => b.id === 'share-1');
+    if (!shareBadge) return;
 
-        const shareBadge = BADGES.find(b => b.id === 'share-1');
-        if (shareBadge) {
-            const newUnlockedBadges = [...prevState.unlockedBadges, shareBadge.id];
-            toast({
-                title: t('badgeUnlocked'),
-                description: t('badgeUnlockedDescription').replace('{badgeName}', t(shareBadge.nameKey)),
-            });
-            return { ...prevState, unlockedBadges: newUnlockedBadges };
-        }
-        return prevState;
+    setState(prevState =>
+        prevState && !prevState.unlockedBadges.includes('share-1')
+            ? { ...prevState, unlockedBadges: [...prevState.unlockedBadges, shareBadge.id] }
+            : prevState
+    );
+    toast({
+        title: t('badgeUnlocked'),
+        description: t('badgeUnlockedDescription').replace('{badgeName}', t(shareBadge.nameKey)),
     });
   }
   
