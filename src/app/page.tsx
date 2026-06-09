@@ -30,6 +30,7 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { JournalStatsCard } from "@/components/app/JournalStatsCard";
 import { NewsletterSignupCard } from "@/components/app/NewsletterSignupCard";
+import { ReturnWelcomeCard } from "@/components/app/ReturnWelcomeCard";
 
 const CHALLENGE_DURATION = 30;
 const NEWSLETTER_KEY = "gratitudeNewsletter";
@@ -44,7 +45,9 @@ export default function GratitudeChallengePage() {
   const [currentQuote, setCurrentQuote] = React.useState<Quote | null>(null);
   const [isResetDialogOpen, setIsResetDialogOpen] = React.useState(false);
   const badgesCardRef = React.useRef<HTMLDivElement>(null);
+  const gratitudeCardRef = React.useRef<HTMLDivElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [returnDismissed, setReturnDismissed] = React.useState(false);
   const [newsletter, setNewsletter] = React.useState<{ subscribed: boolean; dismissed: boolean }>({
     subscribed: false,
     dismissed: false,
@@ -386,6 +389,24 @@ export default function GratitudeChallengePage() {
   const streakText = `${state.streak} ${t(state.streak === 1 ? 'daySingular' : 'daysPlural')}`;
   const isChallengeComplete = state.entries.length >= CHALLENGE_DURATION;
 
+  // Relance in-app : jours pleins écoulés depuis la dernière entrée.
+  const daysSinceLastEntry = state.lastEntryDate
+    ? Math.floor(
+        (new Date(new Date().toDateString()).getTime() -
+          new Date(new Date(state.lastEntryDate).toDateString()).getTime()) /
+          86400000
+      )
+    : 0;
+  // S'affiche au retour après ≥ 2 jours d'absence, en cours de défi, une fois par session.
+  const showReturnWelcome =
+    !returnDismissed &&
+    state.entries.length >= 1 &&
+    !isChallengeComplete &&
+    daysSinceLastEntry >= 2;
+
+  const handleResumeChallenge = () =>
+    gratitudeCardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+
   return (
     <main className="container mx-auto p-4 md:p-8 flex-grow">
         <Header onReset={() => setIsResetDialogOpen(true)} onShare={handleShare} onExport={handleExportData} onImport={handleImportClick} />
@@ -398,8 +419,18 @@ export default function GratitudeChallengePage() {
             data-testid="file-input"
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
-                <GratitudeCard 
+            {showReturnWelcome && (
+                <div className="lg:col-span-3">
+                    <ReturnWelcomeCard
+                        days={daysSinceLastEntry}
+                        day={state.currentDay}
+                        onResume={handleResumeChallenge}
+                        onDismiss={() => setReturnDismissed(true)}
+                    />
+                </div>
+            )}
+            <motion.div ref={gratitudeCardRef} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 md:row-span-2">
+                <GratitudeCard
                     prompt={currentPrompt}
                     day={lastEntry ? lastEntry.day : state.currentDay}
                     isSubmittedToday={isTodayEntrySubmitted}

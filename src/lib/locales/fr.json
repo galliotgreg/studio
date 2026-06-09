@@ -96,9 +96,9 @@
     "entryUpdatedTitle": "Entrée mise à jour",
     "entryUpdatedDescription": "Votre entrée de gratitude a été mise à jour avec succès.",
     "newsletterTitle": "Garde l'élan",
-    "newsletterDescription": "Reçois un petit rappel quotidien et mes outils pour cultiver la gratitude, directement par e-mail.",
+    "newsletterDescription": "Un e-mail par mois : mes outils bien-être appliqués comme un jeu, et les coulisses de l'app à venir. Réponds-moi, je lis tout.",
     "newsletterCompletionTitle": "Bravo, 30 jours tenus !",
-    "newsletterCompletionDescription": "Tu as fait le plus dur. Continue avec la newsletter : mes outils bien-être et les nouveautés de l'app à venir.",
+    "newsletterCompletionDescription": "Tu as fait le plus dur. La newsletter prend le relais : un e-mail par mois, mes outils bien-être et les nouveautés de l'app à venir. Réponds-moi directement.",
     "newsletterEmailPlaceholder": "ton@email.com",
     "newsletterCta": "Je m'abonne",
     "newsletterSubmitting": "Un instant…",
@@ -110,5 +110,9 @@
     "newsletterErrorDescription": "L'inscription n'a pas abouti. Réessaie dans un instant.",
     "newsletterInvalidEmail": "Cette adresse e-mail semble invalide.",
     "newsletterDismiss": "Fermer",
-    "footerNewsletter": "Newsletter"
+    "footerNewsletter": "Newsletter",
+    "returnWelcomeTitle": "Content de te revoir",
+    "returnWelcomeDescription": "Ça fait {days} jours. Pas de pression pour la série — reprends simplement au jour {day}, une entrée suffit.",
+    "returnWelcomeCta": "Reprendre",
+    "returnWelcomeDismiss": "Fermer"
 }

@@ -96,9 +96,9 @@
     "entryUpdatedTitle": "Entry Updated",
     "entryUpdatedDescription": "Your gratitude entry has been successfully updated.",
     "newsletterTitle": "Keep the momentum",
-    "newsletterDescription": "Get a gentle daily nudge and my tools for cultivating gratitude, straight to your inbox.",
+    "newsletterDescription": "One email a month: my well-being tools applied like a game, plus behind-the-scenes of the app to come. Reply anytime — I read everything.",
     "newsletterCompletionTitle": "Nicely done — 30 days!",
-    "newsletterCompletionDescription": "You did the hard part. Keep going with the newsletter: my well-being tools and news about the upcoming app.",
+    "newsletterCompletionDescription": "You did the hard part. The newsletter takes over: one email a month, my well-being tools and news about the upcoming app. Reply to me directly.",
     "newsletterEmailPlaceholder": "you@email.com",
     "newsletterCta": "Subscribe",
     "newsletterSubmitting": "One moment…",
@@ -110,5 +110,9 @@
     "newsletterErrorDescription": "Sign-up didn't go through. Please try again in a moment.",
     "newsletterInvalidEmail": "That email address looks invalid.",
     "newsletterDismiss": "Close",
-    "footerNewsletter": "Newsletter"
+    "footerNewsletter": "Newsletter",
+    "returnWelcomeTitle": "Good to see you back",
+    "returnWelcomeDescription": "It's been {days} days. No pressure on the streak — just pick up at day {day}, one entry is enough.",
+    "returnWelcomeCta": "Resume",
+    "returnWelcomeDismiss": "Close"
 }

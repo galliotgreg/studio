@@ -45,7 +45,10 @@ export async function subscribeToNewsletter(
   const body: Record<string, unknown> = {
     email,
     emailType: "subscribe",
-    labels: [],
+    // Attribution best-effort : tague la source pour mesurer l'apport du défi
+    // dans Ghost Admin. Ghost peut ignorer ce champ sur l'endpoint public
+    // (à vérifier sur une inscription test) ; aucun effet négatif s'il le strip.
+    labels: ["défi"],
     name: null,
   };
   if (integrityToken) body.integrityToken = integrityToken;
