@@ -35,7 +35,11 @@ async function getIntegrityToken(): Promise<string | undefined> {
 }
 
 export async function subscribeToNewsletter(
-  rawEmail: string
+  rawEmail: string,
+  // Attribution best-effort : labels posés sur le membre Ghost. Par défaut
+  // ["défi"] (capture mi-parcours) ; l'écran J30 passe ["défi", "defi-j30"]
+  // pour distinguer les inscrits du pic de complétion dans Ghost Admin.
+  labels: string[] = ["défi"]
 ): Promise<SubscribeResult> {
   const email = rawEmail.trim();
   if (!isValidEmail(email)) return { ok: false, reason: "invalid" };
@@ -45,10 +49,9 @@ export async function subscribeToNewsletter(
   const body: Record<string, unknown> = {
     email,
     emailType: "subscribe",
-    // Attribution best-effort : tague la source pour mesurer l'apport du défi
-    // dans Ghost Admin. Ghost peut ignorer ce champ sur l'endpoint public
-    // (à vérifier sur une inscription test) ; aucun effet négatif s'il le strip.
-    labels: ["défi"],
+    // Ghost peut ignorer ce champ sur l'endpoint public (vérifié OK le 9/6/2026
+    // sur une inscription test : le label remonte bien) ; aucun effet négatif.
+    labels,
     name: null,
   };
   if (integrityToken) body.integrityToken = integrityToken;

@@ -114,5 +114,20 @@
     "returnWelcomeTitle": "Good to see you back",
     "returnWelcomeDescription": "It's been {days} days. No pressure on the streak — just pick up at day {day}, one entry is enough.",
     "returnWelcomeCta": "Resume",
-    "returnWelcomeDismiss": "Close"
+    "returnWelcomeDismiss": "Close",
+    "completionHeroTitle": "30 days. You did it.",
+    "completionHeroSubtitle": "A month of gratitude, one day at a time. Take a moment to see how far you've come.",
+    "completionRecapEntries": "entries written",
+    "completionRecapLongestStreak": "longest streak",
+    "completionRecapDays": "days completed",
+    "completionLongestStreakLabel": "day streak",
+    "completionBadgeUnlocked": "Badge unlocked:",
+    "completionAppTeaser": "What's next: the well-being app that extends the challenge. The newsletter will keep you posted.",
+    "completionShareCta": "Share my journey",
+    "completionViewJournal": "Back to my journal",
+    "completionBackToDashboard": "Back to my dashboard",
+    "completionShareDialogTitle": "Share your journey",
+    "completionShareDialogDescription": "Here's the image that will be generated to celebrate your 30 days.",
+    "completionShareDownload": "Download image",
+    "completionShareHeadline": "I kept 30 days of gratitude"
 }
