@@ -178,18 +178,22 @@ export default function GratitudeChallengePage() {
 
   // Débloque le badge "partage" au premier partage réussi (écran J30).
   const handleUnlockShareBadge = () => {
-    setState((prev) => {
-      if (!prev || prev.unlockedBadges.includes("share-1")) return prev;
-      const shareBadge = BADGES.find((b) => b.id === "share-1");
-      if (!shareBadge) return prev;
-      toast({
-        title: t("badgeUnlocked"),
-        description: t("badgeUnlockedDescription").replace(
-          "{badgeName}",
-          t(shareBadge.nameKey)
-        ),
-      });
-      return { ...prev, unlockedBadges: [...prev.unlockedBadges, shareBadge.id] };
+    if (!state || state.unlockedBadges.includes("share-1")) return;
+    const shareBadge = BADGES.find((b) => b.id === "share-1");
+    if (!shareBadge) return;
+    // setState updater pur : pas d'effet de bord (toast) dedans, sinon React
+    // râle « Cannot update a component while rendering a different component ».
+    setState((prev) =>
+      prev && !prev.unlockedBadges.includes(shareBadge.id)
+        ? { ...prev, unlockedBadges: [...prev.unlockedBadges, shareBadge.id] }
+        : prev
+    );
+    toast({
+      title: t("badgeUnlocked"),
+      description: t("badgeUnlockedDescription").replace(
+        "{badgeName}",
+        t(shareBadge.nameKey)
+      ),
     });
   };
 
