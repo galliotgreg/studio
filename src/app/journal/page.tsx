@@ -121,10 +121,10 @@ export default function JournalPage() {
             src: url('https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap');
           }
         `;
-        const dataUrl = await toPng(imagePreviewRef.current, { 
-            cacheBust: true, 
+        const dataUrl = await toPng(imagePreviewRef.current, {
+            cacheBust: true,
             pixelRatio: 2,
-            fontEmbedCss: fontEmbedCss
+            fontEmbedCSS: fontEmbedCss
         });
         
         const blob = await (await fetch(dataUrl)).blob();

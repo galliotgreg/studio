@@ -114,5 +114,20 @@
     "returnWelcomeTitle": "Content de te revoir",
     "returnWelcomeDescription": "Ça fait {days} jours. Pas de pression pour la série — reprends simplement au jour {day}, une entrée suffit.",
     "returnWelcomeCta": "Reprendre",
-    "returnWelcomeDismiss": "Fermer"
+    "returnWelcomeDismiss": "Fermer",
+    "completionHeroTitle": "30 jours. Tu l'as fait.",
+    "completionHeroSubtitle": "Un mois de gratitude, jour après jour. Prends un instant pour mesurer le chemin.",
+    "completionRecapEntries": "entrées écrites",
+    "completionRecapLongestStreak": "plus longue série",
+    "completionRecapDays": "jours complétés",
+    "completionLongestStreakLabel": "jours de série",
+    "completionBadgeUnlocked": "Badge débloqué :",
+    "completionAppTeaser": "La suite arrive : l'app bien-être qui prolonge le défi. Tu seras prévenu·e par la newsletter.",
+    "completionShareCta": "Partager mon parcours",
+    "completionViewJournal": "Revoir mon journal",
+    "completionBackToDashboard": "Revoir mon tableau de bord",
+    "completionShareDialogTitle": "Partager ton parcours",
+    "completionShareDialogDescription": "Voici l'image qui sera générée pour célébrer tes 30 jours.",
+    "completionShareDownload": "Télécharger l'image",
+    "completionShareHeadline": "J'ai tenu 30 jours de gratitude"
 }

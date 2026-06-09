@@ -31,6 +31,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { JournalStatsCard } from "@/components/app/JournalStatsCard";
 import { NewsletterSignupCard } from "@/components/app/NewsletterSignupCard";
 import { ReturnWelcomeCard } from "@/components/app/ReturnWelcomeCard";
+import { CompletionScreen } from "@/components/app/CompletionScreen";
 
 const CHALLENGE_DURATION = 30;
 const NEWSLETTER_KEY = "gratitudeNewsletter";
@@ -48,6 +49,9 @@ export default function GratitudeChallengePage() {
   const gratitudeCardRef = React.useRef<HTMLDivElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [returnDismissed, setReturnDismissed] = React.useState(false);
+  // À J30, on bascule sur l'écran de complétion ; ce toggle permet de revenir
+  // au tableau de bord classique (échappatoire), sans perdre la célébration.
+  const [showDashboard, setShowDashboard] = React.useState(false);
   const [newsletter, setNewsletter] = React.useState<{ subscribed: boolean; dismissed: boolean }>({
     subscribed: false,
     dismissed: false,
@@ -170,6 +174,23 @@ export default function GratitudeChallengePage() {
   const handleNewsletterDismiss = () => {
     persistNewsletter({ ...newsletter, dismissed: true });
     setHideNewsletter(true);
+  };
+
+  // Débloque le badge "partage" au premier partage réussi (écran J30).
+  const handleUnlockShareBadge = () => {
+    setState((prev) => {
+      if (!prev || prev.unlockedBadges.includes("share-1")) return prev;
+      const shareBadge = BADGES.find((b) => b.id === "share-1");
+      if (!shareBadge) return prev;
+      toast({
+        title: t("badgeUnlocked"),
+        description: t("badgeUnlockedDescription").replace(
+          "{badgeName}",
+          t(shareBadge.nameKey)
+        ),
+      });
+      return { ...prev, unlockedBadges: [...prev.unlockedBadges, shareBadge.id] };
+    });
   };
 
   const handleAddEntry = (text: string, prompt: string) => {
@@ -418,6 +439,17 @@ export default function GratitudeChallengePage() {
             className="hidden"
             data-testid="file-input"
         />
+        {isChallengeComplete && !showDashboard ? (
+        <div className="mt-6">
+            <CompletionScreen
+                entries={state.entries}
+                showNewsletter={!hideNewsletter}
+                onNewsletterSubscribed={handleNewsletterSubscribed}
+                onShareBadgeUnlock={handleUnlockShareBadge}
+                onBackToDashboard={() => setShowDashboard(true)}
+            />
+        </div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
             {showReturnWelcome && (
                 <div className="lg:col-span-3">
@@ -477,6 +509,7 @@ export default function GratitudeChallengePage() {
                 {currentQuote && <QuoteCard quote={currentQuote.text} author={currentQuote.author} onNewQuote={handleNewQuote}/>}
             </motion.div>
         </div>
+        )}
         <AlertDialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
             <AlertDialogContent>
                 <AlertDialogHeader>

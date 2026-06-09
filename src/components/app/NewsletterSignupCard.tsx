@@ -25,12 +25,19 @@ interface NewsletterSignupCardProps {
   onSubscribed?: () => void;
   /** Si fourni, affiche un bouton de fermeture (déclencheur non bloquant). */
   onDismiss?: () => void;
+  /**
+   * Label d'attribution supplémentaire (ex. "defi-j30") posé en plus de "défi".
+   * Permet de distinguer la source dans Ghost Admin (pic de complétion vs
+   * mi-parcours). Sans effet sur l'UI.
+   */
+  source?: string;
 }
 
 export function NewsletterSignupCard({
   variant = "inline",
   onSubscribed,
   onDismiss,
+  source,
 }: NewsletterSignupCardProps) {
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -53,7 +60,10 @@ export function NewsletterSignupCard({
     }
 
     setStatus("loading");
-    const result = await subscribeToNewsletter(email);
+    const result = await subscribeToNewsletter(
+      email,
+      source ? ["défi", source] : undefined
+    );
 
     if (result.ok) {
       setStatus("done");
